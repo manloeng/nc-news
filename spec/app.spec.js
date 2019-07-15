@@ -86,6 +86,12 @@ describe('/', () => {
 							expect(body.msg).to.be.equal('invalid input syntax for integer: "andrew"');
 						});
 					});
+
+					it('GET /articles/:article_id - responds with a Status:404 when passed with an invalid article_id format', () => {
+						return request(app).get('/api/articles/9999').expect(404).then(({ body }) => {
+							expect(body.msg).to.be.equal('Article Not Found');
+						});
+					});
 				});
 			});
 		});
