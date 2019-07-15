@@ -134,18 +134,35 @@ describe('/', () => {
 							});
 					});
 
-					it.only(
-						'PATCH /articles/:article_id - responds with a Status:400 when passed with an invalid update key-value pair',
-						() => {
-							return request(app)
-								.patch('/api/articles/1')
-								.send({ 'not-a-valid-key': 100 })
-								.expect(400)
-								.then(({ body }) => {
-									expect(body.msg).to.be.equal('Not a Valid Key-Value');
-								});
-						}
-					);
+					it('PATCH /articles/:article_id - responds with a Status:400 when passed with an invalid update key-value pair', () => {
+						return request(app)
+							.patch('/api/articles/1')
+							.send({ 'not-a-valid-key': 100 })
+							.expect(400)
+							.then(({ body }) => {
+								expect(body.msg).to.be.equal('Not a Valid Key-Value');
+							});
+					});
+
+					it('PATCH /articles/:article_id - responds with a Status:400 when passed with an invalid update key-value pair', () => {
+						return request(app)
+							.patch('/api/articles/1')
+							.send({ inc_votes: 'not-a-valid-value' })
+							.expect(400)
+							.then(({ body }) => {
+								expect(body.msg).to.be.equal('invalid input syntax for integer: "NaN"');
+							});
+					});
+
+					it('PATCH /articles/:article_id - responds with a Status:400 when passed with an valid update key-value pair and an invalid key-value pair', () => {
+						return request(app)
+							.patch('/api/articles/1')
+							.send({ inc_votes: 100, 'not-a-valid-key': 100 })
+							.expect(400)
+							.then(({ body }) => {
+								expect(body.msg).to.be.equal('Not a Valid Key-Value');
+							});
+					});
 
 					it("PATCH /articles/:article_id - responds with a Status:404 when passed with an article_id that isn't found", () => {
 						return request(app).patch('/api/articles/999').send({ inc_votes: -101 }).expect(404).then(({ body }) => {
