@@ -82,18 +82,15 @@ describe('/', () => {
 						});
 					});
 
-					it.only(
-						'GET /articles/:article_id - responds with a Status:400 when passed with an invalid article_id',
-						() => {
-							return request(app).get('/api/articles/not-a-valid-id').expect(400).then(({ body }) => {
-								expect(body.msg).to.be.equal('invalid input syntax for integer: "not-a-valid-id"');
-							});
-						}
-					);
+					it('GET /articles/:article_id - responds with a Status:400 when passed with an invalid article_id', () => {
+						return request(app).get('/api/articles/not-a-valid-id').expect(400).then(({ body }) => {
+							expect(body.msg).to.be.equal('invalid input syntax for integer: "not-a-valid-id"');
+						});
+					});
 
 					it("GET /articles/:article_id - responds with a Status:404 when passed with an article_id that isn't found", () => {
 						return request(app).get('/api/articles/9999').expect(404).then(({ body }) => {
-							expect(body.msg).to.be.equal('Article Not Found');
+							expect(body.msg).to.be.equal('Article ID Not Found');
 						});
 					});
 				});
@@ -102,12 +99,28 @@ describe('/', () => {
 					it('PATCH /articles/:article_id - responds with a Status:200 and the updated article vote data', () => {
 						return request(app).patch('/api/articles/1').send({ inc_votes: 105 }).expect(200).then(({ body }) => {
 							expect(body.article.votes).to.be.equal(205);
+							expect(body.article).to.have.keys(
+								'article_id',
+								'title',
+								'topic',
+								'author',
+								'body',
+								'votes',
+								'created_at',
+								'comment_count'
+							);
 						});
 					});
 
 					it('PATCH /articles/:article_id - responds with a Status:200 and the updated article vote data', () => {
 						return request(app).patch('/api/articles/1').send({ inc_votes: -101 }).expect(200).then(({ body }) => {
 							expect(body.article.votes).to.be.equal(-1);
+						});
+					});
+
+					it('PATCH /articles/:article_id - responds with a Status:200 when passed with an empty object', () => {
+						return request(app).patch('/api/articles/1').send({}).expect(200).then(({ body }) => {
+							expect(body.article.article_id).to.be.equal(1);
 						});
 					});
 
@@ -120,6 +133,19 @@ describe('/', () => {
 								expect(body.msg).to.be.equal('invalid input syntax for integer: "not-a-valid-id"');
 							});
 					});
+
+					it.only(
+						'PATCH /articles/:article_id - responds with a Status:400 when passed with an invalid update key-value pair',
+						() => {
+							return request(app)
+								.patch('/api/articles/1')
+								.send({ 'not-a-valid-key': 100 })
+								.expect(400)
+								.then(({ body }) => {
+									expect(body.msg).to.be.equal('Not a Valid Key-Value');
+								});
+						}
+					);
 
 					it("PATCH /articles/:article_id - responds with a Status:404 when passed with an article_id that isn't found", () => {
 						return request(app).patch('/api/articles/999').send({ inc_votes: -101 }).expect(404).then(({ body }) => {
