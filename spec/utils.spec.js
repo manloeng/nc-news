@@ -33,7 +33,7 @@ describe('formatDates', () => {
 				created_at: 1471522072389
 			}
 		];
-		const result = formatDate(input);
+		const result = formatDates(input);
 		expect(result[0]).to.contain.keys('title', 'topic', 'author', 'body', 'created_at');
 	});
 });
