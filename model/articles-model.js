@@ -19,8 +19,14 @@ const getArticleById = ({ article_id }) => {
 		});
 };
 
-const patchArticleById = () => {
-	console.log('patchArticleById');
+const patchArticleById = ({ article_id }, { inc_votes }) => {
+	return connection('articles')
+		.where('article_id', article_id)
+		.increment('votes', inc_votes)
+		.returning('*')
+		.then((article) => {
+			return article[0];
+		});
 };
 
 module.exports = { getArticleById, patchArticleById };

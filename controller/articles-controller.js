@@ -9,8 +9,11 @@ const sendGetArticleById = (req, res, next) => {
 };
 
 const sendPatchArticleById = (req, res, next) => {
-	console.log('sendPatchArticleById');
-	patchArticleById();
+	patchArticleById(req.params, req.body)
+		.then((article) => {
+			res.status(200).send({ article });
+		})
+		.catch(next);
 };
 
 module.exports = { sendGetArticleById, sendPatchArticleById };
