@@ -103,10 +103,16 @@ describe('formatComments', () => {
 		const expected = formatComments(input);
 		expect(expected).to.eql([]);
 	});
-	it('returns empty array when passed with an empty array', () => {
+	it('returns an array with an renamed key of "author" when passed with a key of "created_by"', () => {
 		const comments = [ { created_by: 'Andrew' } ];
 		const articleRefObj = { Andrew: 1 };
 		const expected = formatComments(comments, articleRefObj);
 		expect(expected).to.eql([ { author: 'Andrew' } ]);
+	});
+	it('returns an array with an renamed key of "article_id" when passed with a key of "belongs_to"', () => {
+		const comments = [ { belongs_to: 'Andrew' } ];
+		const articleRefObj = { Andrew: 1 };
+		const expected = formatComments(comments, articleRefObj);
+		expect(expected).to.eql([ { article_id: 1 } ]);
 	});
 });
