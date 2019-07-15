@@ -1,7 +1,7 @@
 exports.up = function(knex) {
 	return knex.schema.createTable('articles', (articlesTable) => {
 		articlesTable.increments('article_id').primary();
-		articlesTable.string('title');
+		articlesTable.string('title').notNullable();
 		articlesTable.integer('topic').references('topics.slug');
 		articlesTable.string('author').references('users.username');
 		articlesTable.text('body');
@@ -9,4 +9,6 @@ exports.up = function(knex) {
 	});
 };
 
-exports.down = function(knex) {};
+exports.down = function(knex) {
+	return knex.schema.dropTable('articles');
+};
