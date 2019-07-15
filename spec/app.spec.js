@@ -13,9 +13,25 @@ describe('/', () => {
 	after(() => {
 		connection.destroy();
 	});
+
 	it('/not-a-route', () => {
 		return request(app).get('/not-a-route').expect(404).then(({ body }) => {
 			expect(body.msg).to.equal('Page Not Found');
+		});
+	});
+
+	describe('/api', () => {
+		describe('/api/topics', () => {
+			describe('Http methods', () => {
+				describe('GET method', () => {
+					it('GET /topics - responds with a Status:200 and the list of the topics data', () => {
+						return request(app).get('/api/topics').expect(200).then(({ body }) => {
+							expect(body).to.be.a('object');
+							expect(body).to.have.keys('slug', 'description');
+						});
+					});
+				});
+			});
 		});
 	});
 });
