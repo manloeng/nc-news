@@ -1,11 +1,11 @@
-const { getArticlesById } = require('../model/articles-model.js');
+const { getArticleById } = require('../model/articles-model.js');
 
-const sendGetArticlesById = (req, res, next) => {
-	getArticlesById(req.params)
+const sendGetArticleById = (req, res, next) => {
+	getArticleById(req.params)
 		.then((articles) => {
 			res.status(200).send({ articles });
 		})
 		.catch(next);
 };
 
-module.exports = { sendGetArticlesById };
+module.exports = { sendGetArticleById };

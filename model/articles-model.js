@@ -1,15 +1,23 @@
 const connection = require('../db/connection.js');
 
-const getArticlesById = ({ article_id }) => {
-	return connection.select('*').from('articles').where('article_id', article_id).then((article) => {
-		if (!article) {
-			return Promise.reject({
-				status: 404,
-				msg: 'Article Not Found'
-			});
-		}
-		return article;
-	});
+const getArticleById = ({ article_id }) => {
+	return connection
+		.first('articles.*')
+		.count({ comment_count: 'comments.article_id' })
+		.from('articles')
+		.leftJoin('comments', 'articles.article_id', 'comments.article_id')
+		.groupBy('articles.article_id')
+		.where('articles.article_id', article_id)
+		.then((article) => {
+			console.log(article);
+			if (!article) {
+				return Promise.reject({
+					status: 404,
+					msg: 'Article Not Found'
+				});
+			}
+			return article;
+		});
 };
 
-module.exports = { getArticlesById };
+module.exports = { getArticleById };
