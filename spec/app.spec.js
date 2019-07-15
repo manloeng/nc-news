@@ -76,7 +76,8 @@ describe('/', () => {
 								'author',
 								'body',
 								'votes',
-								'created_at'
+								'created_at',
+								'comment_count'
 							);
 						});
 					});
