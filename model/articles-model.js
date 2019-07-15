@@ -19,4 +19,8 @@ const getArticleById = ({ article_id }) => {
 		});
 };
 
-module.exports = { getArticleById };
+const patchArticleById = () => {
+	console.log('patchArticleById');
+};
+
+module.exports = { getArticleById, patchArticleById };
