@@ -14,6 +14,10 @@ describe('/', () => {
 		connection.destroy();
 	});
 
+	beforeEach(() => {
+		return connection.seed.run();
+	});
+
 	it('/not-a-route', () => {
 		return request(app).get('/not-a-route').expect(404).then(({ body }) => {
 			expect(body.msg).to.equal('Page Not Found');
@@ -27,7 +31,7 @@ describe('/', () => {
 					it('GET /topics - responds with a Status:200 and the list of the topics data', () => {
 						return request(app).get('/api/topics').expect(200).then(({ body }) => {
 							expect(body).to.be.a('object');
-							expect(body).to.have.keys('slug', 'description');
+							expect(body.topics[0]).to.have.keys('slug', 'description');
 						});
 					});
 				});
