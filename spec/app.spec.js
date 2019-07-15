@@ -35,6 +35,16 @@ describe('/', () => {
 						});
 					});
 				});
+
+				it('Invalid Methods - responds with a Status:405', () => {
+					const invalidMethods = [ 'patch', 'put', 'post', 'delete' ];
+
+					invalidMethods.forEach((method) => {
+						return request(app)[method]('/api/topics').expect(405).then((res) => {
+							expect(res.body.msg).to.equal('Method Not Allowed');
+						});
+					});
+				});
 			});
 		});
 
@@ -95,7 +105,7 @@ describe('/', () => {
 					});
 				});
 
-				describe.only('PATCH method', () => {
+				describe('PATCH method', () => {
 					it('PATCH /articles/:article_id - responds with a Status:200 and the updated article vote data', () => {
 						return request(app).patch('/api/articles/1').send({ inc_votes: 105 }).expect(200).then(({ body }) => {
 							expect(body.article.votes).to.be.equal(205);
