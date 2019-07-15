@@ -68,6 +68,12 @@ describe('formatDates', () => {
 	});
 });
 
-describe('makeRefObj', () => {});
+describe('makeRefObj', () => {
+	it('returns empty array when passed with an empty array', () => {
+		const input = [];
+		const expected = makeRefObj(input);
+		expect(expected).to.eql({});
+	});
+});
 
 describe('formatComments', () => {});
