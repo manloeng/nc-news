@@ -115,4 +115,16 @@ describe('formatComments', () => {
 		const expected = formatComments(comments, articleRefObj);
 		expect(expected).to.eql([ { article_id: 1 } ]);
 	});
+	it('returns an array with an object containing the converted date when passed an array with an object containing a Unix timestamp of 0', () => {
+		const comments = [ { created_at: 0 } ];
+		const articleRefObj = { Andrew: 1 };
+		const expected = formatComments(comments, articleRefObj);
+		expect(expected).to.eql([ { created_at: new Date(0) } ]);
+	});
+	it('returns an array with multiple objects containing the converted date when passed an array with objects containing multiple Unix timestamps', () => {
+		const comments = [ { created_at: 0 }, { created_at: 1563188900 } ];
+		const articleRefObj = { Andrew: 1 };
+		const expected = formatComments(comments, articleRefObj);
+		expect(expected).to.eql([ { created_at: new Date(0) }, { created_at: new Date(1563188900) } ]);
+	});
 });
