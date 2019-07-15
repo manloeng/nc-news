@@ -25,6 +25,12 @@ const patchArticleById = ({ article_id }, { inc_votes }) => {
 		.increment('votes', inc_votes)
 		.returning('*')
 		.then((article) => {
+			if (!article.length) {
+				return Promise.reject({
+					status: 404,
+					msg: 'Article ID Not Found'
+				});
+			}
 			return article[0];
 		});
 };
