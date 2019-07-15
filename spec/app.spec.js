@@ -36,7 +36,7 @@ describe('/', () => {
 					});
 				});
 
-				it('Invalid Methods - responds with a Status:405', () => {
+				it('Invalid Methods for /topics - responds with a Status:405', () => {
 					const invalidMethods = [ 'patch', 'put', 'post', 'delete' ];
 
 					invalidMethods.forEach((method) => {
@@ -67,6 +67,16 @@ describe('/', () => {
 					it("GET /users/:username - responds with a Status:404 when passed with an username that isn't found", () => {
 						return request(app).get('/api/users/Andrew').expect(404).then(({ body }) => {
 							expect(body.msg).to.be.equal('User Not Found');
+						});
+					});
+				});
+
+				it('Invalid Methods for /users/:username - responds with a Status:405', () => {
+					const invalidMethods = [ 'patch', 'put', 'post', 'delete' ];
+
+					invalidMethods.forEach((method) => {
+						return request(app)[method]('/api/users/:username').expect(405).then(({ body }) => {
+							expect(body.msg).to.equal('Method Not Allowed');
 						});
 					});
 				});
