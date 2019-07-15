@@ -115,9 +115,9 @@ describe('/', () => {
 						return request(app)
 							.patch('/api/articles/not-a-valid-id')
 							.send({ inc_votes: -101 })
-							.expect(200)
+							.expect(400)
 							.then(({ body }) => {
-								expect(body.article.votes).to.be.equal(-1);
+								expect(body.msg).to.be.equal('invalid input syntax for integer: "not-a-valid-id"');
 							});
 					});
 				});
