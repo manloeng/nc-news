@@ -74,6 +74,14 @@ describe('makeRefObj', () => {
 		const expected = makeRefObj(input);
 		expect(expected).to.eql({});
 	});
+	it('returns empty array when passed with an empty array', () => {
+		let input = [ { article_id: 1, title: 'A' } ];
+		let expected = makeRefObj(input);
+		expect(expected).to.eql({ A: 1 });
+		input = [ { article_id: 2, title: 'B' } ];
+		expected = makeRefObj(input);
+		expect(expected).to.eql({ B: 2 });
+	});
 });
 
 describe('formatComments', () => {});
