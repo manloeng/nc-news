@@ -1,9 +1,10 @@
 exports.formatDates = (list) => {
 	if (!list.length) return [];
-	list.forEach((item) => {
-		item.created_at = new Date(item.created_at);
+	const mapArr = list.map(({ created_at, ...restOfListData }) => {
+		restOfListData.created_at = new Date(created_at);
+		return restOfListData;
 	});
-	return list;
+	return mapArr;
 };
 
 exports.makeRefObj = (list) => {
