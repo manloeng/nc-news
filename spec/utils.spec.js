@@ -74,13 +74,18 @@ describe('makeRefObj', () => {
 		const expected = makeRefObj(input);
 		expect(expected).to.eql({});
 	});
-	it('returns empty array when passed with an empty array', () => {
+	it('returns a newly created reference object with a single key value pair when passed with an array with a single object', () => {
 		let input = [ { article_id: 1, title: 'A' } ];
 		let expected = makeRefObj(input);
 		expect(expected).to.eql({ A: 1 });
 		input = [ { article_id: 2, title: 'B' } ];
 		expected = makeRefObj(input);
 		expect(expected).to.eql({ B: 2 });
+	});
+	it('returns a newly created reference object with mutliple key value pair when passed with an array with a multiple objects', () => {
+		let input = [ { article_id: 1, title: 'A' }, { article_id: 2, title: 'B' } ];
+		let expected = makeRefObj(input);
+		expect(expected).to.eql({ A: 1, B: 2 });
 	});
 });
 
