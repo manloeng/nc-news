@@ -80,6 +80,12 @@ describe('/', () => {
 							);
 						});
 					});
+
+					it('GET /articles/:article_id - responds with a Status:400 when passed with an invalid article_id format', () => {
+						return request(app).get('/api/users/andrew').expect(400).then(({ body }) => {
+							expect(body.msg).to.be.equal('Bad Request');
+						});
+					});
 				});
 			});
 		});
