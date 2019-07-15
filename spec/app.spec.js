@@ -48,7 +48,7 @@ describe('/', () => {
 						});
 					});
 
-					it('GET /users/:username - responds with a Status:400 when passed with an invalid username format', () => {
+					it('GET /users/:username - responds with a Status:400 when passed with an invalid username', () => {
 						return request(app).get('/api/users/999').expect(400).then(({ body }) => {
 							expect(body.msg).to.be.equal('Bad Request');
 						});
@@ -83,7 +83,7 @@ describe('/', () => {
 					});
 
 					it.only(
-						'GET /articles/:article_id - responds with a Status:400 when passed with an invalid article_id format',
+						'GET /articles/:article_id - responds with a Status:400 when passed with an invalid article_id',
 						() => {
 							return request(app).get('/api/articles/not-a-valid-id').expect(400).then(({ body }) => {
 								expect(body.msg).to.be.equal('invalid input syntax for integer: "not-a-valid-id"');
@@ -91,7 +91,7 @@ describe('/', () => {
 						}
 					);
 
-					it('GET /articles/:article_id - responds with a Status:404 when passed with an invalid article_id format', () => {
+					it("GET /articles/:article_id - responds with a Status:404 when passed with an article_id that isn't found", () => {
 						return request(app).get('/api/articles/9999').expect(404).then(({ body }) => {
 							expect(body.msg).to.be.equal('Article Not Found');
 						});
@@ -111,7 +111,7 @@ describe('/', () => {
 						});
 					});
 
-					it('PATCH /articles/:article_id - responds with a Status:200 and the updated article vote data', () => {
+					it('PATCH /articles/:article_id - responds with a Status:400 when passed with an invalid article_id', () => {
 						return request(app)
 							.patch('/api/articles/not-a-valid-id')
 							.send({ inc_votes: -101 })
