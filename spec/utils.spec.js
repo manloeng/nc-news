@@ -10,12 +10,17 @@ describe('formatDates', () => {
 	it('returns empty array when passed with an empty array', () => {
 		const input = [ { created_at: 0 } ];
 		const expected = formatDates(input);
-		expect(expected).to.eql([ new Date(0) ]);
+		expect(expected).to.eql([ { created_at: new Date(0) } ]);
 	});
 	it('returns empty array when passed with an empty array', () => {
 		const input = [ { created_at: 1563188900 } ];
 		const expected = formatDates(input);
-		expect(expected).to.eql([ new Date(1563188900) ]);
+		expect(expected).to.eql([ { created_at: new Date(1563188900) } ]);
+	});
+	it('returns empty array when passed with an empty array', () => {
+		const input = [ { created_at: 0 }, { created_at: 1563188900 } ];
+		const expected = formatDates(input);
+		expect(expected).to.eql([ { created_at: new Date(0) }, { created_at: new Date(1563188900) } ]);
 	});
 });
 
