@@ -82,11 +82,14 @@ describe('/', () => {
 						});
 					});
 
-					it('GET /articles/:article_id - responds with a Status:400 when passed with an invalid article_id format', () => {
-						return request(app).get('/api/articles/andrew').expect(400).then(({ body }) => {
-							expect(body.msg).to.be.equal('invalid input syntax for integer: "andrew"');
-						});
-					});
+					it.only(
+						'GET /articles/:article_id - responds with a Status:400 when passed with an invalid article_id format',
+						() => {
+							return request(app).get('/api/articles/not-a-valid-id').expect(400).then(({ body }) => {
+								expect(body.msg).to.be.equal('invalid input syntax for integer: "not-a-valid-id"');
+							});
+						}
+					);
 
 					it('GET /articles/:article_id - responds with a Status:404 when passed with an invalid article_id format', () => {
 						return request(app).get('/api/articles/9999').expect(404).then(({ body }) => {
@@ -95,16 +98,27 @@ describe('/', () => {
 					});
 				});
 
-				describe('PATCH method', () => {
-					it.only('PATCH /articles/:article_id - responds with a Status:200 and the updated article vote data', () => {
+				describe.only('PATCH method', () => {
+					it('PATCH /articles/:article_id - responds with a Status:200 and the updated article vote data', () => {
 						return request(app).patch('/api/articles/1').send({ inc_votes: 105 }).expect(200).then(({ body }) => {
 							expect(body.article.votes).to.be.equal(205);
 						});
 					});
-					it.only('PATCH /articles/:article_id - responds with a Status:200 and the updated article vote data', () => {
+
+					it('PATCH /articles/:article_id - responds with a Status:200 and the updated article vote data', () => {
 						return request(app).patch('/api/articles/1').send({ inc_votes: -101 }).expect(200).then(({ body }) => {
 							expect(body.article.votes).to.be.equal(-1);
 						});
+					});
+
+					it('PATCH /articles/:article_id - responds with a Status:200 and the updated article vote data', () => {
+						return request(app)
+							.patch('/api/articles/not-a-valid-id')
+							.send({ inc_votes: -101 })
+							.expect(200)
+							.then(({ body }) => {
+								expect(body.article.votes).to.be.equal(-1);
+							});
 					});
 				});
 			});
