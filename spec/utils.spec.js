@@ -87,6 +87,14 @@ describe('makeRefObj', () => {
 		let expected = makeRefObj(input);
 		expect(expected).to.eql({ A: 1, B: 2 });
 	});
+	it('returns a newly created reference object with mutliple key value pair when passed with an array with a multiple objects with extra data', () => {
+		let input = [
+			{ article_id: 1, title: 'A', hope: 'none' },
+			{ article_id: 2, title: 'B', hope: 'none', humour: 'some' }
+		];
+		let expected = makeRefObj(input);
+		expect(expected).to.eql({ A: 1, B: 2 });
+	});
 });
 
 describe('formatComments', () => {});
