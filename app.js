@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const apiRouter = require('./routes/apiRouter.js');
 
+app.use(express.json());
 app.use('/api', apiRouter);
 
 app.all('/*', (req, res, next) => {
@@ -9,7 +10,7 @@ app.all('/*', (req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-	console.log(err);
+	// console.log(err);
 	if (err.status) {
 		res.status(err.status).send({ msg: err.msg });
 	}
