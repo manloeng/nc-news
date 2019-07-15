@@ -37,5 +37,18 @@ describe('/', () => {
 				});
 			});
 		});
+
+		describe('/api/users/:username', () => {
+			describe('Http methods', () => {
+				describe('GET method', () => {
+					it('GET /users/:username - responds with a Status:200 and the list of the topics data', () => {
+						return request(app).get('/api/users/butter_bridge').expect(200).then(({ body }) => {
+							expect(body).to.be.a('object');
+							expect(body.user[0]).to.have.keys('username', 'name', 'avatar_url');
+						});
+					});
+				});
+			});
+		});
 	});
 });
