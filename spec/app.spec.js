@@ -68,6 +68,7 @@ describe('/', () => {
 				describe('GET method', () => {
 					it('GET /articles/:article_id - responds with a Status:200 and the article data', () => {
 						return request(app).get('/api/articles/1').expect(200).then(({ body }) => {
+							console.log(body);
 							expect(body).to.be.a('object');
 							expect(body.article).to.have.keys(
 								'article_id',
@@ -91,6 +92,13 @@ describe('/', () => {
 					it('GET /articles/:article_id - responds with a Status:404 when passed with an invalid article_id format', () => {
 						return request(app).get('/api/articles/9999').expect(404).then(({ body }) => {
 							expect(body.msg).to.be.equal('Article Not Found');
+						});
+					});
+				});
+				describe('PATCH method', () => {
+					it('PATCH /articles/:article_id - responds with a Status:200 and the updated article data', () => {
+						return request(app).patch('/api/articles/1').send({ inc_votes: 1 }).expect(200).then(({ body }) => {
+							expect(body.article.votes).to.be.equal(101);
 						});
 					});
 				});
