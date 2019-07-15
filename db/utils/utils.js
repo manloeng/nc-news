@@ -6,6 +6,8 @@ exports.formatDates = (list) => {
 	return list;
 };
 
-exports.makeRefObj = (list) => {};
+exports.makeRefObj = (list) => {
+	return {};
+};
 
 exports.formatComments = (comments, articleRef) => {};
