@@ -75,7 +75,7 @@ describe('/', () => {
 					const invalidMethods = [ 'patch', 'put', 'post', 'delete' ];
 
 					invalidMethods.forEach((method) => {
-						return request(app)[method]('/api/users/:username').expect(405).then(({ body }) => {
+						return request(app)[method]('/api/users/butter_bridge').expect(405).then(({ body }) => {
 							expect(body.msg).to.equal('Method Not Allowed');
 						});
 					});
@@ -187,6 +187,16 @@ describe('/', () => {
 					it("PATCH /articles/:article_id - responds with a Status:404 when passed with an article_id that isn't found", () => {
 						return request(app).patch('/api/articles/999').send({ inc_votes: -101 }).expect(404).then(({ body }) => {
 							expect(body.msg).to.be.equal('Article ID Not Found');
+						});
+					});
+				});
+
+				it('Invalid Methods for /articles/:article_id - responds with a Status:405', () => {
+					const invalidMethods = [ 'put', 'post', 'delete' ];
+
+					invalidMethods.forEach((method) => {
+						return request(app)[method]('/api/articles/1').expect(405).then(({ body }) => {
+							expect(body.msg).to.equal('Method Not Allowed');
 						});
 					});
 				});
