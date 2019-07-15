@@ -1,7 +1,7 @@
 const connection = require('../db/connection.js');
 
-const getArticleById = ({ article_id }) => {
-	return connection.first('*').from('articles').where('article_id', article_id).then((article) => {
+const getArticlesById = ({ article_id }) => {
+	return connection.select('*').from('articles').where('article_id', article_id).then((article) => {
 		if (!article) {
 			return Promise.reject({
 				status: 404,
@@ -12,4 +12,4 @@ const getArticleById = ({ article_id }) => {
 	});
 };
 
-module.exports = { getArticleById };
+module.exports = { getArticlesById };
