@@ -97,4 +97,16 @@ describe('makeRefObj', () => {
 	});
 });
 
-describe('formatComments', () => {});
+describe('formatComments', () => {
+	it('returns empty array when passed with an empty array', () => {
+		const input = [];
+		const expected = formatComments(input);
+		expect(expected).to.eql([]);
+	});
+	it('returns empty array when passed with an empty array', () => {
+		const comments = [ { created_by: 'Andrew' } ];
+		const articleRefObj = { Andrew: 1 };
+		const expected = formatComments(comments, articleRefObj);
+		expect(expected).to.eql([ { author: 'Andrew' } ]);
+	});
+});
