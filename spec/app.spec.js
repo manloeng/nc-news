@@ -63,7 +63,7 @@ describe('/', () => {
 			});
 		});
 
-		describe.only('/api/articles/:article_id', () => {
+		describe('/api/articles/:article_id', () => {
 			describe('Http methods', () => {
 				describe('GET method', () => {
 					it('GET /articles/:article_id - responds with a Status:200 and the article data', () => {
@@ -82,8 +82,8 @@ describe('/', () => {
 					});
 
 					it('GET /articles/:article_id - responds with a Status:400 when passed with an invalid article_id format', () => {
-						return request(app).get('/api/users/andrew').expect(400).then(({ body }) => {
-							expect(body.msg).to.be.equal('Bad Request');
+						return request(app).get('/api/articles/andrew').expect(400).then(({ body }) => {
+							expect(body.msg).to.be.equal('invalid input syntax for integer: "andrew"');
 						});
 					});
 				});
