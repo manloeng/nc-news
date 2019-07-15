@@ -38,7 +38,7 @@ describe('/', () => {
 			});
 		});
 
-		describe.only('/api/users/:username', () => {
+		describe('/api/users/:username', () => {
 			describe('Http methods', () => {
 				describe('GET method', () => {
 					it('GET /users/:username - responds with a Status:200 and the users data', () => {
@@ -57,6 +57,27 @@ describe('/', () => {
 					it("GET /users/:username - responds with a Status:404 when passed with an username that isn't found", () => {
 						return request(app).get('/api/users/Andrew').expect(404).then(({ body }) => {
 							expect(body.msg).to.be.equal('User Not Found');
+						});
+					});
+				});
+			});
+		});
+
+		describe.only('/api/articles/:article_id', () => {
+			describe('Http methods', () => {
+				describe('GET method', () => {
+					it('GET /articles/:article_id - responds with a Status:200 and the article data', () => {
+						return request(app).get('/api/articles/1').expect(200).then(({ body }) => {
+							expect(body).to.be.a('object');
+							expect(body.articles).to.have.keys(
+								'article_id',
+								'title',
+								'topic',
+								'author',
+								'body',
+								'votes',
+								'created_at'
+							);
 						});
 					});
 				});
