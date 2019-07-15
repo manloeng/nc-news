@@ -134,7 +134,7 @@ describe('/', () => {
 							});
 					});
 
-					it('PATCH /articles/:article_id - responds with a Status:400 when passed with an invalid update key-value pair', () => {
+					it('PATCH /articles/:article_id - responds with a Status:400 when passed with an invalid update key but a valid value', () => {
 						return request(app)
 							.patch('/api/articles/1')
 							.send({ 'not-a-valid-key': 100 })
@@ -144,7 +144,7 @@ describe('/', () => {
 							});
 					});
 
-					it('PATCH /articles/:article_id - responds with a Status:400 when passed with an invalid update key-value pair', () => {
+					it('PATCH /articles/:article_id - responds with a Status:400 when passed with an valid key but invalid update value', () => {
 						return request(app)
 							.patch('/api/articles/1')
 							.send({ inc_votes: 'not-a-valid-value' })
@@ -157,7 +157,7 @@ describe('/', () => {
 					it('PATCH /articles/:article_id - responds with a Status:400 when passed with an valid update key-value pair and an invalid key-value pair', () => {
 						return request(app)
 							.patch('/api/articles/1')
-							.send({ inc_votes: 100, 'not-a-valid-key': 100 })
+							.send({ inc_votes: 100, 999: 100 })
 							.expect(400)
 							.then(({ body }) => {
 								expect(body.msg).to.be.equal('Not a Valid Key-Value');
