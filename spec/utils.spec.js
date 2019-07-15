@@ -127,4 +127,47 @@ describe('formatComments', () => {
 		const expected = formatComments(comments, articleRefObj);
 		expect(expected).to.eql([ { created_at: new Date(0) }, { created_at: new Date(1563188900) } ]);
 	});
+	it('returns an array with all the key-value pair in a object including the newly renamed keys when passed with an array containing one object', () => {
+		const articleRef = { 'Running away': 22 };
+		const input = [
+			{
+				body:
+					'Itaque quisquam est similique et est perspiciatis reprehenderit voluptatem autem. Voluptatem accusantium eius error adipisci quibusdam doloribus.',
+				belongs_to: 'Running away',
+				created_by: 'tickle122',
+				votes: -1,
+				created_at: 1468087638932
+			}
+		];
+		const result = formatComments(input, articleRef);
+		expect(result[0]).to.have.keys('body', 'article_id', 'author', 'votes', 'created_at');
+		expect(result[0].author).to.equal('tickle122');
+		expect(result[0].article_id).to.equal(22);
+		expect(result[0].created_at).to.eql(new Date(1468087638932));
+	});
+	it('returns an array with all the key-value pair in the object including the newly renamed keys when passed with an array containing multiple object', () => {
+		const articleRef = { 'Running a Node App': 10, 'Running away': 22 };
+		const input = [
+			{
+				body:
+					'Itaque quisquam est similique et est perspiciatis reprehenderit voluptatem autem. Voluptatem accusantium eius error adipisci quibusdam doloribus.',
+				belongs_to: 'Running away',
+				created_by: 'tickle122',
+				votes: -1,
+				created_at: 1468087638932
+			},
+			{
+				body: 'Some text here',
+				belongs_to: 'Running a Node App',
+				created_by: 'Andrew',
+				votes: -1,
+				created_at: 0
+			}
+		];
+		const result = formatComments(input, articleRef);
+		expect(result[0]).to.have.keys('body', 'article_id', 'author', 'votes', 'created_at');
+		expect(result[1].author).to.equal('Andrew');
+		expect(result[1].article_id).to.equal(10);
+		expect(result[1].created_at).to.eql(new Date(0));
+	});
 });
