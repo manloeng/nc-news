@@ -96,9 +96,14 @@ describe('/', () => {
 				});
 
 				describe('PATCH method', () => {
-					it.only('PATCH /articles/:article_id - responds with a Status:200 and the updated article data', () => {
+					it.only('PATCH /articles/:article_id - responds with a Status:200 and the updated article vote data', () => {
 						return request(app).patch('/api/articles/1').send({ inc_votes: 105 }).expect(200).then(({ body }) => {
 							expect(body.article.votes).to.be.equal(205);
+						});
+					});
+					it.only('PATCH /articles/:article_id - responds with a Status:200 and the updated article vote data', () => {
+						return request(app).patch('/api/articles/1').send({ inc_votes: -101 }).expect(200).then(({ body }) => {
+							expect(body.article.votes).to.be.equal(-1);
 						});
 					});
 				});
