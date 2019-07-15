@@ -120,6 +120,12 @@ describe('/', () => {
 								expect(body.msg).to.be.equal('invalid input syntax for integer: "not-a-valid-id"');
 							});
 					});
+
+					it("PATCH /articles/:article_id - responds with a Status:404 when passed with an article_id that isn't found", () => {
+						return request(app).patch('/api/articles/999').send({ inc_votes: -101 }).expect(404).then(({ body }) => {
+							expect(body.msg).to.be.equal('Article ID Not Found');
+						});
+					});
 				});
 			});
 		});
