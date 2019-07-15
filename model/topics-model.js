@@ -1,5 +1,7 @@
+const connection = require('../db/connection.js');
+
 const getTopics = () => {
-	console.log('getTopics');
+	return connection.select('*').from('topics');
 };
 
 module.exports = { getTopics };
