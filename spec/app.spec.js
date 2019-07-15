@@ -40,8 +40,8 @@ describe('/', () => {
 					const invalidMethods = [ 'patch', 'put', 'post', 'delete' ];
 
 					invalidMethods.forEach((method) => {
-						return request(app)[method]('/api/topics').expect(405).then((res) => {
-							expect(res.body.msg).to.equal('Method Not Allowed');
+						return request(app)[method]('/api/topics').expect(405).then(({ body }) => {
+							expect(body.msg).to.equal('Method Not Allowed');
 						});
 					});
 				});
