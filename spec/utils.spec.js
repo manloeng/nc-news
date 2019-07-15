@@ -97,7 +97,7 @@ describe('makeRefObj', () => {
 	});
 });
 
-describe('formatComments', () => {
+describe.only('formatComments', () => {
 	it('returns empty array when passed with an empty array', () => {
 		const input = [];
 		const expected = formatComments(input);
@@ -107,25 +107,29 @@ describe('formatComments', () => {
 		const comments = [ { created_by: 'Andrew' } ];
 		const articleRefObj = { Andrew: 1 };
 		const expected = formatComments(comments, articleRefObj);
-		expect(expected).to.eql([ { author: 'Andrew' } ]);
+		expect(expected[0]).to.contain.keys('author');
+		expect(expected[0].author).to.equal('Andrew');
 	});
 	it('returns an array with an renamed key of "article_id" when passed with a key of "belongs_to"', () => {
 		const comments = [ { belongs_to: 'Andrew' } ];
 		const articleRefObj = { Andrew: 1 };
 		const expected = formatComments(comments, articleRefObj);
-		expect(expected).to.eql([ { article_id: 1 } ]);
+		expect(expected[0]).to.contain.keys('article_id');
+		expect(expected[0].article_id).to.equal(1);
 	});
 	it('returns an array with an object containing the converted date when passed an array with an object containing a Unix timestamp of 0', () => {
 		const comments = [ { created_at: 0 } ];
 		const articleRefObj = { Andrew: 1 };
 		const expected = formatComments(comments, articleRefObj);
-		expect(expected).to.eql([ { created_at: new Date(0) } ]);
+		expect(expected[0]).to.contain.keys('created_at');
+		expect(expected[0].created_at).to.eql(new Date(0));
 	});
 	it('returns an array with multiple objects containing the converted date when passed an array with objects containing multiple Unix timestamps', () => {
 		const comments = [ { created_at: 0 }, { created_at: 1563188900 } ];
 		const articleRefObj = { Andrew: 1 };
 		const expected = formatComments(comments, articleRefObj);
-		expect(expected).to.eql([ { created_at: new Date(0) }, { created_at: new Date(1563188900) } ]);
+		expect(expected[0]).to.contain.keys('created_at');
+		expect(expected[1].created_at).to.eql(new Date(1563188900));
 	});
 	it('returns an array with all the key-value pair in a object including the newly renamed keys when passed with an array containing one object', () => {
 		const articleRef = { 'Running away': 22 };
@@ -139,11 +143,11 @@ describe('formatComments', () => {
 				created_at: 1468087638932
 			}
 		];
-		const result = formatComments(input, articleRef);
-		expect(result[0]).to.have.keys('body', 'article_id', 'author', 'votes', 'created_at');
-		expect(result[0].author).to.equal('tickle122');
-		expect(result[0].article_id).to.equal(22);
-		expect(result[0].created_at).to.eql(new Date(1468087638932));
+		const expected = formatComments(input, articleRef);
+		expect(expected[0]).to.have.keys('body', 'article_id', 'author', 'votes', 'created_at');
+		expect(expected[0].author).to.equal('tickle122');
+		expect(expected[0].article_id).to.equal(22);
+		expect(expected[0].created_at).to.eql(new Date(1468087638932));
 	});
 	it('returns an array with all the key-value pair in the object including the newly renamed keys when passed with an array containing multiple object', () => {
 		const articleRef = { 'Running a Node App': 10, 'Running away': 22 };
@@ -164,10 +168,10 @@ describe('formatComments', () => {
 				created_at: 0
 			}
 		];
-		const result = formatComments(input, articleRef);
-		expect(result[0]).to.have.keys('body', 'article_id', 'author', 'votes', 'created_at');
-		expect(result[1].author).to.equal('Andrew');
-		expect(result[1].article_id).to.equal(10);
-		expect(result[1].created_at).to.eql(new Date(0));
+		const expected = formatComments(input, articleRef);
+		expect(expected[0]).to.have.keys('body', 'article_id', 'author', 'votes', 'created_at');
+		expect(expected[1].author).to.equal('Andrew');
+		expect(expected[1].article_id).to.equal(10);
+		expect(expected[1].created_at).to.eql(new Date(0));
 	});
 });
