@@ -3,7 +3,7 @@ exports.formatDates = (list) => {
 	const mapArr = list.map(({ created_at }) => {
 		return new Date(created_at);
 	});
-	return mapArr[0];
+	return mapArr;
 };
 
 exports.makeRefObj = (list) => {};
