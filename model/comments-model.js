@@ -70,8 +70,8 @@ const patchCommentById = ({ comment_id }, { inc_votes, ...restOfBodyData }) => {
 		});
 };
 
-const deleteCommentById = () => {
-	console.log('deleteCommentById');
+const deleteCommentById = ({ comment_id }) => {
+	return connection.from('comments').where('comment_id', comment_id).del();
 };
 
 module.exports = { postCommentByArticleId, getCommentByArticleId, patchCommentById, deleteCommentById };

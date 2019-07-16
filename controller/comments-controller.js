@@ -30,8 +30,11 @@ const sendPatchCommentById = (req, res, next) => {
 };
 
 const sendDeleteCommentById = (req, res, next) => {
-	console.log('sendDeleteCommentById');
-	deleteCommentById();
+	deleteCommentById(req.params)
+		.then(() => {
+			res.sendStatus(204);
+		})
+		.catch(next);
 };
 
 module.exports = { sendPostCommentByArticleId, sendGetCommentByArticleId, sendPatchCommentById, sendDeleteCommentById };
