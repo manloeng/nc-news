@@ -315,7 +315,7 @@ describe('/', () => {
 						});
 					});
 
-					describe.only('GET method', () => {
+					describe('GET method', () => {
 						it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id and is sorted by "created_at" in descending order', () => {
 							return request(app).get('/api/articles/1/comments ').expect(200).then(({ body }) => {
 								expect(body).to.be.a('object');
@@ -379,6 +379,16 @@ describe('/', () => {
 						it('GET /articles/:article_id/comments  - responds with a Status:404 when passed with a article_id thats not found', () => {
 							return request(app).get('/api/articles/999/comments').expect(404).then(({ body }) => {
 								expect(body.msg).to.equal('Article ID Not Found');
+							});
+						});
+					});
+
+					it('Invalid Methods for /articles/:article_id/comments - responds with a Status:405', () => {
+						const invalidMethods = [ 'patch', 'put', 'delete' ];
+
+						invalidMethods.forEach((method) => {
+							return request(app)[method]('/api/articles/1/comments').expect(405).then(({ body }) => {
+								expect(body.msg).to.equal('Method Not Allowed');
 							});
 						});
 					});
