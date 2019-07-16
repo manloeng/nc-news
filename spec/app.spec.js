@@ -271,7 +271,7 @@ describe('/', () => {
 								});
 						});
 
-						it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an article_id', () => {
+						it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an invalid article_id', () => {
 							return request(app)
 								.post('/api/articles/not-an-valid-id/comments')
 								.send({
@@ -281,6 +281,36 @@ describe('/', () => {
 								.expect(400)
 								.then(({ body }) => {
 									expect(body.msg).to.be.equal('invalid input syntax for integer: "not-an-valid-id"');
+								});
+						});
+
+						it("POST /articles/:article_id/comments - responds with a Status:400 when passed with an article_id that isn't found", () => {
+							return request(app)
+								.post('/api/articles/999/comments')
+								.send({
+									body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+									username: 'butter_bridge'
+								})
+								.expect(400)
+								.then(({ body }) => {
+									expect(body.msg).to.be.equal(
+										'insert or update on table "comments" violates foreign key constraint "comments_article_id_foreign"'
+									);
+								});
+						});
+
+						it('POST /articles/:article_id/comments - responds with a Status:400 when passed with addtional unwanted key-values', () => {
+							return request(app)
+								.post('/api/articles/1/comments')
+								.send({
+									body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+									username: 'butter_bridge',
+									age: 28,
+									gender: 'male'
+								})
+								.expect(400)
+								.then(({ body }) => {
+									expect(body.msg).to.be.equal('Bad Request');
 								});
 						});
 					});
