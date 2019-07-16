@@ -357,6 +357,12 @@ describe('/', () => {
 								expect(body.msg).to.equal('Invalid query');
 							});
 						});
+
+						it('GET /articles/:article_id/comments  - responds with a Status:400 when passed with an invalid sort_by query', () => {
+							return request(app).get('/api/articles/1/comments?sort_by=shape').expect(400).then(({ body }) => {
+								expect(body.msg).to.equal('column "shape" does not exist');
+							});
+						});
 					});
 				});
 			});
