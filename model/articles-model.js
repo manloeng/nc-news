@@ -32,11 +32,14 @@ const patchArticleById = ({ article_id }, { inc_votes, ...restOfReqBody }) => {
 		.where('article_id', article_id)
 		.increment('votes', inc_votes)
 		.returning('*')
-		.then(() => {
-			return getArticleById({ article_id });
-		})
 		.then((article) => {
-			return article;
+			if (!article.length) {
+				return Promise.reject({
+					status: 404,
+					msg: 'Article ID Not Found'
+				});
+			}
+			return article[0];
 		});
 };
 
