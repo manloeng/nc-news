@@ -47,4 +47,8 @@ const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'crea
 	}
 };
 
-module.exports = { postCommentByArticleId, getCommentByArticleId };
+const patchCommentById = () => {
+	console.log('patchCommentById');
+};
+
+module.exports = { postCommentByArticleId, getCommentByArticleId, patchCommentById };
