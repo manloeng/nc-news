@@ -202,7 +202,7 @@ describe('/', () => {
 				});
 			});
 
-			describe.only('/api/articles/:article_id/comments', () => {
+			describe('/api/articles/:article_id/comments', () => {
 				describe('Http methods', () => {
 					describe('POST method', () => {
 						it('POST /articles/:article_id/comments - responds with a Status:201 and the newly created comment', () => {
@@ -312,6 +312,15 @@ describe('/', () => {
 								.then(({ body }) => {
 									expect(body.msg).to.be.equal('Bad Request');
 								});
+						});
+					});
+
+					describe.only('GET method', () => {
+						it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id', () => {
+							return request(app).get('/api/articles/1/comments ').expect(200).then(({ body }) => {
+								expect(body).to.be.a('object');
+								expect(body.comments[0]).to.have.keys('comment_id', 'votes', 'created_at', 'author', 'body');
+							});
 						});
 					});
 				});
