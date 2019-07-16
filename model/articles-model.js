@@ -26,6 +26,7 @@ const patchArticleById = ({ article_id }, { inc_votes, ...restOfReqBody }) => {
 			msg: 'Not a Valid Key-Value'
 		});
 	}
+
 	return connection
 		.from('articles')
 		.where('article_id', article_id)

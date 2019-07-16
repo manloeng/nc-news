@@ -23,6 +23,7 @@ const postCommentByArticleId = ({ article_id }, { username, body, ...restOftheBo
 
 const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'created_at', ...restOfArticleData }) => {
 	const objLength = Object.keys(restOfArticleData).length;
+
 	if ((order === 'asc' && objLength === 0) || (order === 'desc' && objLength === 0)) {
 		return connection
 			.select('*')
