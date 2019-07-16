@@ -47,8 +47,15 @@ const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'crea
 	}
 };
 
-const patchCommentById = () => {
-	console.log('patchCommentById');
+const patchCommentById = ({ comment_id }, { inc_votes, ...restOfBodyData }) => {
+	return connection
+		.from('comments')
+		.where('comment_id', comment_id)
+		.increment('votes', inc_votes)
+		.returning('*')
+		.then((comment) => {
+			return comment[0];
+		});
 };
 
 module.exports = { postCommentByArticleId, getCommentByArticleId, patchCommentById };

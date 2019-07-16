@@ -17,8 +17,11 @@ const sendGetCommentByArticleId = (req, res, next) => {
 };
 
 const sendPatchCommentById = (req, res, next) => {
-	console.log('sendPatchCommentById');
-	patchCommentById();
+	patchCommentById(req.params, req.body)
+		.then((comment) => {
+			res.status(200).send({ comment });
+		})
+		.catch(next);
 };
 
 module.exports = { sendPostCommentByArticleId, sendGetCommentByArticleId, sendPatchCommentById };
