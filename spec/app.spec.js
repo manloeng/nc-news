@@ -333,30 +333,12 @@ describe('/', () => {
 
 						it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id', () => {
 							return request(app).get('/api/articles/1/comments?order=asc').expect(200).then(({ body }) => {
-								expect(body).to.be.a('object');
-								expect(body.comments[0]).to.have.keys(
-									'article_id',
-									'comment_id',
-									'votes',
-									'created_at',
-									'author',
-									'body'
-								);
 								expect(body.comments).to.be.ascendingBy('created_at');
 							});
 						});
 
 						it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id', () => {
 							return request(app).get('/api/articles/1/comments?sort_by=author').expect(200).then(({ body }) => {
-								expect(body).to.be.a('object');
-								expect(body.comments[0]).to.have.keys(
-									'article_id',
-									'comment_id',
-									'votes',
-									'created_at',
-									'author',
-									'body'
-								);
 								expect(body.comments).to.be.descendingBy('author');
 							});
 						});
