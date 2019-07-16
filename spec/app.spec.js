@@ -118,6 +118,7 @@ describe('/', () => {
 				describe('PATCH method', () => {
 					it('PATCH /articles/:article_id - responds with a Status:200 and the updated article vote data', () => {
 						return request(app).patch('/api/articles/1').send({ inc_votes: 105 }).expect(200).then(({ body }) => {
+							expect(body).to.be.a('object');
 							expect(body.article.votes).to.be.equal(205);
 							expect(body.article).to.have.keys(
 								'article_id',
@@ -390,6 +391,26 @@ describe('/', () => {
 							return request(app)[method]('/api/articles/1/comments').expect(405).then(({ body }) => {
 								expect(body.msg).to.equal('Method Not Allowed');
 							});
+						});
+					});
+				});
+			});
+		});
+
+		describe('/api/comments/:comment_id', () => {
+			describe('Http methods', () => {
+				describe('PATCH method', () => {
+					it('PATCH /comments/:comment_id - responds with a Status:200 and the list of the comments data', () => {
+						return request(app).patch('/api/comments/1').send({ inc_votes: 1 }).expect(200).then(({ body }) => {
+							expect(body).to.be.a('object');
+							expect(body.comments[0]).to.have.keys(
+								'article_id',
+								'comment_id',
+								'votes',
+								'created_at',
+								'author',
+								'body'
+							);
 						});
 					});
 				});
