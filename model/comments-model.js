@@ -22,13 +22,15 @@ const postCommentByArticleId = ({ article_id }, { username, body, ...restOftheBo
 };
 
 const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'created_at', ...restOfArticleData }) => {
-	if (Object.keys(restOfArticleData).length > 0) {
+	const objLength = Object.keys(restOfArticleData).length;
+	if ((order === 'asc' && objLength === 0) || (order === 'desc' && objLength === 0)) {
+		return connection.select('*').from('comments').orderBy(sort_by, order).where('article_id', article_id);
+	} else {
 		return Promise.reject({
 			status: 400,
 			msg: 'Invalid query'
 		});
 	}
-	return connection.select('*').from('comments').orderBy(sort_by, order).where('article_id', article_id);
 };
 
 module.exports = { postCommentByArticleId, getCommentByArticleId };
