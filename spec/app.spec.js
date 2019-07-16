@@ -460,7 +460,7 @@ describe('/', () => {
 					});
 				});
 
-				describe.only('DELETE method', () => {
+				describe('DELETE method', () => {
 					it('DELETE /comments/:comment_id - responds with a Status:204', () => {
 						return request(app).delete('/api/comments/1').expect(204);
 					});
@@ -474,6 +474,16 @@ describe('/', () => {
 					it('DELETE /comments/:comment_id - responds with a Status:404', () => {
 						return request(app).delete('/api/comments/999').expect(404).then(({ body }) => {
 							expect(body.msg).to.equal('Comment ID Not Found');
+						});
+					});
+				});
+
+				it('Invalid Methods for /topics - responds with a Status:405', () => {
+					const invalidMethods = [ 'get', 'post', 'put' ];
+
+					invalidMethods.forEach((method) => {
+						return request(app)[method]('/api/comments/:comment_id').expect(405).then(({ body }) => {
+							expect(body.msg).to.equal('Method Not Allowed');
 						});
 					});
 				});
