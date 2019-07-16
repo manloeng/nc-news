@@ -369,6 +369,12 @@ describe('/', () => {
 								expect(body.msg).to.equal('Invalid query');
 							});
 						});
+
+						it('GET /articles/:article_id/comments  - responds with a Status:400 when passed with an invalid order query', () => {
+							return request(app).get('/api/articles/not-a-valid-id/comments').expect(400).then(({ body }) => {
+								expect(body.msg).to.equal('invalid input syntax for integer: "not-a-valid-id"');
+							});
+						});
 					});
 				});
 			});
