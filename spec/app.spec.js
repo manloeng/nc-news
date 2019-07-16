@@ -363,6 +363,12 @@ describe('/', () => {
 								expect(body.msg).to.equal('column "shape" does not exist');
 							});
 						});
+
+						it('GET /articles/:article_id/comments  - responds with a Status:400 when passed with an invalid order query', () => {
+							return request(app).get('/api/articles/1/comments?order=shape').expect(400).then(({ body }) => {
+								expect(body.msg).to.equal('Invalid query');
+							});
+						});
 					});
 				});
 			});
