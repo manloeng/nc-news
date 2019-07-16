@@ -1,6 +1,12 @@
 const connection = require('../db/connection.js');
 
 const postCommentByArticleId = ({ article_id }, { username, body, ...restOftheBody }) => {
+	if (Object.keys(restOftheBody).length > 0) {
+		return Promise.reject({
+			status: 400,
+			msg: 'Bad Request'
+		});
+	}
 	const formattedObj = {};
 	formattedObj.article_id = article_id;
 	formattedObj.author = username;
