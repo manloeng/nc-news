@@ -399,10 +399,54 @@ describe('/', () => {
 		describe.only('/api/comments/:comment_id', () => {
 			describe('Http methods', () => {
 				describe('PATCH method', () => {
-					it('PATCH /comments/:comment_id - responds with a Status:200 and the list of the comments data', () => {
+					it('PATCH /comments/:comment_id - responds with a Status:200 and the comment data', () => {
 						return request(app).patch('/api/comments/1').send({ inc_votes: 1 }).expect(200).then(({ body }) => {
 							expect(body).to.be.a('object');
 							expect(body.comment).to.have.keys('article_id', 'comment_id', 'votes', 'created_at', 'author', 'body');
+						});
+					});
+
+					it('PATCH /comments/:comment_id - responds with a Status:200 and the comment data', () => {
+						return request(app).patch('/api/comments/1').send({ inc_votes: -100 }).expect(200).then(({ body }) => {
+							expect(body.comment.votes).to.equal(-84);
+						});
+					});
+
+					it('PATCH /comments/:comment_id - responds with a Status:200 when passed with an empty Object', () => {
+						return request(app).patch('/api/comments/1').send({}).expect(200).then(({ body }) => {
+							expect(body.comment.comment_id).to.equal(1);
+						});
+					});
+
+					it('PATCH /comments/:comment_id - responds with a Status:400 when passed with an invalid query', () => {
+						return request(app).patch('/api/comments/1').send({ increase_votes: -100 }).expect(400).then(({ body }) => {
+							expect(body.msg).to.equal('Bad Request');
+						});
+					});
+
+					it('PATCH /comments/:comment_id - responds with a Status:400 when passed with an invalid query value', () => {
+						return request(app)
+							.patch('/api/comments/1')
+							.send({ inc_votes: 'not-a-value' })
+							.expect(400)
+							.then(({ body }) => {
+								expect(body.msg).to.equal('invalid input syntax for integer: "NaN"');
+							});
+					});
+
+					it('PATCH /comments/:comment_id - responds with a Status:400 when passed with an invalid comment_id', () => {
+						return request(app)
+							.patch('/api/comments/not-an-valid-id')
+							.send({ inc_votes: 1 })
+							.expect(400)
+							.then(({ body }) => {
+								expect(body.msg).to.equal('invalid input syntax for integer: "not-an-valid-id"');
+							});
+					});
+
+					it("PATCH /comments/:comment_id - responds with a Status:404 when passed with an comment_id that isn't found", () => {
+						return request(app).patch('/api/comments/999').send({ inc_votes: 1 }).expect(404).then(({ body }) => {
+							expect(body.msg).to.equal('Comment ID Not Found');
 						});
 					});
 				});
