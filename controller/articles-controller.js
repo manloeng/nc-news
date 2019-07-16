@@ -1,4 +1,4 @@
-const { getArticleById, patchArticleById } = require('../model/articles-model.js');
+const { getArticleById, patchArticleById, getArticles } = require('../model/articles-model.js');
 
 const sendGetArticleById = (req, res, next) => {
 	getArticleById(req.params)
@@ -16,4 +16,9 @@ const sendPatchArticleById = (req, res, next) => {
 		.catch(next);
 };
 
-module.exports = { sendGetArticleById, sendPatchArticleById };
+const sendGetArticles = (req, res, next) => {
+	console.log('sendGetArticles');
+	getArticles();
+};
+
+module.exports = { sendGetArticleById, sendPatchArticleById, sendGetArticles };

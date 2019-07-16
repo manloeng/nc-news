@@ -43,4 +43,8 @@ const patchArticleById = ({ article_id }, { inc_votes, ...restOfReqBody }) => {
 		});
 };
 
-module.exports = { getArticleById, patchArticleById };
+const getArticles = () => {
+	console.log('getArticles');
+};
+
+module.exports = { getArticleById, patchArticleById, getArticles };
