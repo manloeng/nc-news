@@ -202,7 +202,7 @@ describe('/', () => {
 				});
 			});
 
-			describe.only('/api/articles/:article_id/comments', () => {
+			describe('/api/articles/:article_id/comments', () => {
 				describe('Http methods', () => {
 					describe('POST method', () => {
 						it('POST /articles/:article_id/comments - responds with a Status:201 and the newly created comment', () => {
@@ -210,8 +210,7 @@ describe('/', () => {
 								.post('/api/articles/1/comments')
 								.send({
 									body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
-									author: 'butter_bridge',
-									votes: 16
+									username: 'butter_bridge'
 								})
 								.expect(201)
 								.then(({ body }) => {
