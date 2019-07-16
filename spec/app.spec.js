@@ -342,6 +342,15 @@ describe('/', () => {
 								expect(body.comments).to.be.descendingBy('author');
 							});
 						});
+
+						it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id', () => {
+							return request(app)
+								.get('/api/articles/1/comments?sort_by=author&order=asc')
+								.expect(200)
+								.then(({ body }) => {
+									expect(body.comments).to.be.ascendingBy('author');
+								});
+						});
 					});
 				});
 			});
