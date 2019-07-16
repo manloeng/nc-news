@@ -24,7 +24,20 @@ const postCommentByArticleId = ({ article_id }, { username, body, ...restOftheBo
 const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'created_at', ...restOfArticleData }) => {
 	const objLength = Object.keys(restOfArticleData).length;
 	if ((order === 'asc' && objLength === 0) || (order === 'desc' && objLength === 0)) {
-		return connection.select('*').from('comments').orderBy(sort_by, order).where('article_id', article_id);
+		return connection
+			.select('*')
+			.from('comments')
+			.orderBy(sort_by, order)
+			.where('article_id', article_id)
+			.then((comments) => {
+				if (!comments.length) {
+					return Promise.reject({
+						status: 404,
+						msg: 'Article ID Not Found'
+					});
+				}
+				return comments;
+			});
 	} else {
 		return Promise.reject({
 			status: 400,
