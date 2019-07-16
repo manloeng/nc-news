@@ -44,7 +44,12 @@ const patchArticleById = ({ article_id }, { inc_votes, ...restOfReqBody }) => {
 };
 
 const getArticles = () => {
-	console.log('getArticles');
+	return connection
+		.select('articles.article_id', 'articles.author', 'articles.created_at', 'articles.votes', 'title', 'topic')
+		.from('articles')
+		.leftJoin('comments', 'articles.article_id', 'comments.comment_id')
+		.count({ comment_count: 'comments.article_id' })
+		.groupBy('articles.article_id');
 };
 
 module.exports = { getArticleById, patchArticleById, getArticles };

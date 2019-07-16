@@ -17,8 +17,9 @@ const sendPatchArticleById = (req, res, next) => {
 };
 
 const sendGetArticles = (req, res, next) => {
-	console.log('sendGetArticles');
-	getArticles();
+	getArticles().then((articles) => {
+		res.status(200).send({ articles });
+	});
 };
 
 module.exports = { sendGetArticleById, sendPatchArticleById, sendGetArticles };
