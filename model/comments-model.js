@@ -70,4 +70,8 @@ const patchCommentById = ({ comment_id }, { inc_votes, ...restOfBodyData }) => {
 		});
 };
 
-module.exports = { postCommentByArticleId, getCommentByArticleId, patchCommentById };
+const deleteCommentById = () => {
+	console.log('deleteCommentById');
+};
+
+module.exports = { postCommentByArticleId, getCommentByArticleId, patchCommentById, deleteCommentById };
