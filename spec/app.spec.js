@@ -202,5 +202,37 @@ describe('/', () => {
 				});
 			});
 		});
+
+		describe.only('/api/articles/:article_id/comments', () => {
+			describe('Http methods', () => {
+				describe('POST method', () => {
+					it('POST /articles/:article_id/comments - responds with a Status:201 and the newly created comment', () => {
+						return request(app).get('/api/articles/1/comments').expect(201).then(({ body }) => {
+							expect(body).to.be.a('object');
+							expect(body.comments[0]).to.have.keys(
+								'comment_id',
+								'body',
+								'article_id',
+								'author',
+								'votes',
+								'created_at'
+							);
+						});
+					});
+				});
+			});
+		});
 	});
 });
+
+/**
+ * 				it('Invalid Methods for /topics - responds with a Status:405', () => {
+					const invalidMethods = [ 'patch', 'put', 'delete' ];
+
+					invalidMethods.forEach((method) => {
+						return request(app)[method]('/api/topics').expect(405).then(({ body }) => {
+							expect(body.msg).to.equal('Method Not Allowed');
+						});
+					});
+				});
+ */
