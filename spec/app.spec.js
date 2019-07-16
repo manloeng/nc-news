@@ -202,7 +202,7 @@ describe('/', () => {
 				});
 			});
 
-			describe('/api/articles/:article_id/comments', () => {
+			describe.only('/api/articles/:article_id/comments', () => {
 				describe('Http methods', () => {
 					describe('POST method', () => {
 						it('POST /articles/:article_id/comments - responds with a Status:201 and the newly created comment', () => {
@@ -223,6 +223,64 @@ describe('/', () => {
 										'votes',
 										'created_at'
 									);
+								});
+						});
+
+						it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an empty object', () => {
+							return request(app).post('/api/articles/1/comments').send({}).expect(400).then(({ body }) => {
+								expect(body.msg).to.be.equal('null value in column "body" violates not-null constraint');
+							});
+						});
+
+						it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an object not containing a body', () => {
+							return request(app)
+								.post('/api/articles/1/comments')
+								.send({
+									username: 'butter_bridge'
+								})
+								.expect(400)
+								.then(({ body }) => {
+									expect(body.msg).to.be.equal('null value in column "body" violates not-null constraint');
+								});
+						});
+
+						it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an object not containing a invalid username', () => {
+							return request(app)
+								.post('/api/articles/1/comments')
+								.send({
+									body: 'Some Text Here',
+									username: 123
+								})
+								.expect(400)
+								.then(({ body }) => {
+									expect(body.msg).to.be.equal(
+										'insert or update on table "comments" violates foreign key constraint "comments_author_foreign"'
+									);
+								});
+						});
+
+						it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an object not containing a username', () => {
+							return request(app)
+								.post('/api/articles/1/comments')
+								.send({
+									body: 'Some Text Here'
+								})
+								.expect(400)
+								.then(({ body }) => {
+									expect(body.msg).to.be.equal('Require Username Input');
+								});
+						});
+
+						it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an article_id', () => {
+							return request(app)
+								.post('/api/articles/not-an-valid-id/comments')
+								.send({
+									body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+									username: 'butter_bridge'
+								})
+								.expect(400)
+								.then(({ body }) => {
+									expect(body.msg).to.be.equal('invalid input syntax for integer: "not-an-valid-id"');
 								});
 						});
 					});
