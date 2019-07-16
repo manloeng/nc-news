@@ -115,7 +115,7 @@ describe('/', () => {
 					});
 				});
 
-				describe.only('PATCH method', () => {
+				describe('PATCH method', () => {
 					it('PATCH /articles/:article_id - responds with a Status:200 and the updated article vote data', () => {
 						return request(app).patch('/api/articles/1').send({ inc_votes: 105 }).expect(200).then(({ body }) => {
 							expect(body).to.be.a('object');
@@ -396,20 +396,13 @@ describe('/', () => {
 			});
 		});
 
-		describe('/api/comments/:comment_id', () => {
+		describe.only('/api/comments/:comment_id', () => {
 			describe('Http methods', () => {
 				describe('PATCH method', () => {
 					it('PATCH /comments/:comment_id - responds with a Status:200 and the list of the comments data', () => {
 						return request(app).patch('/api/comments/1').send({ inc_votes: 1 }).expect(200).then(({ body }) => {
 							expect(body).to.be.a('object');
-							expect(body.comments[0]).to.have.keys(
-								'article_id',
-								'comment_id',
-								'votes',
-								'created_at',
-								'author',
-								'body'
-							);
+							expect(body.comment).to.have.keys('article_id', 'comment_id', 'votes', 'created_at', 'author', 'body');
 						});
 					});
 				});
