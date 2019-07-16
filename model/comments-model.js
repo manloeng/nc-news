@@ -1,6 +1,12 @@
 const connection = require('../db/connection.js');
 
 const postCommentByArticleId = ({ article_id }, { username, body, ...restOftheBody }) => {
+	if (!username || !body) {
+		return Promise.reject({
+			status: 400,
+			msg: 'Require Input'
+		});
+	}
 	const formattedObj = {};
 	formattedObj.article_id = article_id;
 	formattedObj.author = username;
