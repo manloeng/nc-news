@@ -1,8 +1,11 @@
 const { postCommentByArticleId } = require('../model/comments-model.js');
 
-const sendPostCommentByArticleId = () => {
-	console.log('sendPostCommentByArticleId');
-	postCommentByArticleId();
+const sendPostCommentByArticleId = (req, res, next) => {
+	postCommentByArticleId(req.params, req.body)
+		.then((comment) => {
+			res.status(201).send({ comment });
+		})
+		.catch(next);
 };
 
 module.exports = { sendPostCommentByArticleId };
