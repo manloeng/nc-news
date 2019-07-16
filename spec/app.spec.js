@@ -353,8 +353,8 @@ describe('/', () => {
 						});
 
 						it('GET /articles/:article_id/comments  - responds with a Status:400 when passed with an invalid query', () => {
-							return request(app).get('/api/articles/1/comments?sorting=author').expect(200).then(({ body }) => {
-								expect(body.message).to.be.equal('Invalid query');
+							return request(app).get('/api/articles/1/comments?sorting=author').expect(400).then(({ body }) => {
+								expect(body.msg).to.equal('Invalid query');
 							});
 						});
 					});
