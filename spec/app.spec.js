@@ -201,22 +201,32 @@ describe('/', () => {
 					});
 				});
 			});
-		});
 
-		describe.only('/api/articles/:article_id/comments', () => {
-			describe('Http methods', () => {
-				describe('POST method', () => {
-					it('POST /articles/:article_id/comments - responds with a Status:201 and the newly created comment', () => {
-						return request(app).get('/api/articles/1/comments').expect(201).then(({ body }) => {
-							expect(body).to.be.a('object');
-							expect(body.comments[0]).to.have.keys(
-								'comment_id',
-								'body',
-								'article_id',
-								'author',
-								'votes',
-								'created_at'
-							);
+			describe.only('/api/articles/:article_id/comments', () => {
+				describe('Http methods', () => {
+					describe('POST method', () => {
+						it('POST /articles/:article_id/comments - responds with a Status:201 and the newly created comment', () => {
+							return request(app)
+								.post('/api/articles/1/comments')
+								.send({
+									body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+									belongs_to: "They're not exactly dogs, are they?",
+									created_by: 'butter_bridge',
+									votes: 16,
+									created_at: 1511354163389
+								})
+								.expect(201)
+								.then(({ body }) => {
+									expect(body).to.be.a('object');
+									expect(body.comments[0]).to.have.keys(
+										'comment_id',
+										'body',
+										'article_id',
+										'author',
+										'votes',
+										'created_at'
+									);
+								});
 						});
 					});
 				});
