@@ -396,7 +396,7 @@ describe('/', () => {
 			});
 		});
 
-		describe.only('/api/comments/:comment_id', () => {
+		describe('/api/comments/:comment_id', () => {
 			describe('Http methods', () => {
 				describe('PATCH method', () => {
 					it('PATCH /comments/:comment_id - responds with a Status:200 and the comment data', () => {
@@ -418,13 +418,22 @@ describe('/', () => {
 						});
 					});
 
-					it('PATCH /comments/:comment_id - responds with a Status:400 when passed with an invalid query', () => {
+					it('PATCH /comments/:comment_id - responds with a Status:400 when passed with an invalid update key but a valid value', () => {
 						return request(app).patch('/api/comments/1').send({ increase_votes: -100 }).expect(400).then(({ body }) => {
 							expect(body.msg).to.equal('Bad Request');
 						});
 					});
+					it('PATCH /comments/:comment_id - responds with a Status:400 when passed with an valid update key-value pair and an invalid key-value pair', () => {
+						return request(app)
+							.patch('/api/comments/1')
+							.send({ inc_votes: -100, increase_votes: -100 })
+							.expect(400)
+							.then(({ body }) => {
+								expect(body.msg).to.equal('Bad Request');
+							});
+					});
 
-					it('PATCH /comments/:comment_id - responds with a Status:400 when passed with an invalid query value', () => {
+					it('PATCH /comments/:comment_id - responds with a Status:400 when passed with anvalid key but invalid update value', () => {
 						return request(app)
 							.patch('/api/comments/1')
 							.send({ inc_votes: 'not-a-value' })
