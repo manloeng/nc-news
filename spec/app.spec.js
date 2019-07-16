@@ -115,7 +115,7 @@ describe('/', () => {
 					});
 				});
 
-				describe('PATCH method', () => {
+				describe.only('PATCH method', () => {
 					it('PATCH /articles/:article_id - responds with a Status:200 and the updated article vote data', () => {
 						return request(app).patch('/api/articles/1').send({ inc_votes: 105 }).expect(200).then(({ body }) => {
 							expect(body).to.be.a('object');
@@ -127,8 +127,7 @@ describe('/', () => {
 								'author',
 								'body',
 								'votes',
-								'created_at',
-								'comment_count'
+								'created_at'
 							);
 						});
 					});
