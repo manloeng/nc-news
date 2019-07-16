@@ -210,15 +210,13 @@ describe('/', () => {
 								.post('/api/articles/1/comments')
 								.send({
 									body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
-									belongs_to: "They're not exactly dogs, are they?",
-									created_by: 'butter_bridge',
-									votes: 16,
-									created_at: 1511354163389
+									author: 'butter_bridge',
+									votes: 16
 								})
 								.expect(201)
 								.then(({ body }) => {
 									expect(body).to.be.a('object');
-									expect(body.comments[0]).to.have.keys(
+									expect(body.comment).to.have.keys(
 										'comment_id',
 										'body',
 										'article_id',
