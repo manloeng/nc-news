@@ -89,7 +89,7 @@ describe('/', () => {
 					it('GET /articles - responds with a Status:200 and the list of articles', () => {
 						return request(app).get('/api/articles').expect(200).then(({ body }) => {
 							expect(body).to.be.a('object');
-							expect(body.article).to.have.keys(
+							expect(body.articles[0]).to.have.keys(
 								'article_id',
 								'title',
 								'topic',
