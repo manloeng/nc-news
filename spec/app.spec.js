@@ -316,7 +316,7 @@ describe('/', () => {
 					});
 
 					describe.only('GET method', () => {
-						it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id', () => {
+						it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id and is sorted by "created_at" in descending order', () => {
 							return request(app).get('/api/articles/1/comments ').expect(200).then(({ body }) => {
 								expect(body).to.be.a('object');
 								expect(body.comments[0]).to.have.keys(
@@ -331,25 +331,31 @@ describe('/', () => {
 							});
 						});
 
-						it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id', () => {
+						it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id and is sorted by "created_at" in ascending order', () => {
 							return request(app).get('/api/articles/1/comments?order=asc').expect(200).then(({ body }) => {
 								expect(body.comments).to.be.ascendingBy('created_at');
 							});
 						});
 
-						it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id', () => {
+						it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id and is sorted by "author" in descending order', () => {
 							return request(app).get('/api/articles/1/comments?sort_by=author').expect(200).then(({ body }) => {
 								expect(body.comments).to.be.descendingBy('author');
 							});
 						});
 
-						it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id', () => {
+						it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id and is sorted by "author" in ascending order', () => {
 							return request(app)
 								.get('/api/articles/1/comments?sort_by=author&order=asc')
 								.expect(200)
 								.then(({ body }) => {
 									expect(body.comments).to.be.ascendingBy('author');
 								});
+						});
+
+						it('GET /articles/:article_id/comments  - responds with a Status:400 when passed with an invalid query', () => {
+							return request(app).get('/api/articles/1/comments?sorting=author').expect(200).then(({ body }) => {
+								expect(body.message).to.be.equal('Invalid query');
+							});
 						});
 					});
 				});
