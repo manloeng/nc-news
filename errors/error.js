@@ -19,12 +19,16 @@ const sqlErrors = (err, req, res, next) => {
 		res.status(400).send({ msg: err.message.match(reg)[0] });
 	}
 	if (err.code === '23502') {
-		const reg2 = /null.+/g;
-		res.status(400).send({ msg: err.message.match(reg2)[0] });
+		const reg = /null.+/g;
+		res.status(400).send({ msg: err.message.match(reg)[0] });
 	}
 	if (err.code === '23503') {
-		const reg3 = /insert or.+/g;
-		res.status(400).send({ msg: err.message.match(reg3)[0] });
+		const reg = /insert or.+/g;
+		res.status(400).send({ msg: err.message.match(reg)[0] });
+	}
+	if (err.code === '42703') {
+		const reg = /column.+/g;
+		res.status(400).send({ msg: err.message.match(reg)[0] });
 	} else next(err);
 };
 
