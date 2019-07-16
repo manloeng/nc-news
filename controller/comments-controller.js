@@ -9,9 +9,11 @@ const sendPostCommentByArticleId = (req, res, next) => {
 };
 
 const sendGetCommentByArticleId = (req, res, next) => {
-	getCommentByArticleId(req.params, req.query).then((comments) => {
-		res.status(200).send({ comments });
-	});
+	getCommentByArticleId(req.params, req.query)
+		.then((comments) => {
+			res.status(200).send({ comments });
+		})
+		.catch(next);
 };
 
 module.exports = { sendPostCommentByArticleId, sendGetCommentByArticleId };
