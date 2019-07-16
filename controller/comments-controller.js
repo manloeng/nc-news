@@ -1,4 +1,4 @@
-const { postCommentByArticleId } = require('../model/comments-model.js');
+const { postCommentByArticleId, getCommentByArticleId } = require('../model/comments-model.js');
 
 const sendPostCommentByArticleId = (req, res, next) => {
 	postCommentByArticleId(req.params, req.body)
@@ -8,4 +8,9 @@ const sendPostCommentByArticleId = (req, res, next) => {
 		.catch(next);
 };
 
-module.exports = { sendPostCommentByArticleId };
+const sendGetCommentByArticleId = (req, res, next) => {
+	console.log('sendGetCommentByArticleId');
+	getCommentByArticleId();
+};
+
+module.exports = { sendPostCommentByArticleId, sendGetCommentByArticleId };

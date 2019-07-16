@@ -21,4 +21,8 @@ const postCommentByArticleId = ({ article_id }, { username, body, ...restOftheBo
 	});
 };
 
-module.exports = { postCommentByArticleId };
+const getCommentByArticleId = () => {
+	console.log('getCommentByArticleId');
+};
+
+module.exports = { postCommentByArticleId, getCommentByArticleId };
