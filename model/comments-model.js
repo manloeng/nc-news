@@ -21,8 +21,8 @@ const postCommentByArticleId = ({ article_id }, { username, body, ...restOftheBo
 	});
 };
 
-const getCommentByArticleId = () => {
-	console.log('getCommentByArticleId');
+const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'created_at' }) => {
+	return connection.select('*').from('comments').orderBy(sort_by, order).where('article_id', article_id);
 };
 
 module.exports = { postCommentByArticleId, getCommentByArticleId };
