@@ -71,7 +71,16 @@ const patchCommentById = ({ comment_id }, { inc_votes, ...restOfBodyData }) => {
 };
 
 const deleteCommentById = ({ comment_id }) => {
-	return connection.from('comments').where('comment_id', comment_id).del();
+	return connection.from('comments').where('comment_id', comment_id).del().then((deleteCount) => {
+		if (!deleteCount) {
+			return Promise.reject({
+				status: 404,
+				msg: 'Comment ID Not Found'
+			});
+		}
+
+		return deleteCount;
+	});
 };
 
 module.exports = { postCommentByArticleId, getCommentByArticleId, patchCommentById, deleteCommentById };
