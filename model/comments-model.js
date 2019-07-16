@@ -1,7 +1,7 @@
 const connection = require('../db/connection.js');
 
-const postCommentByArticleId = ({ article_id }, { username, body, ...restOftheBody }) => {
-	if (Object.keys(restOftheBody).length > 0) {
+const postCommentByArticleId = ({ article_id }, { username, body, ...restOfBodyData }) => {
+	if (Object.keys(restOfBodyData).length > 0) {
 		return Promise.reject({
 			status: 400,
 			msg: 'Bad Request'
@@ -48,12 +48,24 @@ const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'crea
 };
 
 const patchCommentById = ({ comment_id }, { inc_votes, ...restOfBodyData }) => {
+	if (Object.keys(restOfBodyData).length > 0) {
+		return Promise.reject({
+			status: 400,
+			msg: 'Bad Request'
+		});
+	}
 	return connection
 		.from('comments')
 		.where('comment_id', comment_id)
 		.increment('votes', inc_votes)
 		.returning('*')
 		.then((comment) => {
+			if (!comment.length) {
+				return Promise.reject({
+					status: 404,
+					msg: 'Comment ID Not Found'
+				});
+			}
 			return comment[0];
 		});
 };
