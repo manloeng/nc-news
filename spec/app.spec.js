@@ -25,6 +25,15 @@ describe('/', () => {
 	});
 
 	describe('/api', () => {
+		it.only(
+			'GET /api - responds with a Status:200 and a JSON describing all the available endpoints on your API',
+			() => {
+				return request(app).get('/api').expect(200).then(({ body }) => {
+					expect(body).to.be.a('object');
+				});
+			}
+		);
+
 		describe('/api/topics', () => {
 			describe('Http methods', () => {
 				describe('GET method', () => {
