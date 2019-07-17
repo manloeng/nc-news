@@ -8,10 +8,7 @@ const insertCommentByArticleId = ({ article_id }, { username, body, ...restOfReq
 		});
 	}
 
-	const formattedObj = {};
-	formattedObj.article_id = article_id;
-	formattedObj.author = username;
-	formattedObj.body = body;
+	const formattedObj = { article_id, body, author: username };
 	return connection.insert(formattedObj).into('comments').returning('*').then((comment) => {
 		return comment[0];
 	});
