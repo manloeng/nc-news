@@ -85,7 +85,7 @@ describe('/', () => {
 
 		describe('/api/articles', () => {
 			describe('Http methods', () => {
-				describe.only('GET method', () => {
+				describe('GET method', () => {
 					it('GET /articles - responds with a Status:200 and the list of articles', () => {
 						return request(app).get('/api/articles').expect(200).then(({ body }) => {
 							expect(body).to.be.a('object');
@@ -164,6 +164,16 @@ describe('/', () => {
 					it('GET /articles - responds with a Status:400 when passed with a valid sort_by query and a invalid query key', () => {
 						return request(app).get('/api/articles?sort_by=author&order_by=asc').expect(400).then(({ body }) => {
 							expect(body.msg).to.be.equal('Bad Request');
+						});
+					});
+				});
+
+				it('Invalid Methods for /topics - responds with a Status:405', () => {
+					const invalidMethods = [ 'patch', 'post', 'put', 'delete' ];
+
+					invalidMethods.forEach((method) => {
+						return request(app)[method]('/api/articles').expect(405).then(({ body }) => {
+							expect(body.msg).to.equal('Method Not Allowed');
 						});
 					});
 				});
@@ -578,15 +588,3 @@ describe('/', () => {
 		});
 	});
 });
-
-/**
- * 				it('Invalid Methods for /topics - responds with a Status:405', () => {
-					const invalidMethods = [ 'patch', 'put', 'delete' ];
-
-					invalidMethods.forEach((method) => {
-						return request(app)[method]('/api/topics').expect(405).then(({ body }) => {
-							expect(body.msg).to.equal('Method Not Allowed');
-						});
-					});
-				});
- */
