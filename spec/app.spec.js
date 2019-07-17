@@ -124,6 +124,12 @@ describe('/', () => {
 							expect(body.msg).to.be.equal('Bad Request');
 						});
 					});
+
+					it('GET /articles - responds with a Status:400 when passed with invalid query value', () => {
+						return request(app).get('/api/articles?sort_by=shape').expect(400).then(({ body }) => {
+							expect(body.msg).to.be.equal('Bad Request');
+						});
+					});
 				});
 			});
 
