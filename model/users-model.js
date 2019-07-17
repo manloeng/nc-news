@@ -3,7 +3,6 @@ const connection = require('../db/connection.js');
 const getUserByUsername = ({ username }) => {
 	const reg = /([A-Z])\w+/i;
 
-	//username of 999 is being read as a string
 	if (!reg.test(username)) {
 		return Promise.reject({
 			status: 400,
