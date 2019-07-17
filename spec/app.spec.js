@@ -87,134 +87,135 @@ describe('/', () => {
 		});
 
 		describe('/api/articles', () => {
-			describe('Http methods', () => {
-				describe('GET method', () => {
-					it('GET /articles - responds with a Status:200 and the list of articles', () => {
-						return request(app).get('/api/articles').expect(200).then(({ body }) => {
-							expect(body).to.be.a('object');
-							expect(body.articles[0]).to.have.keys(
-								'article_id',
-								'title',
-								'topic',
-								'author',
-								'votes',
-								'created_at',
-								'comment_count'
-							);
-						});
-					});
-
-					it('GET /articles - responds with a Status:200 and the list of articles sorted by a default of "created_at" in descending order', () => {
-						return request(app).get('/api/articles').expect(200).then(({ body }) => {
-							expect(body.articles).to.be.descendingBy('created_at');
-						});
-					});
-
-					it('GET /articles - responds with a Status:200 and the list of articles sorted by "created_at" in ascending order', () => {
-						return request(app).get('/api/articles?order=asc').expect(200).then(({ body }) => {
-							expect(body.articles).to.be.ascendingBy('created_at');
-						});
-					});
-
-					it('GET /articles - responds with a Status:200 and the list of articles sorted by "author" in descending order', () => {
-						return request(app).get('/api/articles?sort_by=author').expect(200).then(({ body }) => {
-							expect(body.articles).to.be.descendingBy('author');
-						});
-					});
-
-					it('GET /articles - responds with a Status:200 and the list of articles sorted by "author" in ascending order', () => {
-						return request(app).get('/api/articles?sort_by=author&order=asc').expect(200).then(({ body }) => {
-							expect(body.articles).to.be.ascendingBy('author');
-						});
-					});
-
-					it('GET /articles - responds with a Status:200 and the list of articles filtered by "author"', () => {
-						return request(app).get('/api/articles?author=butter_bridge').expect(200).then(({ body }) => {
-							expect(body.articles).to.be.descendingBy('created_at');
-							expect(body.articles).to.have.lengthOf(3);
-						});
-					});
-
-					it('GET /articles - responds with a Status:200 and an empty object of "author" data', () => {
-						return request(app).get('/api/articles?author=andrew').expect(200).then(({ body }) => {
-							expect(body.articles).to.be.eql([]);
-						});
-					});
-
-					it('GET /articles - responds with a Status:200 and the list of articles filtered by "topic"', () => {
-						return request(app).get('/api/articles?topic=mitch').expect(200).then(({ body }) => {
-							expect(body.articles).to.be.descendingBy('created_at');
-						});
-					});
-
-					it('GET /articles - responds with a Status:200 and an empty object of "topic" data', () => {
-						return request(app).get('/api/articles?topic=andrew').expect(200).then(({ body }) => {
-							expect(body.articles).to.be.eql([]);
-						});
-					});
-
-					it('GET /articles - responds with a Status:400 and the list of articles filtered by "author"', () => {
-						return request(app).get('/api/articles?author=123').expect(400).then(({ body }) => {
-							expect(body.msg).to.be.equal('Bad Request');
-						});
-					});
-
-					it('GET /articles - responds with a Status:400 and the list of articles filtered by "topic"', () => {
-						return request(app).get('/api/articles?topic=123').expect(400).then(({ body }) => {
-							expect(body.msg).to.be.equal('Bad Request');
-						});
-					});
-
-					it('GET /articles - responds with a Status:400 when passed with a invalid query', () => {
-						return request(app).get('/api/articles?sorting=author').expect(400).then(({ body }) => {
-							expect(body.msg).to.be.equal('Bad Request');
-						});
-					});
-
-					it('GET /articles - responds with a Status:400 when passed with a invalid sort_by - query value', () => {
-						return request(app).get('/api/articles?sort_by=shape').expect(400).then(({ body }) => {
-							expect(body.msg).to.be.equal('order by "shape" desc - column "shape" does not exist');
-						});
-					});
-
-					it('GET /articles - responds with a Status:400 when passed with a invalid order - query value', () => {
-						return request(app).get('/api/articles?order=shape').expect(400).then(({ body }) => {
-							expect(body.msg).to.be.equal('Bad Request');
-						});
-					});
-
-					it('GET /articles - responds with a Status:400 when passed with a valid sort_by query and a invalid order query', () => {
-						return request(app).get('/api/articles?sort_by=author&order=shape').expect(400).then(({ body }) => {
-							expect(body.msg).to.be.equal('Bad Request');
-						});
-					});
-
-					it('GET /articles - responds with a Status:400 when passed with a valid order query and a invalid sort_by query', () => {
-						return request(app).get('/api/articles?sort_by=shape&order=asc').expect(400).then(({ body }) => {
-							expect(body.msg).to.be.equal('order by "shape" asc - column "shape" does not exist');
-						});
-					});
-
-					it('GET /articles - responds with a Status:400 when passed with a valid order query and a invalid query key', () => {
-						return request(app).get('/api/articles?sorting=author&order=asc').expect(400).then(({ body }) => {
-							expect(body.msg).to.be.equal('Bad Request');
-						});
-					});
-
-					it('GET /articles - responds with a Status:400 when passed with a valid sort_by query and a invalid query key', () => {
-						return request(app).get('/api/articles?sort_by=author&order_by=asc').expect(400).then(({ body }) => {
-							expect(body.msg).to.be.equal('Bad Request');
-						});
+			describe('GET method', () => {
+				it('GET /articles - responds with a Status:200 and the list of articles', () => {
+					return request(app).get('/api/articles').expect(200).then(({ body: { articles } }) => {
+						expect(articles[0]).to.have.keys(
+							'article_id',
+							'title',
+							'topic',
+							'author',
+							'votes',
+							'created_at',
+							'comment_count'
+						);
+						expect(articles).to.have.lengthOf(12);
 					});
 				});
 
-				it('Invalid Methods for /topics - responds with a Status:405', () => {
-					const invalidMethods = [ 'patch', 'post', 'put', 'delete' ];
+				it('GET /articles - responds with a Status:200 and the list of articles sorted by a default of "created_at" in descending order', () => {
+					return request(app).get('/api/articles').expect(200).then(({ body: { articles } }) => {
+						expect(articles).to.be.descendingBy('created_at');
+					});
+				});
 
-					invalidMethods.forEach((method) => {
-						return request(app)[method]('/api/articles').expect(405).then(({ body }) => {
-							expect(body.msg).to.equal('Method Not Allowed');
+				it('GET /articles - responds with a Status:200 and the list of articles sorted by "created_at" in ascending order', () => {
+					return request(app).get('/api/articles?order=asc').expect(200).then(({ body: { articles } }) => {
+						expect(articles).to.be.ascendingBy('created_at');
+					});
+				});
+
+				it('GET /articles - responds with a Status:200 and the list of articles sorted by "author" in descending order', () => {
+					return request(app).get('/api/articles?sort_by=author').expect(200).then(({ body: { articles } }) => {
+						expect(articles).to.be.descendingBy('author');
+					});
+				});
+
+				it('GET /articles - responds with a Status:200 and the list of articles sorted by "author" in ascending order', () => {
+					return request(app)
+						.get('/api/articles?sort_by=author&order=asc')
+						.expect(200)
+						.then(({ body: { articles } }) => {
+							expect(articles).to.be.ascendingBy('author');
 						});
+				});
+
+				it('GET /articles - responds with a Status:200 and the list of articles filtered by "author"', () => {
+					return request(app).get('/api/articles?author=butter_bridge').expect(200).then(({ body: { articles } }) => {
+						expect(articles).to.be.descendingBy('created_at');
+						expect(articles).to.have.lengthOf(3);
+					});
+				});
+
+				it('GET /articles - responds with a Status:200 and an empty object of "author" data', () => {
+					return request(app).get('/api/articles?author=andrew').expect(200).then(({ body: { articles } }) => {
+						expect(articles).to.be.eql([]);
+					});
+				});
+
+				it('GET /articles - responds with a Status:200 and the list of articles filtered by "topic"', () => {
+					return request(app).get('/api/articles?topic=mitch').expect(200).then(({ body: { articles } }) => {
+						expect(articles).to.be.descendingBy('created_at');
+					});
+				});
+
+				it('GET /articles - responds with a Status:200 and an empty object of "topic" data', () => {
+					return request(app).get('/api/articles?topic=andrew').expect(200).then(({ body: { articles } }) => {
+						expect(articles).to.be.eql([]);
+					});
+				});
+
+				it('GET /articles - responds with a Status:400 and the list of articles filtered by "author"', () => {
+					return request(app).get('/api/articles?author=123').expect(400).then(({ body: { msg } }) => {
+						expect(msg).to.be.equal('Bad Request');
+					});
+				});
+
+				it('GET /articles - responds with a Status:400 and the list of articles filtered by "topic"', () => {
+					return request(app).get('/api/articles?topic=123').expect(400).then(({ body: { msg } }) => {
+						expect(msg).to.be.equal('Bad Request');
+					});
+				});
+
+				it('GET /articles - responds with a Status:400 when passed with a invalid query', () => {
+					return request(app).get('/api/articles?sorting=author').expect(400).then(({ body: { msg } }) => {
+						expect(msg).to.be.equal('Bad Request');
+					});
+				});
+
+				it('GET /articles - responds with a Status:400 when passed with a invalid sort_by - query value', () => {
+					return request(app).get('/api/articles?sort_by=shape').expect(400).then(({ body: { msg } }) => {
+						expect(msg).to.be.equal('order by "shape" desc - column "shape" does not exist');
+					});
+				});
+
+				it('GET /articles - responds with a Status:400 when passed with a invalid order - query value', () => {
+					return request(app).get('/api/articles?order=shape').expect(400).then(({ body: { msg } }) => {
+						expect(msg).to.be.equal('Bad Request');
+					});
+				});
+
+				it('GET /articles - responds with a Status:400 when passed with a valid sort_by query and a invalid order query', () => {
+					return request(app).get('/api/articles?sort_by=author&order=shape').expect(400).then(({ body: { msg } }) => {
+						expect(msg).to.be.equal('Bad Request');
+					});
+				});
+
+				it('GET /articles - responds with a Status:400 when passed with a valid order query and a invalid sort_by query', () => {
+					return request(app).get('/api/articles?sort_by=shape&order=asc').expect(400).then(({ body: { msg } }) => {
+						expect(msg).to.be.equal('order by "shape" asc - column "shape" does not exist');
+					});
+				});
+
+				it('GET /articles - responds with a Status:400 when passed with a valid order query and a invalid query key', () => {
+					return request(app).get('/api/articles?sorting=author&order=asc').expect(400).then(({ body: { msg } }) => {
+						expect(msg).to.be.equal('Bad Request');
+					});
+				});
+
+				it('GET /articles - responds with a Status:400 when passed with a valid sort_by query and a invalid query key', () => {
+					return request(app).get('/api/articles?sort_by=author&order_by=asc').expect(400).then(({ body: { msg } }) => {
+						expect(msg).to.be.equal('Bad Request');
+					});
+				});
+			});
+
+			it('Invalid Methods for /topics - responds with a Status:405', () => {
+				const invalidMethods = [ 'patch', 'post', 'put', 'delete' ];
+
+				invalidMethods.forEach((method) => {
+					return request(app)[method]('/api/articles').expect(405).then(({ body: { msg } }) => {
+						expect(msg).to.equal('Method Not Allowed');
 					});
 				});
 			});
