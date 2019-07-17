@@ -20,27 +20,27 @@ const insertCommentByArticleId = ({ article_id }, { username, body, ...restOfReq
 const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'created_at', ...restOfReqBody }) => {
 	const objLength = Object.keys(restOfReqBody).length;
 
-	if ((order === 'asc' && objLength === 0) || (order === 'desc' && objLength === 0)) {
-		return connection
-			.select('*')
-			.from('comments')
-			.orderBy(sort_by, order)
-			.where('article_id', article_id)
-			.then((comments) => {
-				if (!comments.length) {
-					return Promise.reject({
-						status: 404,
-						msg: 'Article ID Not Found'
-					});
-				}
-				return comments;
-			});
-	} else {
+	if (!((order === 'asc' && objLength === 0) || (order === 'desc' && objLength === 0))) {
 		return Promise.reject({
 			status: 400,
 			msg: 'Invalid query'
 		});
 	}
+
+	return connection
+		.select('*')
+		.from('comments')
+		.orderBy(sort_by, order)
+		.where('article_id', article_id)
+		.then((comments) => {
+			if (!comments.length) {
+				return Promise.reject({
+					status: 404,
+					msg: 'Article ID Not Found'
+				});
+			}
+			return comments;
+		});
 };
 
 const updateCommentById = ({ comment_id }, { inc_votes, ...restOfReqBody }) => {
