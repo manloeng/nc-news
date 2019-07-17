@@ -1,6 +1,6 @@
 const { getTopics } = require('../model/topics-model.js');
 
-const sendGetTopics = (req, res, next) => {
+const sendTopics = (req, res, next) => {
 	getTopics()
 		.then((topics) => {
 			res.status(200).send({ topics });
@@ -8,4 +8,4 @@ const sendGetTopics = (req, res, next) => {
 		.catch(next);
 };
 
-module.exports = { sendGetTopics };
+module.exports = { sendTopics };

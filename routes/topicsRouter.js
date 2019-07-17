@@ -1,7 +1,7 @@
 const topicsRouter = require('express').Router();
-const { sendGetTopics } = require('../controller/topics-controller.js');
+const { sendTopics } = require('../controller/topics-controller.js');
 const { sendMethodNotAllowed } = require('../errors/error.js');
 
-topicsRouter.route('/').get(sendGetTopics).all(sendMethodNotAllowed);
+topicsRouter.route('/').get(sendTopics).all(sendMethodNotAllowed);
 
 module.exports = topicsRouter;
