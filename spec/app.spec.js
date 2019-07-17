@@ -132,10 +132,22 @@ describe('/', () => {
 						});
 					});
 
-					it.only('GET /articles - responds with a Status:200 and the list of articles filtered by "author"', () => {
+					it('GET /articles - responds with a Status:200 and the list of articles filtered by "author"', () => {
 						return request(app).get('/api/articles?author=butter_bridge').expect(200).then(({ body }) => {
 							expect(body.articles).to.be.descendingBy('created_at');
 							expect(body.articles).to.have.lengthOf(3);
+						});
+					});
+
+					it('GET /articles - responds with a Status:200 and the list of articles filtered by "author"', () => {
+						return request(app).get('/api/articles?author=andrew').expect(200).then(({ body }) => {
+							expect(body.articles).to.be.eql([]);
+						});
+					});
+
+					it('GET /articles - responds with a Status:400 and the list of articles filtered by "author"', () => {
+						return request(app).get('/api/articles?author=123').expect(400).then(({ body }) => {
+							expect(body.msg).to.be.equal('Bad Request');
 						});
 					});
 
