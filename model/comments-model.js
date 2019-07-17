@@ -1,13 +1,29 @@
 const connection = require('../db/connection.js');
+const checkIfExists = require('../errors/checkExist.js');
 
 const insertCommentByArticleId = ({ article_id }, { username, body, ...restOfReqBody }) => {
-	if (Object.keys(restOfReqBody).length > 0) {
+	const reg = /([A-Z])\w+/i;
+	if (
+		// Checks for extra invalid queries
+		Object.keys(restOfReqBody).length > 0 ||
+		// Checks for invalid username format (i.e Int)
+		!reg.test(username)
+	) {
 		return Promise.reject({
 			status: 400,
 			msg: 'Bad Request'
 		});
 	}
 
+	// checkIfExists(article_id, 'articles', 'article_id').then((article) => {
+	// 	// Checks if article ID exists in the database
+	// 	if (!article.length) {
+	// 		return Promise.reject({
+	// 			status: 404,
+	// 			msg: "Article ID Doesn't Exist"
+	// 		});
+	// 	}
+	// });
 	const formattedObj = { article_id, body, author: username };
 	return connection.insert(formattedObj).into('comments').returning('*').then((comment) => {
 		return comment[0];
