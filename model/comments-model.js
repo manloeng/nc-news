@@ -43,7 +43,7 @@ const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'crea
 	}
 };
 
-const patchCommentById = ({ comment_id }, { inc_votes, ...restOfReqBody }) => {
+const updateCommentById = ({ comment_id }, { inc_votes, ...restOfReqBody }) => {
 	if (Object.keys(restOfReqBody).length > 0) {
 		return Promise.reject({
 			status: 400,
@@ -66,7 +66,7 @@ const patchCommentById = ({ comment_id }, { inc_votes, ...restOfReqBody }) => {
 		});
 };
 
-const deleteCommentById = ({ comment_id }) => {
+const destroyCommentById = ({ comment_id }) => {
 	return connection.from('comments').where('comment_id', comment_id).del().then((deleteCount) => {
 		if (!deleteCount) {
 			return Promise.reject({
@@ -79,4 +79,4 @@ const deleteCommentById = ({ comment_id }) => {
 	});
 };
 
-module.exports = { insertCommentByArticleId, getCommentByArticleId, patchCommentById, deleteCommentById };
+module.exports = { insertCommentByArticleId, getCommentByArticleId, updateCommentById, destroyCommentById };
