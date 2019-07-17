@@ -384,9 +384,7 @@ describe('/', () => {
 									})
 									.expect(400)
 									.then(({ body: { msg } }) => {
-										expect(msg).to.be.equal(
-											'insert or update on table "comments" violates foreign key constraint "comments_author_foreign"'
-										);
+										expect(msg).to.be.equal('Bad Request');
 									});
 							});
 
