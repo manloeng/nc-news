@@ -1,7 +1,7 @@
 const connection = require('../db/connection.js');
 
-const postCommentByArticleId = ({ article_id }, { username, body, ...restOfBodyData }) => {
-	if (Object.keys(restOfBodyData).length > 0) {
+const postCommentByArticleId = ({ article_id }, { username, body, ...restOfReqBody }) => {
+	if (Object.keys(restOfReqBody).length > 0) {
 		return Promise.reject({
 			status: 400,
 			msg: 'Bad Request'
@@ -17,8 +17,8 @@ const postCommentByArticleId = ({ article_id }, { username, body, ...restOfBodyD
 	});
 };
 
-const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'created_at', ...restOfArticleData }) => {
-	const objLength = Object.keys(restOfArticleData).length;
+const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'created_at', ...restOfReqBody }) => {
+	const objLength = Object.keys(restOfReqBody).length;
 
 	if ((order === 'asc' && objLength === 0) || (order === 'desc' && objLength === 0)) {
 		return connection
@@ -43,8 +43,8 @@ const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'crea
 	}
 };
 
-const patchCommentById = ({ comment_id }, { inc_votes, ...restOfBodyData }) => {
-	if (Object.keys(restOfBodyData).length > 0) {
+const patchCommentById = ({ comment_id }, { inc_votes, ...restOfReqBody }) => {
+	if (Object.keys(restOfReqBody).length > 0) {
 		return Promise.reject({
 			status: 400,
 			msg: 'Bad Request'
