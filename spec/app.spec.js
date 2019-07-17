@@ -125,8 +125,14 @@ describe('/', () => {
 						});
 					});
 
-					it('GET /articles - responds with a Status:400 when passed with invalid query value', () => {
+					it('GET /articles - responds with a Status:400 when passed with invalid sort_by - query value', () => {
 						return request(app).get('/api/articles?sort_by=shape').expect(400).then(({ body }) => {
+							expect(body.msg).to.be.equal('column "shape" does not exist');
+						});
+					});
+
+					it('GET /articles - responds with a Status:400 when passed with invalid order - query value', () => {
+						return request(app).get('/api/articles?order=shape').expect(400).then(({ body }) => {
 							expect(body.msg).to.be.equal('Bad Request');
 						});
 					});
