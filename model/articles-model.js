@@ -45,6 +45,14 @@ const patchArticleById = ({ article_id }, { inc_votes, ...restOfReqBody }) => {
 
 const getArticles = ({ order = 'desc', sort_by = 'created_at', author, ...restOfReqBody }) => {
 	const objLength = Object.keys(restOfReqBody).length;
+	const reg = /([A-Z])\w+/i;
+
+	if (!reg.test(author)) {
+		return Promise.reject({
+			status: 400,
+			msg: 'Bad Request'
+		});
+	}
 
 	if ((order === 'asc' && objLength === 0) || (order === 'desc' && objLength === 0)) {
 		return connection
