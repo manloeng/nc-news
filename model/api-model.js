@@ -1,5 +1,7 @@
+const json = require('../endpoints.json');
+
 const getJSON = () => {
-	console.log('getJSON');
+	return json;
 };
 
 module.exports = getJSON;
