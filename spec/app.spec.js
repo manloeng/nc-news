@@ -125,20 +125,44 @@ describe('/', () => {
 						});
 					});
 
-					it('GET /articles - responds with a Status:400 when passed with invalid query', () => {
+					it('GET /articles - responds with a Status:400 when passed with a invalid query', () => {
 						return request(app).get('/api/articles?sorting=author').expect(400).then(({ body }) => {
 							expect(body.msg).to.be.equal('Bad Request');
 						});
 					});
 
-					it('GET /articles - responds with a Status:400 when passed with invalid sort_by - query value', () => {
+					it('GET /articles - responds with a Status:400 when passed with a invalid sort_by - query value', () => {
 						return request(app).get('/api/articles?sort_by=shape').expect(400).then(({ body }) => {
 							expect(body.msg).to.be.equal('column "shape" does not exist');
 						});
 					});
 
-					it('GET /articles - responds with a Status:400 when passed with invalid order - query value', () => {
+					it('GET /articles - responds with a Status:400 when passed with a invalid order - query value', () => {
 						return request(app).get('/api/articles?order=shape').expect(400).then(({ body }) => {
+							expect(body.msg).to.be.equal('Bad Request');
+						});
+					});
+
+					it('GET /articles - responds with a Status:400 when passed with a valid sort_by query and a invalid order query', () => {
+						return request(app).get('/api/articles?sort_by=author&order=shape').expect(400).then(({ body }) => {
+							expect(body.msg).to.be.equal('Bad Request');
+						});
+					});
+
+					it('GET /articles - responds with a Status:400 when passed with a valid order query and a invalid sort_by query', () => {
+						return request(app).get('/api/articles?sort_by=shape&order=asc').expect(400).then(({ body }) => {
+							expect(body.msg).to.be.equal('column "shape" does not exist');
+						});
+					});
+
+					it('GET /articles - responds with a Status:400 when passed with a valid order query and a invalid query key', () => {
+						return request(app).get('/api/articles?sorting=author&order=asc').expect(400).then(({ body }) => {
+							expect(body.msg).to.be.equal('Bad Request');
+						});
+					});
+
+					it('GET /articles - responds with a Status:400 when passed with a valid sort_by query and a invalid query key', () => {
+						return request(app).get('/api/articles?sort_by=author&order_by=asc').expect(400).then(({ body }) => {
 							expect(body.msg).to.be.equal('Bad Request');
 						});
 					});
