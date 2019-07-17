@@ -449,8 +449,12 @@ describe('/', () => {
 						describe('GET method', () => {
 							it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id and is sorted by "created_at" in descending order', () => {
 								return request(app).get('/api/articles/1/comments ').expect(200).then(({ body: { comments } }) => {
+									comments.forEach((comment) => {
+										expect(comment.article_id).to.equal(1);
+									});
 									expect(comments[0]).to.have.keys('article_id', 'comment_id', 'votes', 'created_at', 'author', 'body');
 									expect(comments).to.be.descendingBy('created_at');
+									expect(comments).to.have.lengthOf(13);
 								});
 							});
 
