@@ -15,7 +15,7 @@ const insertCommentByArticleId = ({ article_id }, { username, body, ...restOfReq
 		});
 	}
 
-	// checkIfExists(article_id, 'articles', 'article_id').then((article) => {
+	// const queryExist = checkIfExists(article_id, 'articles', 'article_id').then((article) => {
 	// 	// Checks if article ID exists in the database
 	// 	if (!article.length) {
 	// 		return Promise.reject({
@@ -33,10 +33,17 @@ const insertCommentByArticleId = ({ article_id }, { username, body, ...restOfReq
 const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'created_at', ...restOfReqBody }) => {
 	const objLength = Object.keys(restOfReqBody).length;
 
-	if (!((order === 'asc' && objLength === 0) || (order === 'desc' && objLength === 0))) {
+	if (
+		// Checks if the Order Query is 'asc' or 'desc'
+		!(
+			(order === 'asc' || order === 'desc') &&
+			// And Checks if the passed query keys - length
+			objLength === 0
+		)
+	) {
 		return Promise.reject({
 			status: 400,
-			msg: 'Invalid query'
+			msg: 'Require a Valid Query'
 		});
 	}
 

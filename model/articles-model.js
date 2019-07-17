@@ -23,7 +23,7 @@ const updateArticleById = ({ article_id }, { inc_votes, ...restOfReqBody }) => {
 	if (Object.keys(restOfReqBody).length > 0) {
 		return Promise.reject({
 			status: 400,
-			msg: 'Not a Valid Key-Value'
+			msg: 'Require a Valid Query'
 		});
 	}
 
@@ -47,17 +47,20 @@ const getArticles = ({ order = 'desc', sort_by = 'created_at', author, topic, ..
 	const objLength = Object.keys(restOfReqBody).length;
 	const reg = /([A-Z])\w+/i;
 
-	if (!reg.test(author) || !reg.test(topic)) {
+	if (
+		// Checks if author or topic has a valid format
+		!reg.test(author) ||
+		!reg.test(topic) ||
+		// Checks if the Order Query is 'asc' or 'desc'
+		!(
+			(order === 'asc' || order === 'desc') &&
+			// And Checks if the passed query keys - length
+			objLength === 0
+		)
+	) {
 		return Promise.reject({
 			status: 400,
-			msg: 'Bad Request'
-		});
-	}
-
-	if (!((order === 'asc' && objLength === 0) || (order === 'desc' && objLength === 0))) {
-		return Promise.reject({
-			status: 400,
-			msg: 'Bad Request'
+			msg: 'Require a Valid Query'
 		});
 	}
 
