@@ -14,7 +14,7 @@ const sqlErrors = (err, req, res, next) => {
 		'23502': /null.+/g,
 		'23503': /insert or.+/g,
 		'42703': /column.+/g,
-		'42P01': /relation/g
+		'42P01': /relation.+/g
 	};
 
 	if (err.code in sqlErrCodes) {
