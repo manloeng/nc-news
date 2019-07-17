@@ -54,28 +54,28 @@ const getArticles = ({ order = 'desc', sort_by = 'created_at', author, topic, ..
 		});
 	}
 
-	if ((order === 'asc' && objLength === 0) || (order === 'desc' && objLength === 0)) {
-		return connection
-			.select('articles.article_id', 'articles.author', 'articles.created_at', 'articles.votes', 'title', 'topic')
-			.from('articles')
-			.leftJoin('comments', 'articles.article_id', 'comments.comment_id')
-			.count({ comment_count: 'comments.article_id' })
-			.groupBy('articles.article_id')
-			.orderBy(sort_by, order)
-			.modify((queryBuilder) => {
-				if (author) {
-					queryBuilder.where('articles.author', author);
-				}
-				if (topic) {
-					queryBuilder.where('topic', topic);
-				}
-			});
-	} else {
+	if (!((order === 'asc' && objLength === 0) || (order === 'desc' && objLength === 0))) {
 		return Promise.reject({
 			status: 400,
 			msg: 'Bad Request'
 		});
 	}
+
+	return connection
+		.select('articles.article_id', 'articles.author', 'articles.created_at', 'articles.votes', 'title', 'topic')
+		.from('articles')
+		.leftJoin('comments', 'articles.article_id', 'comments.comment_id')
+		.count({ comment_count: 'comments.article_id' })
+		.groupBy('articles.article_id')
+		.orderBy(sort_by, order)
+		.modify((queryBuilder) => {
+			if (author) {
+				queryBuilder.where('articles.author', author);
+			}
+			if (topic) {
+				queryBuilder.where('topic', topic);
+			}
+		});
 };
 
 module.exports = { getArticleById, updateArticleById, getArticles };
