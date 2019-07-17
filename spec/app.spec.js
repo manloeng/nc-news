@@ -119,6 +119,12 @@ describe('/', () => {
 						});
 					});
 
+					it('GET /articles - responds with a Status:200 and the list of articles sorted by "author" in ascending order', () => {
+						return request(app).get('/api/articles?sort_by=author&order=asc').expect(200).then(({ body }) => {
+							expect(body.articles).to.be.ascendingBy('author');
+						});
+					});
+
 					it('GET /articles - responds with a Status:400 when passed with invalid query', () => {
 						return request(app).get('/api/articles?sorting=author').expect(400).then(({ body }) => {
 							expect(body.msg).to.be.equal('Bad Request');
