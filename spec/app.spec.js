@@ -157,19 +157,19 @@ describe('/', () => {
 
 				it('GET /articles - responds with a Status:400 and the list of articles filtered by "author"', () => {
 					return request(app).get('/api/articles?author=123').expect(400).then(({ body: { msg } }) => {
-						expect(msg).to.be.equal('Bad Request');
+						expect(msg).to.be.equal('Require a Valid Query');
 					});
 				});
 
 				it('GET /articles - responds with a Status:400 and the list of articles filtered by "topic"', () => {
 					return request(app).get('/api/articles?topic=123').expect(400).then(({ body: { msg } }) => {
-						expect(msg).to.be.equal('Bad Request');
+						expect(msg).to.be.equal('Require a Valid Query');
 					});
 				});
 
 				it('GET /articles - responds with a Status:400 when passed with a invalid query', () => {
 					return request(app).get('/api/articles?sorting=author').expect(400).then(({ body: { msg } }) => {
-						expect(msg).to.be.equal('Bad Request');
+						expect(msg).to.be.equal('Require a Valid Query');
 					});
 				});
 
@@ -181,13 +181,13 @@ describe('/', () => {
 
 				it('GET /articles - responds with a Status:400 when passed with a invalid order - query value', () => {
 					return request(app).get('/api/articles?order=shape').expect(400).then(({ body: { msg } }) => {
-						expect(msg).to.be.equal('Bad Request');
+						expect(msg).to.be.equal('Require a Valid Query');
 					});
 				});
 
 				it('GET /articles - responds with a Status:400 when passed with a valid sort_by query and a invalid order query', () => {
 					return request(app).get('/api/articles?sort_by=author&order=shape').expect(400).then(({ body: { msg } }) => {
-						expect(msg).to.be.equal('Bad Request');
+						expect(msg).to.be.equal('Require a Valid Query');
 					});
 				});
 
@@ -199,13 +199,13 @@ describe('/', () => {
 
 				it('GET /articles - responds with a Status:400 when passed with a valid order query and a invalid query key', () => {
 					return request(app).get('/api/articles?sorting=author&order=asc').expect(400).then(({ body: { msg } }) => {
-						expect(msg).to.be.equal('Bad Request');
+						expect(msg).to.be.equal('Require a Valid Query');
 					});
 				});
 
 				it('GET /articles - responds with a Status:400 when passed with a valid sort_by query and a invalid query key', () => {
 					return request(app).get('/api/articles?sort_by=author&order_by=asc').expect(400).then(({ body: { msg } }) => {
-						expect(msg).to.be.equal('Bad Request');
+						expect(msg).to.be.equal('Require a Valid Query');
 					});
 				});
 			});
@@ -295,7 +295,7 @@ describe('/', () => {
 							.send({ 'not-a-valid-key': 100 })
 							.expect(400)
 							.then(({ body: { msg } }) => {
-								expect(msg).to.be.equal('Not a Valid Key-Value');
+								expect(msg).to.be.equal('Require a Valid Query');
 							});
 					});
 
@@ -315,7 +315,7 @@ describe('/', () => {
 							.send({ inc_votes: 100, 999: 100 })
 							.expect(400)
 							.then(({ body: { msg } }) => {
-								expect(msg).to.be.equal('Not a Valid Key-Value');
+								expect(msg).to.be.equal('Require a Valid Query');
 							});
 					});
 
@@ -341,198 +341,190 @@ describe('/', () => {
 				});
 
 				describe('/api/articles/:article_id/comments', () => {
-					describe('Http methods', () => {
-						describe('POST method', () => {
-							it('POST /articles/:article_id/comments - responds with a Status:201 and the newly created comment', () => {
-								return request(app)
-									.post('/api/articles/1/comments')
-									.send({
-										body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
-										username: 'butter_bridge'
-									})
-									.expect(201)
-									.then(({ body: { comment } }) => {
-										expect(comment).to.have.keys('comment_id', 'body', 'article_id', 'author', 'votes', 'created_at');
-										expect(comment.article_id).to.equal(1);
-									});
-							});
+					describe('POST method', () => {
+						it('POST /articles/:article_id/comments - responds with a Status:201 and the newly created comment', () => {
+							return request(app)
+								.post('/api/articles/1/comments')
+								.send({
+									body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+									username: 'butter_bridge'
+								})
+								.expect(201)
+								.then(({ body: { comment } }) => {
+									expect(comment).to.have.keys('comment_id', 'body', 'article_id', 'author', 'votes', 'created_at');
+									expect(comment.article_id).to.equal(1);
+								});
+						});
 
-							it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an empty object', () => {
-								return request(app).post('/api/articles/1/comments').send({}).expect(400).then(({ body: { msg } }) => {
+						it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an empty object', () => {
+							return request(app).post('/api/articles/1/comments').send({}).expect(400).then(({ body: { msg } }) => {
+								expect(msg).to.be.equal('null value in column "body" violates not-null constraint');
+							});
+						});
+
+						it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an object not containing a body', () => {
+							return request(app)
+								.post('/api/articles/1/comments')
+								.send({
+									username: 'butter_bridge'
+								})
+								.expect(400)
+								.then(({ body: { msg } }) => {
 									expect(msg).to.be.equal('null value in column "body" violates not-null constraint');
 								});
-							});
+						});
 
-							it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an object not containing a body', () => {
-								return request(app)
-									.post('/api/articles/1/comments')
-									.send({
-										username: 'butter_bridge'
-									})
-									.expect(400)
-									.then(({ body: { msg } }) => {
-										expect(msg).to.be.equal('null value in column "body" violates not-null constraint');
-									});
-							});
+						it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an object not containing a invalid username', () => {
+							return request(app)
+								.post('/api/articles/1/comments')
+								.send({
+									body: 'Some Text Here',
+									username: 123
+								})
+								.expect(400)
+								.then(({ body: { msg } }) => {
+									expect(msg).to.be.equal('Bad Request');
+								});
+						});
 
-							it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an object not containing a invalid username', () => {
-								return request(app)
-									.post('/api/articles/1/comments')
-									.send({
-										body: 'Some Text Here',
-										username: 123
-									})
-									.expect(400)
-									.then(({ body: { msg } }) => {
-										expect(msg).to.be.equal('Bad Request');
-									});
-							});
+						it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an object not containing a username', () => {
+							return request(app)
+								.post('/api/articles/1/comments')
+								.send({
+									body: 'Some Text Here'
+								})
+								.expect(400)
+								.then(({ body: { msg } }) => {
+									expect(msg).to.be.equal('null value in column "author" violates not-null constraint');
+								});
+						});
 
-							it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an object not containing a username', () => {
-								return request(app)
-									.post('/api/articles/1/comments')
-									.send({
-										body: 'Some Text Here'
-									})
-									.expect(400)
-									.then(({ body: { msg } }) => {
-										expect(msg).to.be.equal('null value in column "author" violates not-null constraint');
-									});
-							});
+						it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an invalid article_id', () => {
+							return request(app)
+								.post('/api/articles/not-an-valid-id/comments')
+								.send({
+									body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+									username: 'butter_bridge'
+								})
+								.expect(400)
+								.then(({ body: { msg } }) => {
+									expect(msg).to.be.equal('invalid input syntax for integer: "not-an-valid-id"');
+								});
+						});
 
-							it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an invalid article_id', () => {
-								return request(app)
-									.post('/api/articles/not-an-valid-id/comments')
-									.send({
-										body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
-										username: 'butter_bridge'
-									})
-									.expect(400)
-									.then(({ body: { msg } }) => {
-										expect(msg).to.be.equal('invalid input syntax for integer: "not-an-valid-id"');
-									});
-							});
+						it("POST /articles/:article_id/comments - responds with a Status:400 when passed with an article_id that isn't found", () => {
+							return request(app)
+								.post('/api/articles/999/comments')
+								.send({
+									body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+									username: 'butter_bridge'
+								})
+								.expect(400)
+								.then(({ body: { msg } }) => {
+									expect(msg).to.be.equal(
+										'insert or update on table "comments" violates foreign key constraint "comments_article_id_foreign"'
+									);
+								});
+						});
 
-							it("POST /articles/:article_id/comments - responds with a Status:400 when passed with an article_id that isn't found", () => {
-								return request(app)
-									.post('/api/articles/999/comments')
-									.send({
-										body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
-										username: 'butter_bridge'
-									})
-									.expect(400)
-									.then(({ body: { msg } }) => {
-										expect(msg).to.be.equal(
-											'insert or update on table "comments" violates foreign key constraint "comments_article_id_foreign"'
-										);
-									});
-							});
+						it('POST /articles/:article_id/comments - responds with a Status:400 when passed with addtional unwanted key-values', () => {
+							return request(app)
+								.post('/api/articles/1/comments')
+								.send({
+									body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+									username: 'butter_bridge',
+									age: 28,
+									gender: 'male'
+								})
+								.expect(400)
+								.then(({ body: { msg } }) => {
+									expect(msg).to.be.equal('Bad Request');
+								});
+						});
+					});
 
-							it('POST /articles/:article_id/comments - responds with a Status:400 when passed with addtional unwanted key-values', () => {
-								return request(app)
-									.post('/api/articles/1/comments')
-									.send({
-										body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
-										username: 'butter_bridge',
-										age: 28,
-										gender: 'male'
-									})
-									.expect(400)
-									.then(({ body: { msg } }) => {
-										expect(msg).to.be.equal('Bad Request');
-									});
+					describe('GET method', () => {
+						it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id and is sorted by "created_at" in descending order', () => {
+							return request(app).get('/api/articles/1/comments ').expect(200).then(({ body: { comments } }) => {
+								comments.forEach((comment) => {
+									expect(comment.article_id).to.equal(1);
+								});
+								expect(comments[0]).to.have.keys('article_id', 'comment_id', 'votes', 'created_at', 'author', 'body');
+								expect(comments).to.be.descendingBy('created_at');
+								expect(comments).to.have.lengthOf(13);
 							});
 						});
 
-						describe('GET method', () => {
-							it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id and is sorted by "created_at" in descending order', () => {
-								return request(app).get('/api/articles/1/comments ').expect(200).then(({ body: { comments } }) => {
-									comments.forEach((comment) => {
-										expect(comment.article_id).to.equal(1);
-									});
-									expect(comments[0]).to.have.keys('article_id', 'comment_id', 'votes', 'created_at', 'author', 'body');
-									expect(comments).to.be.descendingBy('created_at');
-									expect(comments).to.have.lengthOf(13);
+						it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id and is sorted by "created_at" in ascending order', () => {
+							return request(app)
+								.get('/api/articles/1/comments?order=asc')
+								.expect(200)
+								.then(({ body: { comments } }) => {
+									expect(comments).to.be.ascendingBy('created_at');
 								});
-							});
+						});
 
-							it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id and is sorted by "created_at" in ascending order', () => {
-								return request(app)
-									.get('/api/articles/1/comments?order=asc')
-									.expect(200)
-									.then(({ body: { comments } }) => {
-										expect(comments).to.be.ascendingBy('created_at');
-									});
-							});
-
-							it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id and is sorted by "author" in descending order', () => {
-								return request(app)
-									.get('/api/articles/1/comments?sort_by=author')
-									.expect(200)
-									.then(({ body: { comments } }) => {
-										expect(comments).to.be.descendingBy('author');
-									});
-							});
-
-							it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id and is sorted by "author" in ascending order', () => {
-								return request(app)
-									.get('/api/articles/1/comments?sort_by=author&order=asc')
-									.expect(200)
-									.then(({ body: { comments } }) => {
-										expect(comments).to.be.ascendingBy('author');
-									});
-							});
-
-							it('GET /articles/:article_id/comments  - responds with a Status:400 when passed with an invalid query', () => {
-								return request(app)
-									.get('/api/articles/1/comments?sorting=author')
-									.expect(400)
-									.then(({ body: { msg } }) => {
-										expect(msg).to.equal('Invalid query');
-									});
-							});
-
-							it('GET /articles/:article_id/comments  - responds with a Status:400 when passed with an invalid sort_by query', () => {
-								return request(app)
-									.get('/api/articles/1/comments?sort_by=shape')
-									.expect(400)
-									.then(({ body: { msg } }) => {
-										expect(msg).to.equal('order by "shape" desc - column "shape" does not exist');
-									});
-							});
-
-							it('GET /articles/:article_id/comments  - responds with a Status:400 when passed with an invalid order query', () => {
-								return request(app)
-									.get('/api/articles/1/comments?order=shape')
-									.expect(400)
-									.then(({ body: { msg } }) => {
-										expect(msg).to.equal('Invalid query');
-									});
-							});
-
-							it('GET /articles/:article_id/comments  - responds with a Status:400 when passed with an invalid article_id', () => {
-								return request(app)
-									.get('/api/articles/not-a-valid-id/comments')
-									.expect(400)
-									.then(({ body: { msg } }) => {
-										expect(msg).to.equal('invalid input syntax for integer: "not-a-valid-id"');
-									});
-							});
-
-							it('GET /articles/:article_id/comments  - responds with a Status:404 when passed with a article_id thats not found', () => {
-								return request(app).get('/api/articles/999/comments').expect(404).then(({ body: { msg } }) => {
-									expect(msg).to.equal('Article ID Not Found');
+						it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id and is sorted by "author" in descending order', () => {
+							return request(app)
+								.get('/api/articles/1/comments?sort_by=author')
+								.expect(200)
+								.then(({ body: { comments } }) => {
+									expect(comments).to.be.descendingBy('author');
 								});
+						});
+
+						it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id and is sorted by "author" in ascending order', () => {
+							return request(app)
+								.get('/api/articles/1/comments?sort_by=author&order=asc')
+								.expect(200)
+								.then(({ body: { comments } }) => {
+									expect(comments).to.be.ascendingBy('author');
+								});
+						});
+
+						it('GET /articles/:article_id/comments  - responds with a Status:400 when passed with an invalid query', () => {
+							return request(app)
+								.get('/api/articles/1/comments?sorting=author')
+								.expect(400)
+								.then(({ body: { msg } }) => {
+									expect(msg).to.equal('Require a Valid Query');
+								});
+						});
+
+						it('GET /articles/:article_id/comments  - responds with a Status:400 when passed with an invalid sort_by query', () => {
+							return request(app)
+								.get('/api/articles/1/comments?sort_by=shape')
+								.expect(400)
+								.then(({ body: { msg } }) => {
+									expect(msg).to.equal('order by "shape" desc - column "shape" does not exist');
+								});
+						});
+
+						it('GET /articles/:article_id/comments  - responds with a Status:400 when passed with an invalid order query', () => {
+							return request(app).get('/api/articles/1/comments?order=shape').expect(400).then(({ body: { msg } }) => {
+								expect(msg).to.equal('Require a Valid Query');
 							});
 						});
 
-						it('Invalid Methods for /articles/:article_id/comments - responds with a Status:405', () => {
-							const invalidMethods = [ 'patch', 'put', 'delete' ];
+						it('GET /articles/:article_id/comments  - responds with a Status:400 when passed with an invalid article_id', () => {
+							return request(app).get('/api/articles/not-a-valid-id/comments').expect(400).then(({ body: { msg } }) => {
+								expect(msg).to.equal('invalid input syntax for integer: "not-a-valid-id"');
+							});
+						});
 
-							invalidMethods.forEach((method) => {
-								return request(app)[method]('/api/articles/1/comments').expect(405).then(({ body: { msg } }) => {
-									expect(msg).to.equal('Method Not Allowed');
-								});
+						it('GET /articles/:article_id/comments  - responds with a Status:404 when passed with a article_id thats not found', () => {
+							return request(app).get('/api/articles/999/comments').expect(404).then(({ body: { msg } }) => {
+								expect(msg).to.equal('Article ID Not Found');
+							});
+						});
+					});
+
+					it('Invalid Methods for /articles/:article_id/comments - responds with a Status:405', () => {
+						const invalidMethods = [ 'patch', 'put', 'delete' ];
+
+						invalidMethods.forEach((method) => {
+							return request(app)[method]('/api/articles/1/comments').expect(405).then(({ body: { msg } }) => {
+								expect(msg).to.equal('Method Not Allowed');
 							});
 						});
 					});
