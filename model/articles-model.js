@@ -43,11 +43,11 @@ const patchArticleById = ({ article_id }, { inc_votes, ...restOfReqBody }) => {
 		});
 };
 
-const getArticles = ({ order = 'desc', sort_by = 'created_at', author, ...restOfReqBody }) => {
+const getArticles = ({ order = 'desc', sort_by = 'created_at', author, topic, ...restOfReqBody }) => {
 	const objLength = Object.keys(restOfReqBody).length;
 	const reg = /([A-Z])\w+/i;
 
-	if (!reg.test(author)) {
+	if (!reg.test(author) || !reg.test(topic)) {
 		return Promise.reject({
 			status: 400,
 			msg: 'Bad Request'
@@ -65,6 +65,9 @@ const getArticles = ({ order = 'desc', sort_by = 'created_at', author, ...restOf
 			.modify((queryBuilder) => {
 				if (author) {
 					queryBuilder.where('articles.author', author);
+				}
+				if (topic) {
+					queryBuilder.where('topic', topic);
 				}
 			});
 	} else {
