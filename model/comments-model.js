@@ -1,6 +1,6 @@
 const connection = require('../db/connection.js');
 
-const postCommentByArticleId = ({ article_id }, { username, body, ...restOfReqBody }) => {
+const insertCommentByArticleId = ({ article_id }, { username, body, ...restOfReqBody }) => {
 	if (Object.keys(restOfReqBody).length > 0) {
 		return Promise.reject({
 			status: 400,
@@ -79,4 +79,4 @@ const deleteCommentById = ({ comment_id }) => {
 	});
 };
 
-module.exports = { postCommentByArticleId, getCommentByArticleId, patchCommentById, deleteCommentById };
+module.exports = { insertCommentByArticleId, getCommentByArticleId, patchCommentById, deleteCommentById };

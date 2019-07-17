@@ -8,7 +8,7 @@ const sendArticleById = (req, res, next) => {
 		.catch(next);
 };
 
-const sendPatchArticleById = (req, res, next) => {
+const patchArticleById = (req, res, next) => {
 	updateArticleById(req.params, req.body)
 		.then((article) => {
 			res.status(200).send({ article });
@@ -24,4 +24,4 @@ const sendArticles = (req, res, next) => {
 		.catch(next);
 };
 
-module.exports = { sendArticleById, sendPatchArticleById, sendArticles };
+module.exports = { sendArticleById, patchArticleById, sendArticles };

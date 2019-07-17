@@ -1,19 +1,19 @@
 const {
-	postCommentByArticleId,
+	insertCommentByArticleId,
 	getCommentByArticleId,
 	patchCommentById,
 	deleteCommentById
 } = require('../model/comments-model.js');
 
-const sendPostCommentByArticleId = (req, res, next) => {
-	postCommentByArticleId(req.params, req.body)
+const postCommentByArticleId = (req, res, next) => {
+	insertCommentByArticleId(req.params, req.body)
 		.then((comment) => {
 			res.status(201).send({ comment });
 		})
 		.catch(next);
 };
 
-const sendGetCommentByArticleId = (req, res, next) => {
+const sendCommentByArticleId = (req, res, next) => {
 	getCommentByArticleId(req.params, req.query)
 		.then((comments) => {
 			res.status(200).send({ comments });
@@ -37,4 +37,4 @@ const sendDeleteCommentById = (req, res, next) => {
 		.catch(next);
 };
 
-module.exports = { sendPostCommentByArticleId, sendGetCommentByArticleId, sendPatchCommentById, sendDeleteCommentById };
+module.exports = { postCommentByArticleId, sendCommentByArticleId, sendPatchCommentById, sendDeleteCommentById };
