@@ -106,6 +106,12 @@ describe('/', () => {
 							expect(body.articles).to.be.descendingBy('created_at');
 						});
 					});
+
+					it('GET /articles - responds with a Status:200 and the list of articles sorted by "created_at" in ascending order', () => {
+						return request(app).get('/api/articles?order=asc').expect(200).then(({ body }) => {
+							expect(body.articles).to.be.ascendingBy('created_at');
+						});
+					});
 				});
 			});
 
