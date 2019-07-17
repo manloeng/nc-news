@@ -118,6 +118,12 @@ describe('/', () => {
 							expect(body.articles).to.be.descendingBy('author');
 						});
 					});
+
+					it('GET /articles - responds with a Status:400 when passed with invalid query', () => {
+						return request(app).get('/api/articles?sorting=author').expect(400).then(({ body }) => {
+							expect(body.msg).to.be.equal('Bad Request');
+						});
+					});
 				});
 			});
 
