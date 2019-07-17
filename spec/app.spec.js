@@ -221,120 +221,120 @@ describe('/', () => {
 			});
 
 			describe('/api/articles/:article_id', () => {
-				describe('Http methods', () => {
-					describe('GET method', () => {
-						it('GET /articles/:article_id - responds with a Status:200 and the article data', () => {
-							return request(app).get('/api/articles/1').expect(200).then(({ body }) => {
-								expect(body).to.be.a('object');
-								expect(body.article).to.have.keys(
-									'article_id',
-									'title',
-									'topic',
-									'author',
-									'body',
-									'votes',
-									'created_at',
-									'comment_count'
-								);
-							});
-						});
-
-						it('GET /articles/:article_id - responds with a Status:400 when passed with an invalid article_id', () => {
-							return request(app).get('/api/articles/not-a-valid-id').expect(400).then(({ body }) => {
-								expect(body.msg).to.be.equal('invalid input syntax for integer: "not-a-valid-id"');
-							});
-						});
-
-						it("GET /articles/:article_id - responds with a Status:404 when passed with an article_id that isn't found", () => {
-							return request(app).get('/api/articles/9999').expect(404).then(({ body }) => {
-								expect(body.msg).to.be.equal('Article ID Not Found');
-							});
+				describe('GET method', () => {
+					it('GET /articles/:article_id - responds with a Status:200 and the article data', () => {
+						return request(app).get('/api/articles/1').expect(200).then(({ body: { article } }) => {
+							expect(article).to.have.keys(
+								'article_id',
+								'title',
+								'topic',
+								'author',
+								'body',
+								'votes',
+								'created_at',
+								'comment_count'
+							);
 						});
 					});
 
-					describe('PATCH method', () => {
-						it('PATCH /articles/:article_id - responds with a Status:200 and the updated article vote data', () => {
-							return request(app).patch('/api/articles/1').send({ inc_votes: 105 }).expect(200).then(({ body }) => {
-								expect(body).to.be.a('object');
-								expect(body.article.votes).to.be.equal(205);
-								expect(body.article).to.have.keys(
-									'article_id',
-									'title',
-									'topic',
-									'author',
-									'body',
-									'votes',
-									'created_at'
-								);
-							});
-						});
-
-						it('PATCH /articles/:article_id - responds with a Status:200 and the updated article vote data', () => {
-							return request(app).patch('/api/articles/1').send({ inc_votes: -101 }).expect(200).then(({ body }) => {
-								expect(body.article.votes).to.be.equal(-1);
-							});
-						});
-
-						it('PATCH /articles/:article_id - responds with a Status:200 when passed with an empty object', () => {
-							return request(app).patch('/api/articles/1').send({}).expect(200).then(({ body }) => {
-								expect(body.article.article_id).to.be.equal(1);
-							});
-						});
-
-						it('PATCH /articles/:article_id - responds with a Status:400 when passed with an invalid article_id', () => {
-							return request(app)
-								.patch('/api/articles/not-a-valid-id')
-								.send({ inc_votes: -101 })
-								.expect(400)
-								.then(({ body }) => {
-									expect(body.msg).to.be.equal('invalid input syntax for integer: "not-a-valid-id"');
-								});
-						});
-
-						it('PATCH /articles/:article_id - responds with a Status:400 when passed with an invalid update key but a valid value', () => {
-							return request(app)
-								.patch('/api/articles/1')
-								.send({ 'not-a-valid-key': 100 })
-								.expect(400)
-								.then(({ body }) => {
-									expect(body.msg).to.be.equal('Not a Valid Key-Value');
-								});
-						});
-
-						it('PATCH /articles/:article_id - responds with a Status:400 when passed with an valid key but invalid update value', () => {
-							return request(app)
-								.patch('/api/articles/1')
-								.send({ inc_votes: 'not-a-valid-value' })
-								.expect(400)
-								.then(({ body }) => {
-									expect(body.msg).to.be.equal('invalid input syntax for integer: "NaN"');
-								});
-						});
-
-						it('PATCH /articles/:article_id - responds with a Status:400 when passed with an valid update key-value pair and an invalid key-value pair', () => {
-							return request(app)
-								.patch('/api/articles/1')
-								.send({ inc_votes: 100, 999: 100 })
-								.expect(400)
-								.then(({ body }) => {
-									expect(body.msg).to.be.equal('Not a Valid Key-Value');
-								});
-						});
-
-						it("PATCH /articles/:article_id - responds with a Status:404 when passed with an article_id that isn't found", () => {
-							return request(app).patch('/api/articles/999').send({ inc_votes: -101 }).expect(404).then(({ body }) => {
-								expect(body.msg).to.be.equal('Article ID Not Found');
-							});
+					it('GET /articles/:article_id - responds with a Status:400 when passed with an invalid article_id', () => {
+						return request(app).get('/api/articles/not-a-valid-id').expect(400).then(({ body: { msg } }) => {
+							expect(msg).to.be.equal('invalid input syntax for integer: "not-a-valid-id"');
 						});
 					});
 
-					it('Invalid Methods for /articles/:article_id - responds with a Status:405', () => {
-						const invalidMethods = [ 'put', 'post', 'delete' ];
+					it("GET /articles/:article_id - responds with a Status:404 when passed with an article_id that isn't found", () => {
+						return request(app).get('/api/articles/9999').expect(404).then(({ body: { msg } }) => {
+							expect(msg).to.be.equal('Article ID Not Found');
+						});
+					});
+				});
 
-						invalidMethods.forEach((method) => {
-							return request(app)[method]('/api/articles/1').expect(405).then(({ body }) => {
-								expect(body.msg).to.equal('Method Not Allowed');
+				describe('PATCH method', () => {
+					it('PATCH /articles/:article_id - responds with a Status:200 and the updated article vote data', () => {
+						return request(app)
+							.patch('/api/articles/1')
+							.send({ inc_votes: 105 })
+							.expect(200)
+							.then(({ body: { article } }) => {
+								expect(article.votes).to.be.equal(205);
+								expect(article).to.have.keys('article_id', 'title', 'topic', 'author', 'body', 'votes', 'created_at');
 							});
+					});
+
+					it('PATCH /articles/:article_id - responds with a Status:200 and the updated article vote data', () => {
+						return request(app)
+							.patch('/api/articles/1')
+							.send({ inc_votes: -101 })
+							.expect(200)
+							.then(({ body: { article } }) => {
+								expect(article.votes).to.be.equal(-1);
+							});
+					});
+
+					it('PATCH /articles/:article_id - responds with a Status:200 when passed with an empty object', () => {
+						return request(app).patch('/api/articles/1').send({}).expect(200).then(({ body: { article } }) => {
+							expect(article.article_id).to.be.equal(1);
+						});
+					});
+
+					it('PATCH /articles/:article_id - responds with a Status:400 when passed with an invalid article_id', () => {
+						return request(app)
+							.patch('/api/articles/not-a-valid-id')
+							.send({ inc_votes: -101 })
+							.expect(400)
+							.then(({ body: { msg } }) => {
+								expect(msg).to.be.equal('invalid input syntax for integer: "not-a-valid-id"');
+							});
+					});
+
+					it('PATCH /articles/:article_id - responds with a Status:400 when passed with an invalid update key but a valid value', () => {
+						return request(app)
+							.patch('/api/articles/1')
+							.send({ 'not-a-valid-key': 100 })
+							.expect(400)
+							.then(({ body: { msg } }) => {
+								expect(msg).to.be.equal('Not a Valid Key-Value');
+							});
+					});
+
+					it('PATCH /articles/:article_id - responds with a Status:400 when passed with an valid key but invalid update value', () => {
+						return request(app)
+							.patch('/api/articles/1')
+							.send({ inc_votes: 'not-a-valid-value' })
+							.expect(400)
+							.then(({ body: { msg } }) => {
+								expect(msg).to.be.equal('invalid input syntax for integer: "NaN"');
+							});
+					});
+
+					it('PATCH /articles/:article_id - responds with a Status:400 when passed with an valid update key-value pair and an invalid key-value pair', () => {
+						return request(app)
+							.patch('/api/articles/1')
+							.send({ inc_votes: 100, 999: 100 })
+							.expect(400)
+							.then(({ body: { msg } }) => {
+								expect(msg).to.be.equal('Not a Valid Key-Value');
+							});
+					});
+
+					it("PATCH /articles/:article_id - responds with a Status:404 when passed with an article_id that isn't found", () => {
+						return request(app)
+							.patch('/api/articles/999')
+							.send({ inc_votes: -101 })
+							.expect(404)
+							.then(({ body: { msg } }) => {
+								expect(msg).to.be.equal('Article ID Not Found');
+							});
+					});
+				});
+
+				it('Invalid Methods for /articles/:article_id - responds with a Status:405', () => {
+					const invalidMethods = [ 'put', 'post', 'delete' ];
+
+					invalidMethods.forEach((method) => {
+						return request(app)[method]('/api/articles/1').expect(405).then(({ body: { msg } }) => {
+							expect(msg).to.equal('Method Not Allowed');
 						});
 					});
 				});
