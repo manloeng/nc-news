@@ -67,7 +67,7 @@ const updateCommentById = ({ comment_id }, { inc_votes, ...restOfReqBody }) => {
 	if (Object.keys(restOfReqBody).length > 0) {
 		return Promise.reject({
 			status: 400,
-			msg: 'Bad Request'
+			msg: 'Require a Valid Query'
 		});
 	}
 	return connection
