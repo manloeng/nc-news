@@ -44,19 +44,22 @@ const patchArticleById = ({ article_id }, { inc_votes, ...restOfReqBody }) => {
 };
 
 const getArticles = ({ order = 'desc', sort_by = 'created_at', ...restOfReqBody }) => {
-	if (Object.keys(restOfReqBody).length > 0) {
+	const objLength = Object.keys(restOfReqBody).length;
+
+	if ((order === 'asc' && objLength === 0) || (order === 'desc' && objLength === 0)) {
+		return connection
+			.select('articles.article_id', 'articles.author', 'articles.created_at', 'articles.votes', 'title', 'topic')
+			.from('articles')
+			.leftJoin('comments', 'articles.article_id', 'comments.comment_id')
+			.count({ comment_count: 'comments.article_id' })
+			.groupBy('articles.article_id')
+			.orderBy(sort_by, order);
+	} else {
 		return Promise.reject({
 			status: 400,
 			msg: 'Bad Request'
 		});
 	}
-	return connection
-		.select('articles.article_id', 'articles.author', 'articles.created_at', 'articles.votes', 'title', 'topic')
-		.from('articles')
-		.leftJoin('comments', 'articles.article_id', 'comments.comment_id')
-		.count({ comment_count: 'comments.article_id' })
-		.groupBy('articles.article_id')
-		.orderBy(sort_by, order);
 };
 
 module.exports = { getArticleById, patchArticleById, getArticles };
