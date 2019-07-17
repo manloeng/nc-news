@@ -1,8 +1,8 @@
 const getJSON = require('../model/api-model.js');
 
 const sendGetJSON = (req, res, next) => {
-	const json = getJSON();
-	res.status(200).send({ json });
+	const routes = getJSON();
+	res.status(200).send({ routes });
 };
 
 module.exports = sendGetJSON;
