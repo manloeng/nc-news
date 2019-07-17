@@ -19,8 +19,8 @@ describe('/', () => {
 	});
 
 	it('/not-a-route', () => {
-		return request(app).get('/not-a-route').expect(404).then(({ body }) => {
-			expect(body.msg).to.equal('Page Not Found');
+		return request(app).get('/not-a-route').expect(404).then(({ body: { msg } }) => {
+			expect(msg).to.equal('Page Not Found');
 		});
 	});
 
@@ -33,58 +33,54 @@ describe('/', () => {
 		});
 
 		describe('/api/topics', () => {
-			describe('Http methods', () => {
-				describe('GET method', () => {
-					it('GET /topics - responds with a Status:200 and the list of the topics data', () => {
-						return request(app).get('/api/topics').expect(200).then(({ body }) => {
-							expect(body).to.be.a('object');
-							expect(body.topics[0]).to.have.keys('slug', 'description');
-						});
+			describe('GET method', () => {
+				it('GET /topics - responds with a Status:200 and the list of the topics data', () => {
+					return request(app).get('/api/topics').expect(200).then(({ body: { topics } }) => {
+						expect(topics[0]).to.have.keys('slug', 'description');
+						expect(topics).to.have.lengthOf(3);
 					});
 				});
+			});
 
-				it('Invalid Methods for /topics - responds with a Status:405', () => {
-					const invalidMethods = [ 'patch', 'put', 'post', 'delete' ];
+			it('Invalid Methods for /topics - responds with a Status:405', () => {
+				const invalidMethods = [ 'patch', 'put', 'post', 'delete' ];
 
-					invalidMethods.forEach((method) => {
-						return request(app)[method]('/api/topics').expect(405).then(({ body }) => {
-							expect(body.msg).to.equal('Method Not Allowed');
-						});
+				invalidMethods.forEach((method) => {
+					return request(app)[method]('/api/topics').expect(405).then(({ body: { msg } }) => {
+						expect(msg).to.equal('Method Not Allowed');
 					});
 				});
 			});
 		});
 
 		describe('/api/users/:username', () => {
-			describe('Http methods', () => {
-				describe('GET method', () => {
-					it('GET /users/:username - responds with a Status:200 and the users data', () => {
-						return request(app).get('/api/users/butter_bridge').expect(200).then(({ body: { user } }) => {
-							expect(user).to.have.keys('username', 'name', 'avatar_url');
-							expect(user.username).to.equal('butter_bridge');
-						});
-					});
-
-					it('GET /users/:username - responds with a Status:400 when passed with an invalid username', () => {
-						return request(app).get('/api/users/999').expect(400).then(({ body: { msg } }) => {
-							expect(msg).to.be.equal('Bad Request');
-						});
-					});
-
-					it("GET /users/:username - responds with a Status:404 when passed with an username that isn't found", () => {
-						return request(app).get('/api/users/Andrew').expect(404).then(({ body: { msg } }) => {
-							expect(msg).to.be.equal('User Not Found');
-						});
+			describe('GET method', () => {
+				it('GET /users/:username - responds with a Status:200 and the users data', () => {
+					return request(app).get('/api/users/butter_bridge').expect(200).then(({ body: { user } }) => {
+						expect(user).to.have.keys('username', 'name', 'avatar_url');
+						expect(user.username).to.equal('butter_bridge');
 					});
 				});
 
-				it('Invalid Methods for /users/:username - responds with a Status:405', () => {
-					const invalidMethods = [ 'patch', 'put', 'post', 'delete' ];
+				it('GET /users/:username - responds with a Status:400 when passed with an invalid username', () => {
+					return request(app).get('/api/users/999').expect(400).then(({ body: { msg } }) => {
+						expect(msg).to.be.equal('Bad Request');
+					});
+				});
 
-					invalidMethods.forEach((method) => {
-						return request(app)[method]('/api/users/butter_bridge').expect(405).then(({ body: { msg } }) => {
-							expect(msg).to.equal('Method Not Allowed');
-						});
+				it("GET /users/:username - responds with a Status:404 when passed with an username that isn't found", () => {
+					return request(app).get('/api/users/Andrew').expect(404).then(({ body: { msg } }) => {
+						expect(msg).to.be.equal('User Not Found');
+					});
+				});
+			});
+
+			it('Invalid Methods for /users/:username - responds with a Status:405', () => {
+				const invalidMethods = [ 'patch', 'put', 'post', 'delete' ];
+
+				invalidMethods.forEach((method) => {
+					return request(app)[method]('/api/users/butter_bridge').expect(405).then(({ body: { msg } }) => {
+						expect(msg).to.equal('Method Not Allowed');
 					});
 				});
 			});
