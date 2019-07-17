@@ -1,6 +1,6 @@
 const { getArticleById, updateArticleById, getArticles } = require('../model/articles-model.js');
 
-const sendGetArticleById = (req, res, next) => {
+const sendArticleById = (req, res, next) => {
 	getArticleById(req.params)
 		.then((article) => {
 			res.status(200).send({ article });
@@ -24,4 +24,4 @@ const sendArticles = (req, res, next) => {
 		.catch(next);
 };
 
-module.exports = { sendGetArticleById, sendPatchArticleById, sendArticles };
+module.exports = { sendArticleById, sendPatchArticleById, sendArticles };
