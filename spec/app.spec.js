@@ -59,21 +59,21 @@ describe('/', () => {
 			describe('Http methods', () => {
 				describe('GET method', () => {
 					it('GET /users/:username - responds with a Status:200 and the users data', () => {
-						return request(app).get('/api/users/butter_bridge').expect(200).then(({ body }) => {
-							expect(body).to.be.a('object');
-							expect(body.user).to.have.keys('username', 'name', 'avatar_url');
+						return request(app).get('/api/users/butter_bridge').expect(200).then(({ body: { user } }) => {
+							expect(user).to.have.keys('username', 'name', 'avatar_url');
+							expect(user.username).to.equal('butter_bridge');
 						});
 					});
 
 					it('GET /users/:username - responds with a Status:400 when passed with an invalid username', () => {
-						return request(app).get('/api/users/999').expect(400).then(({ body }) => {
-							expect(body.msg).to.be.equal('Bad Request');
+						return request(app).get('/api/users/999').expect(400).then(({ body: { msg } }) => {
+							expect(msg).to.be.equal('Bad Request');
 						});
 					});
 
 					it("GET /users/:username - responds with a Status:404 when passed with an username that isn't found", () => {
-						return request(app).get('/api/users/Andrew').expect(404).then(({ body }) => {
-							expect(body.msg).to.be.equal('User Not Found');
+						return request(app).get('/api/users/Andrew').expect(404).then(({ body: { msg } }) => {
+							expect(msg).to.be.equal('User Not Found');
 						});
 					});
 				});
@@ -82,8 +82,8 @@ describe('/', () => {
 					const invalidMethods = [ 'patch', 'put', 'post', 'delete' ];
 
 					invalidMethods.forEach((method) => {
-						return request(app)[method]('/api/users/butter_bridge').expect(405).then(({ body }) => {
-							expect(body.msg).to.equal('Method Not Allowed');
+						return request(app)[method]('/api/users/butter_bridge').expect(405).then(({ body: { msg } }) => {
+							expect(msg).to.equal('Method Not Allowed');
 						});
 					});
 				});
