@@ -64,7 +64,7 @@ describe('/', () => {
 
 				it('GET /users/:username - responds with a Status:400 when passed with an invalid username', () => {
 					return request(app).get('/api/users/999').expect(400).then(({ body: { msg } }) => {
-						expect(msg).to.be.equal('Bad Request');
+						expect(msg).to.be.equal('Require a Valid Query');
 					});
 				});
 

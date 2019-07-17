@@ -7,7 +7,7 @@ const getUserByUsername = ({ username }) => {
 	if (!reg.test(username)) {
 		return Promise.reject({
 			status: 400,
-			msg: 'Bad Request'
+			msg: 'Require a Valid Query'
 		});
 	}
 
