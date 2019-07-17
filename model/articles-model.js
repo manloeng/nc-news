@@ -43,7 +43,7 @@ const patchArticleById = ({ article_id }, { inc_votes, ...restOfReqBody }) => {
 		});
 };
 
-const getArticles = ({ order = 'desc', sort_by = 'created_at', ...restOfReqBody }) => {
+const getArticles = ({ order = 'desc', sort_by = 'created_at', author, ...restOfReqBody }) => {
 	const objLength = Object.keys(restOfReqBody).length;
 
 	if ((order === 'asc' && objLength === 0) || (order === 'desc' && objLength === 0)) {
@@ -53,7 +53,12 @@ const getArticles = ({ order = 'desc', sort_by = 'created_at', ...restOfReqBody 
 			.leftJoin('comments', 'articles.article_id', 'comments.comment_id')
 			.count({ comment_count: 'comments.article_id' })
 			.groupBy('articles.article_id')
-			.orderBy(sort_by, order);
+			.orderBy(sort_by, order)
+			.modify((queryBuilder) => {
+				if (author) {
+					queryBuilder.where('articles.author', author);
+				}
+			});
 	} else {
 		return Promise.reject({
 			status: 400,
