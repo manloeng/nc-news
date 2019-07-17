@@ -363,7 +363,7 @@ describe('/', () => {
 									})
 									.expect(400)
 									.then(({ body }) => {
-										expect(body.msg).to.be.equal('Require Username Input');
+										expect(body.msg).to.be.equal('null value in column "author" violates not-null constraint');
 									});
 							});
 
