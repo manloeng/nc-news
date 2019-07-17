@@ -1,4 +1,4 @@
-const { getArticleById, patchArticleById, getArticles } = require('../model/articles-model.js');
+const { getArticleById, updateArticleById, getArticles } = require('../model/articles-model.js');
 
 const sendGetArticleById = (req, res, next) => {
 	getArticleById(req.params)
@@ -9,14 +9,14 @@ const sendGetArticleById = (req, res, next) => {
 };
 
 const sendPatchArticleById = (req, res, next) => {
-	patchArticleById(req.params, req.body)
+	updateArticleById(req.params, req.body)
 		.then((article) => {
 			res.status(200).send({ article });
 		})
 		.catch(next);
 };
 
-const sendGetArticles = (req, res, next) => {
+const sendArticles = (req, res, next) => {
 	getArticles(req.query)
 		.then((articles) => {
 			res.status(200).send({ articles });
@@ -24,4 +24,4 @@ const sendGetArticles = (req, res, next) => {
 		.catch(next);
 };
 
-module.exports = { sendGetArticleById, sendPatchArticleById, sendGetArticles };
+module.exports = { sendGetArticleById, sendPatchArticleById, sendArticles };

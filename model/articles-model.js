@@ -19,7 +19,7 @@ const getArticleById = ({ article_id }) => {
 		});
 };
 
-const patchArticleById = ({ article_id }, { inc_votes, ...restOfReqBody }) => {
+const updateArticleById = ({ article_id }, { inc_votes, ...restOfReqBody }) => {
 	if (Object.keys(restOfReqBody).length > 0) {
 		return Promise.reject({
 			status: 400,
@@ -78,4 +78,4 @@ const getArticles = ({ order = 'desc', sort_by = 'created_at', author, topic, ..
 	}
 };
 
-module.exports = { getArticleById, patchArticleById, getArticles };
+module.exports = { getArticleById, updateArticleById, getArticles };
