@@ -17,7 +17,7 @@ const sendPatchArticleById = (req, res, next) => {
 };
 
 const sendGetArticles = (req, res, next) => {
-	getArticles().then((articles) => {
+	getArticles(req.query).then((articles) => {
 		res.status(200).send({ articles });
 	});
 };
