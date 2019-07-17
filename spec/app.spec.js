@@ -566,7 +566,7 @@ describe('/', () => {
 						.send({ increase_votes: -100 })
 						.expect(400)
 						.then(({ body: { msg } }) => {
-							expect(msg).to.equal('Bad Request');
+							expect(msg).to.equal('Require a Valid Query');
 						});
 				});
 				it('PATCH /comments/:comment_id - responds with a Status:400 when passed with an valid update key-value pair and an invalid key-value pair', () => {
@@ -575,7 +575,7 @@ describe('/', () => {
 						.send({ inc_votes: -100, increase_votes: -100 })
 						.expect(400)
 						.then(({ body: { msg } }) => {
-							expect(msg).to.equal('Bad Request');
+							expect(msg).to.equal('Require a Valid Query');
 						});
 				});
 
