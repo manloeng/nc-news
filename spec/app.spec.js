@@ -139,14 +139,32 @@ describe('/', () => {
 						});
 					});
 
-					it('GET /articles - responds with a Status:200 and the list of articles filtered by "author"', () => {
+					it('GET /articles - responds with a Status:200 and an empty object of "author" data', () => {
 						return request(app).get('/api/articles?author=andrew').expect(200).then(({ body }) => {
+							expect(body.articles).to.be.eql([]);
+						});
+					});
+
+					it('GET /articles - responds with a Status:200 and the list of articles filtered by "topic"', () => {
+						return request(app).get('/api/articles?topic=mitch').expect(200).then(({ body }) => {
+							expect(body.articles).to.be.descendingBy('created_at');
+						});
+					});
+
+					it('GET /articles - responds with a Status:200 and an empty object of "topic" data', () => {
+						return request(app).get('/api/articles?topic=andrew').expect(200).then(({ body }) => {
 							expect(body.articles).to.be.eql([]);
 						});
 					});
 
 					it('GET /articles - responds with a Status:400 and the list of articles filtered by "author"', () => {
 						return request(app).get('/api/articles?author=123').expect(400).then(({ body }) => {
+							expect(body.msg).to.be.equal('Bad Request');
+						});
+					});
+
+					it('GET /articles - responds with a Status:400 and the list of articles filtered by "topic"', () => {
+						return request(app).get('/api/articles?topic=123').expect(400).then(({ body }) => {
 							expect(body.msg).to.be.equal('Bad Request');
 						});
 					});
