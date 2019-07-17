@@ -43,7 +43,13 @@ const patchArticleById = ({ article_id }, { inc_votes, ...restOfReqBody }) => {
 		});
 };
 
-const getArticles = ({ order = 'desc', sort_by = 'created_at' }) => {
+const getArticles = ({ order = 'desc', sort_by = 'created_at', ...restOfReqBody }) => {
+	if (Object.keys(restOfReqBody).length > 0) {
+		return Promise.reject({
+			status: 400,
+			msg: 'Bad Request'
+		});
+	}
 	return connection
 		.select('articles.article_id', 'articles.author', 'articles.created_at', 'articles.votes', 'title', 'topic')
 		.from('articles')
