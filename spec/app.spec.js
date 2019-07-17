@@ -177,7 +177,7 @@ describe('/', () => {
 
 					it('GET /articles - responds with a Status:400 when passed with a invalid sort_by - query value', () => {
 						return request(app).get('/api/articles?sort_by=shape').expect(400).then(({ body }) => {
-							expect(body.msg).to.be.equal('column "shape" does not exist');
+							expect(body.msg).to.be.equal('order by "shape" desc - column "shape" does not exist');
 						});
 					});
 
@@ -195,7 +195,7 @@ describe('/', () => {
 
 					it('GET /articles - responds with a Status:400 when passed with a valid order query and a invalid sort_by query', () => {
 						return request(app).get('/api/articles?sort_by=shape&order=asc').expect(400).then(({ body }) => {
-							expect(body.msg).to.be.equal('column "shape" does not exist');
+							expect(body.msg).to.be.equal('order by "shape" asc - column "shape" does not exist');
 						});
 					});
 
@@ -500,7 +500,7 @@ describe('/', () => {
 
 							it('GET /articles/:article_id/comments  - responds with a Status:400 when passed with an invalid sort_by query', () => {
 								return request(app).get('/api/articles/1/comments?sort_by=shape').expect(400).then(({ body }) => {
-									expect(body.msg).to.equal('column "shape" does not exist');
+									expect(body.msg).to.equal('order by "shape" desc - column "shape" does not exist');
 								});
 							});
 
