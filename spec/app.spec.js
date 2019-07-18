@@ -97,10 +97,10 @@ describe('/', () => {
 		});
 
 		describe('/api/articles', () => {
-			describe.only('GET method', () => {
-				it('GET /articles - responds with a Status:200 and the list of articles', () => {
-					return request(app).get('/api/articles').expect(200).then(({ body: { articles } }) => {
-						expect(articles[0]).to.have.keys(
+			describe('GET method', () => {
+				it('GET /articles - responds with a Status:200 and the list of articles which is limited to 10', () => {
+					return request(app).get('/api/articles').expect(200).then(({ body }) => {
+						expect(body.articles[0]).to.have.keys(
 							'article_id',
 							'title',
 							'topic',
@@ -109,7 +109,8 @@ describe('/', () => {
 							'created_at',
 							'comment_count'
 						);
-						expect(articles).to.have.lengthOf(10);
+						expect(body.articles).to.have.lengthOf(10);
+						expect(body).to.have.key('articles', 'total_count');
 					});
 				});
 
@@ -460,13 +461,21 @@ describe('/', () => {
 
 					describe('GET method', () => {
 						it('GET /articles/:article_id/comments  - responds with a Status:200 and the comments data based on article id and is sorted by "created_at" in descending order', () => {
-							return request(app).get('/api/articles/1/comments ').expect(200).then(({ body: { comments } }) => {
-								comments.forEach((comment) => {
+							return request(app).get('/api/articles/1/comments ').expect(200).then(({ body }) => {
+								body.comments.forEach((comment) => {
 									expect(comment.article_id).to.equal(1);
 								});
-								expect(comments[0]).to.have.keys('article_id', 'comment_id', 'votes', 'created_at', 'author', 'body');
-								expect(comments).to.be.descendingBy('created_at');
-								expect(comments).to.have.lengthOf(13);
+								expect(body.comments[0]).to.have.keys(
+									'article_id',
+									'comment_id',
+									'votes',
+									'created_at',
+									'author',
+									'body'
+								);
+								expect(body.comments).to.be.descendingBy('created_at');
+								expect(body.comments).to.have.lengthOf(10);
+								expect(body).to.have.key('comments', 'total_count');
 							});
 						});
 
@@ -517,7 +526,7 @@ describe('/', () => {
 								.get('/api/articles/1/comments?sort_by=shape')
 								.expect(400)
 								.then(({ body: { msg } }) => {
-									expect(msg).to.equal('order by "shape" desc - column "shape" does not exist');
+									expect(msg).to.equal('order by "shape" desc limit $2 - column "shape" does not exist');
 								});
 						});
 
