@@ -64,21 +64,33 @@ const getArticles = ({ order = 'desc', sort_by = 'created_at', author, topic, ..
 		});
 	}
 
-	return connection
-		.select('articles.article_id', 'articles.author', 'articles.created_at', 'articles.votes', 'title', 'topic')
-		.from('articles')
-		.leftJoin('comments', 'articles.article_id', 'comments.comment_id')
-		.count({ comment_count: 'comments.article_id' })
-		.groupBy('articles.article_id')
-		.orderBy(sort_by, order)
-		.modify((queryBuilder) => {
-			if (author) {
-				queryBuilder.where('articles.author', author);
-			}
-			if (topic) {
-				queryBuilder.where('topic', topic);
-			}
-		});
+	return (
+		connection
+			.select('articles.article_id', 'articles.author', 'articles.created_at', 'articles.votes', 'title', 'topic')
+			.from('articles')
+			// .rightJoin('comments', 'articles.article_id', 'comments.comment_id')
+			.leftJoin('comments', 'articles.article_id', 'comments.comment_id')
+			.count({ comment_count: 'comments.article_id' })
+			.groupBy('articles.article_id')
+			.orderBy(sort_by, order)
+			.modify((queryBuilder) => {
+				if (author) {
+					queryBuilder.where('articles.author', author);
+				}
+				if (topic) {
+					queryBuilder.where('topic', topic);
+				}
+			})
+			.then((articles) => {
+				if (!articles.length) {
+					return Promise.reject({
+						status: 404,
+						msg: 'Topic Not Found'
+					});
+				}
+				return articles;
+			})
+	);
 };
 
 module.exports = { getArticleById, updateArticleById, getArticles };

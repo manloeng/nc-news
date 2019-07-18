@@ -32,7 +32,7 @@ describe('/', () => {
 			});
 		});
 
-		it.only('Invalid Methods for /api - responds with a Status:405', () => {
+		it('Invalid Methods for /api - responds with a Status:405', () => {
 			const invalidMethods = [ 'post', 'patch', 'put', 'delete' ];
 
 			invalidMethods.forEach((method) => {
@@ -97,7 +97,7 @@ describe('/', () => {
 		});
 
 		describe('/api/articles', () => {
-			describe('GET method', () => {
+			describe.only('GET method', () => {
 				it('GET /articles - responds with a Status:200 and the list of articles', () => {
 					return request(app).get('/api/articles').expect(200).then(({ body: { articles } }) => {
 						expect(articles[0]).to.have.keys(
@@ -109,12 +109,13 @@ describe('/', () => {
 							'created_at',
 							'comment_count'
 						);
-						expect(articles).to.have.lengthOf(12);
+						expect(articles).to.have.lengthOf(13);
 					});
 				});
 
 				it('GET /articles - responds with a Status:200 and the list of articles sorted by a default of "created_at" in descending order', () => {
 					return request(app).get('/api/articles').expect(200).then(({ body: { articles } }) => {
+						console.log(articles);
 						expect(articles).to.be.descendingBy('created_at');
 					});
 				});
@@ -159,9 +160,9 @@ describe('/', () => {
 					});
 				});
 
-				it('GET /articles - responds with a Status:200 and an empty object of "topic" data', () => {
-					return request(app).get('/api/articles?topic=andrew').expect(200).then(({ body: { articles } }) => {
-						expect(articles).to.be.eql([]);
+				it.only('GET /articles - responds with a Status:404 when the "topic" data isn\'t found', () => {
+					return request(app).get('/api/articles?topic=andrew').expect(404).then(({ body: { msg } }) => {
+						expect(msg).to.be.equal('Topic Not Found');
 					});
 				});
 
