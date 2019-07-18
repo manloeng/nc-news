@@ -354,7 +354,7 @@ describe('/', () => {
 				});
 
 				describe('/api/articles/:article_id/comments', () => {
-					describe('POST method', () => {
+					describe.only('POST method', () => {
 						it('POST /articles/:article_id/comments - responds with a Status:201 and the newly created comment', () => {
 							return request(app)
 								.post('/api/articles/1/comments')
@@ -425,7 +425,7 @@ describe('/', () => {
 								});
 						});
 
-						it("POST /articles/:article_id/comments - responds with a Status:400 when passed with an article_id that isn't found", () => {
+						it("POST /articles/:article_id/comments - responds with a Status:404 when passed with an article_id that isn't found", () => {
 							return request(app)
 								.post('/api/articles/999/comments')
 								.send({
@@ -434,7 +434,7 @@ describe('/', () => {
 								})
 								.expect(404)
 								.then(({ body: { msg } }) => {
-									expect(msg).to.be.equal("Article ID Doesn't Exist");
+									expect(msg).to.be.equal('Key (article_id)=(999) is not present in table "articles".');
 								});
 						});
 
