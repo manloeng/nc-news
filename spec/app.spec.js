@@ -52,7 +52,7 @@ describe('/', () => {
 				});
 			});
 
-			describe.only('POST method', () => {
+			describe('POST method', () => {
 				it('POST /topics - responds with a Status:201 and the newly created topic', () => {
 					return request(app)
 						.post('/api/topics')
@@ -147,34 +147,63 @@ describe('/', () => {
 			});
 		});
 
-		describe('/api/users/:username', () => {
-			describe('GET method', () => {
-				it('GET /users/:username - responds with a Status:200 and the users data', () => {
-					return request(app).get('/api/users/butter_bridge').expect(200).then(({ body: { user } }) => {
-						expect(user).to.have.keys('username', 'name', 'avatar_url');
-						expect(user.username).to.equal('butter_bridge');
-					});
+		describe('/api/users', () => {
+			describe.only('POST method', () => {
+				it('POST /users - responds with a Status:201 and the newly created user', () => {
+					return request(app)
+						.post('/api/users')
+						.send({
+							username: 'butters',
+							name: 'jonny',
+							avatar_url: 'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg'
+						})
+						.expect(201)
+						.then(({ body: { user } }) => {
+							expect(user).to.have.all.keys('username', 'name', 'avatar_url');
+							expect(user.username).to.equal('butters');
+						});
 				});
 
-				it('GET /users/:username - responds with a Status:400 when passed with an invalid username', () => {
-					return request(app).get('/api/users/999').expect(400).then(({ body: { msg } }) => {
-						expect(msg).to.be.equal('Require a Valid Query');
-					});
-				});
+				it('Invalid Methods for /users - responds with a Status:405', () => {
+					const invalidMethods = [ 'patch', 'put', 'delete' ];
 
-				it("GET /users/:username - responds with a Status:404 when passed with an username that isn't found", () => {
-					return request(app).get('/api/users/Andrew').expect(404).then(({ body: { msg } }) => {
-						expect(msg).to.be.equal('User Not Found');
+					invalidMethods.forEach((method) => {
+						return request(app)[method]('/api/users').expect(405).then(({ body: { msg } }) => {
+							expect(msg).to.equal('Method Not Allowed');
+						});
 					});
 				});
 			});
 
-			it('Invalid Methods for /users/:username - responds with a Status:405', () => {
-				const invalidMethods = [ 'patch', 'put', 'post', 'delete' ];
+			describe('/api/users/:username', () => {
+				describe('GET method', () => {
+					it('GET /users/:username - responds with a Status:200 and the users data', () => {
+						return request(app).get('/api/users/butter_bridge').expect(200).then(({ body: { user } }) => {
+							expect(user).to.have.keys('username', 'name', 'avatar_url');
+							expect(user.username).to.equal('butter_bridge');
+						});
+					});
 
-				invalidMethods.forEach((method) => {
-					return request(app)[method]('/api/users/butter_bridge').expect(405).then(({ body: { msg } }) => {
-						expect(msg).to.equal('Method Not Allowed');
+					it('GET /users/:username - responds with a Status:400 when passed with an invalid username', () => {
+						return request(app).get('/api/users/999').expect(400).then(({ body: { msg } }) => {
+							expect(msg).to.be.equal('Require a Valid Query');
+						});
+					});
+
+					it("GET /users/:username - responds with a Status:404 when passed with an username that isn't found", () => {
+						return request(app).get('/api/users/Andrew').expect(404).then(({ body: { msg } }) => {
+							expect(msg).to.be.equal('User Not Found');
+						});
+					});
+				});
+
+				it('Invalid Methods for /users/:username - responds with a Status:405', () => {
+					const invalidMethods = [ 'patch', 'put', 'post', 'delete' ];
+
+					invalidMethods.forEach((method) => {
+						return request(app)[method]('/api/users/butter_bridge').expect(405).then(({ body: { msg } }) => {
+							expect(msg).to.equal('Method Not Allowed');
+						});
 					});
 				});
 			});
