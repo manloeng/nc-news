@@ -14,6 +14,7 @@ const insertCommentByArticleId = ({ article_id }, { username, body, ...restOfReq
 			msg: 'Bad Request'
 		});
 	}
+	// can't use previous checking method because this comes from articles id
 
 	// const queryExist = checkIfExists(article_id, 'articles', 'article_id').then((article) => {
 	// 	// Checks if article ID exists in the database

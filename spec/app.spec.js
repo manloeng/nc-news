@@ -32,6 +32,16 @@ describe('/', () => {
 			});
 		});
 
+		it.only('Invalid Methods for /api - responds with a Status:405', () => {
+			const invalidMethods = [ 'post', 'patch', 'put', 'delete' ];
+
+			invalidMethods.forEach((method) => {
+				return request(app)[method]('/api').expect(405).then(({ body: { msg } }) => {
+					expect(msg).to.equal('Method Not Allowed');
+				});
+			});
+		});
+
 		describe('/api/topics', () => {
 			describe('GET method', () => {
 				it('GET /topics - responds with a Status:200 and the list of the topics data', () => {

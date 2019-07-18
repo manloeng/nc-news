@@ -4,8 +4,9 @@ const usersRouter = require('./usersRouter.js');
 const articlesRouter = require('./articlesRouter.js');
 const commentsRouter = require('./commentsRouter.js');
 const sendGetJSON = require('../controller/api-controller.js');
+const { sendMethodNotAllowed } = require('../errors/error.js');
 
-apiRouter.route('/').get(sendGetJSON);
+apiRouter.route('/').get(sendGetJSON).all(sendMethodNotAllowed);
 
 apiRouter.use('/topics', topicsRouter);
 apiRouter.use('/users', usersRouter);
