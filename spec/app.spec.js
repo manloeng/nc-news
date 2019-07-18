@@ -148,7 +148,7 @@ describe('/', () => {
 		});
 
 		describe('/api/users', () => {
-			describe.only('POST method', () => {
+			describe('POST method', () => {
 				it('POST /users - responds with a Status:201 and the newly created user', () => {
 					return request(app)
 						.post('/api/users')
@@ -205,6 +205,15 @@ describe('/', () => {
 				it('POST /users - responds with a Status:400 when passed with an empty object', () => {
 					return request(app).post('/api/users').send({}).expect(400).then(({ body: { msg } }) => {
 						expect(msg).to.equal('null value in column "username" violates not-null constraint');
+					});
+				});
+			});
+
+			describe.only('GET method', () => {
+				it('GET /users - responds with a Status:200 and a list of the users data', () => {
+					return request(app).get('/api/users').expect(200).then(({ body: { users } }) => {
+						expect(users[0]).to.have.keys('username', 'name', 'avatar_url');
+						expect(users).to.have.lengthOf(4);
 					});
 				});
 			});
