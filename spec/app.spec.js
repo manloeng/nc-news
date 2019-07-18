@@ -444,7 +444,7 @@ describe('/', () => {
 					});
 				});
 
-				describe.only('DELETE method', () => {
+				describe('DELETE method', () => {
 					it('DELETE /articles/:article_id - responds with a Status:204', () => {
 						return request(app).delete('/api/articles/2').expect(204);
 					});
@@ -590,7 +590,7 @@ describe('/', () => {
 								expect(body.comments).to.be.descendingBy('created_at');
 								expect(body.comments).to.have.lengthOf(10);
 								expect(body).to.have.key('comments', 'total_count');
-								expect(body.total_count).to.equal(18);
+								expect(body.total_count).to.equal(13);
 							});
 						});
 

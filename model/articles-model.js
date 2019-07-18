@@ -115,7 +115,14 @@ const insertArticles = ({ username, title, topic, body, ...restOfReqBody }) => {
 };
 
 const destroyArticleById = ({ article_id }) => {
-	return connection.from('articles').where('article_id', article_id).del();
+	return connection.from('articles').where('article_id', article_id).del().then((deleteCount) => {
+		if (!deleteCount) {
+			return Promise.reject({
+				status: 404,
+				msg: 'Article ID Not Found'
+			});
+		}
+	});
 };
 
 const totalArticleCount = () => {
@@ -123,13 +130,9 @@ const totalArticleCount = () => {
 };
 
 const totalCommentCountByArticleID = ({ article_id }) => {
-	return connection
-		.select('*')
-		.leftJoin('articles', 'comments.article_id', 'articles.article_id')
-		.from('comments')
-		.then((articles) => {
-			return articles.length;
-		});
+	return connection.select('*').from('comments').where('article_id', article_id).then((articles) => {
+		return articles.length;
+	});
 };
 
 module.exports = {
