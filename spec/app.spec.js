@@ -97,7 +97,7 @@ describe('/', () => {
 		});
 
 		describe('/api/articles', () => {
-			describe('GET method', () => {
+			describe.only('GET method', () => {
 				it('GET /articles - responds with a Status:200 and the list of articles', () => {
 					return request(app).get('/api/articles').expect(200).then(({ body: { articles } }) => {
 						expect(articles[0]).to.have.keys(
@@ -109,9 +109,7 @@ describe('/', () => {
 							'created_at',
 							'comment_count'
 						);
-						//getting articles of length 12 still
-						expect(articles).to.have.lengthOf(12);
-						// expect(articles).to.have.lengthOf(13);
+						expect(articles).to.have.lengthOf(10);
 					});
 				});
 
@@ -187,7 +185,7 @@ describe('/', () => {
 
 				it('GET /articles - responds with a Status:400 when passed with a invalid sort_by - query value', () => {
 					return request(app).get('/api/articles?sort_by=shape').expect(400).then(({ body: { msg } }) => {
-						expect(msg).to.be.equal('order by "shape" desc - column "shape" does not exist');
+						expect(msg).to.be.equal('order by "shape" desc limit $1 - column "shape" does not exist');
 					});
 				});
 
@@ -205,7 +203,7 @@ describe('/', () => {
 
 				it('GET /articles - responds with a Status:400 when passed with a valid order query and a invalid sort_by query', () => {
 					return request(app).get('/api/articles?sort_by=shape&order=asc').expect(400).then(({ body: { msg } }) => {
-						expect(msg).to.be.equal('order by "shape" asc - column "shape" does not exist');
+						expect(msg).to.be.equal('order by "shape" asc limit $1 - column "shape" does not exist');
 					});
 				});
 
@@ -220,6 +218,12 @@ describe('/', () => {
 						expect(msg).to.be.equal('Require a Valid Query');
 					});
 				});
+
+				// it('GET /articles - responds with a Status:400 when passed with a valid sort_by query and a invalid query key', () => {
+				// 	return request(app).get('/api/articles?sort_by=author&order_by=asc').expect(400).then(({ body: { msg } }) => {
+				// 		expect(msg).to.be.equal('Require a Valid Query');
+				// 	});
+				// });
 			});
 
 			it('Invalid Methods for /topics - responds with a Status:405', () => {
@@ -354,7 +358,7 @@ describe('/', () => {
 				});
 
 				describe('/api/articles/:article_id/comments', () => {
-					describe.only('POST method', () => {
+					describe('POST method', () => {
 						it('POST /articles/:article_id/comments - responds with a Status:201 and the newly created comment', () => {
 							return request(app)
 								.post('/api/articles/1/comments')
