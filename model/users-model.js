@@ -27,4 +27,8 @@ const insertUser = ({ username, name, avatar_url, ...restOfReqBody }) => {
 	return connection.insert(formattedObj).into('users').returning('*').then((user) => user[0]);
 };
 
-module.exports = { getUserByUsername, insertUser };
+const getUsers = () => {
+	return connection.select('*').from('users');
+};
+
+module.exports = { getUserByUsername, insertUser, getUsers };
