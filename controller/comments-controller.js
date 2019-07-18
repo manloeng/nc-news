@@ -15,8 +15,8 @@ const postCommentByArticleId = (req, res, next) => {
 
 const sendCommentByArticleId = (req, res, next) => {
 	getCommentByArticleId(req.params, req.query)
-		.then((comments) => {
-			res.status(200).send({ comments });
+		.then(({ ...comments }) => {
+			res.status(200).send({ ...comments });
 		})
 		.catch(next);
 };

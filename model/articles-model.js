@@ -82,8 +82,6 @@ const getArticles = ({
 		.count({ comment_count: 'comments.article_id' })
 		.groupBy('articles.article_id')
 		.orderBy(sort_by, order)
-		.limit(limit)
-		.offset(offsetLimit)
 		.modify((queryBuilder) => {
 			if (author) {
 				queryBuilder.where('articles.author', author);
@@ -91,6 +89,7 @@ const getArticles = ({
 			if (topic) {
 				queryBuilder.where('topic', topic);
 			}
+			queryBuilder.limit(limit).offset(offsetLimit);
 		})
 		.then((articles) => {
 			if (!articles.length) {
@@ -99,7 +98,8 @@ const getArticles = ({
 					msg: 'Data Not Found'
 				});
 			}
-			return articles;
+			const total_count = articles.length;
+			return { total_count, articles };
 		});
 };
 

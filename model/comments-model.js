@@ -21,7 +21,10 @@ const insertCommentByArticleId = ({ article_id }, { username, body, ...restOfReq
 	});
 };
 
-const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'created_at', ...restOfReqBody }) => {
+const getCommentByArticleId = (
+	{ article_id },
+	{ order = 'desc', sort_by = 'created_at', limit = 10, p = 1, ...restOfReqBody }
+) => {
 	const objLength = Object.keys(restOfReqBody).length;
 
 	if (
@@ -38,11 +41,15 @@ const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'crea
 		});
 	}
 
+	const offsetLimit = p * limit - limit;
+
 	return connection
 		.select('*')
 		.from('comments')
 		.orderBy(sort_by, order)
 		.where('article_id', article_id)
+		.limit(limit)
+		.offset(offsetLimit)
 		.then((comments) => {
 			// Checks If Article ID exists in db
 			const queryExist = checkIfExists(article_id, 'articles', 'article_id');
@@ -55,7 +62,8 @@ const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'crea
 					msg: 'Article ID Not Found'
 				});
 			}
-			return comments;
+			const total_count = comments.length;
+			return { total_count, comments };
 		});
 };
 
