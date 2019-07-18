@@ -244,6 +244,23 @@ describe('/', () => {
 							expect(article.article_id).to.equal(13);
 						});
 				});
+
+				it('POST /articles/:article_id/comments - responds with a Status:200 when passed with an object just containing title key', () => {
+					return request(app)
+						.post('/api/articles')
+						.send({ title: "Andrew's First article post" })
+						.expect(201)
+						.then(({ body: { article } }) => {
+							console.log(article);
+							expect(article).to.be.equal('null value in column "title" violates not-null constraint');
+						});
+				});
+
+				it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an empty object', () => {
+					return request(app).post('/api/articles').send({}).expect(400).then(({ body: { msg } }) => {
+						expect(msg).to.be.equal('null value in column "title" violates not-null constraint');
+					});
+				});
 			});
 
 			it('Invalid Methods for /topics - responds with a Status:405', () => {
