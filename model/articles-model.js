@@ -103,4 +103,8 @@ const getArticles = ({
 		});
 };
 
-module.exports = { getArticleById, updateArticleById, getArticles };
+const insertArticles = ({ username, ...restOfReqBody }) => {
+	restOfReqBody.author = username;
+	return connection.insert(restOfReqBody).into('articles').returning('*').then((article) => article[0]);
+};
+module.exports = { getArticleById, updateArticleById, getArticles, insertArticles };

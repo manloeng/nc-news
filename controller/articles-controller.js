@@ -1,4 +1,4 @@
-const { getArticleById, updateArticleById, getArticles } = require('../model/articles-model.js');
+const { getArticleById, updateArticleById, getArticles, insertArticles } = require('../model/articles-model.js');
 
 const sendArticleById = (req, res, next) => {
 	getArticleById(req.params)
@@ -24,4 +24,12 @@ const sendArticles = (req, res, next) => {
 		.catch(next);
 };
 
-module.exports = { sendArticleById, patchArticleById, sendArticles };
+const postArticles = (req, res, next) => {
+	insertArticles(req.body)
+		.then((article) => {
+			res.status(201).send({ article });
+		})
+		.catch(next);
+};
+
+module.exports = { sendArticleById, patchArticleById, sendArticles, postArticles };
