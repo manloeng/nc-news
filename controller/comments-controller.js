@@ -5,6 +5,8 @@ const {
 	destroyCommentById
 } = require('../model/comments-model.js');
 
+const { totalCommentCountByArticleID } = require('../model/articles-model.js');
+
 const postCommentByArticleId = (req, res, next) => {
 	insertCommentByArticleId(req.params, req.body)
 		.then((comment) => {
@@ -15,8 +17,12 @@ const postCommentByArticleId = (req, res, next) => {
 
 const sendCommentByArticleId = (req, res, next) => {
 	getCommentByArticleId(req.params, req.query)
-		.then(({ ...comments }) => {
-			res.status(200).send({ ...comments });
+		.then((comments) => {
+			const total_count = totalCommentCountByArticleID(req.params);
+			return Promise.all([ total_count, comments ]);
+		})
+		.then(([ total_count, comments ]) => {
+			res.status(200).send({ total_count, comments });
 		})
 		.catch(next);
 };

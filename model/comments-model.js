@@ -62,8 +62,7 @@ const getCommentByArticleId = (
 					msg: 'Article ID Not Found'
 				});
 			}
-			const total_count = comments.length;
-			return { total_count, comments };
+			return comments;
 		});
 };
 
@@ -103,4 +102,9 @@ const destroyCommentById = ({ comment_id }) => {
 	});
 };
 
-module.exports = { insertCommentByArticleId, getCommentByArticleId, updateCommentById, destroyCommentById };
+module.exports = {
+	insertCommentByArticleId,
+	getCommentByArticleId,
+	updateCommentById,
+	destroyCommentById
+};

@@ -118,4 +118,21 @@ const totalArticleCount = () => {
 	return connection.select('*').from('articles').then((article) => article.length);
 };
 
-module.exports = { getArticleById, updateArticleById, getArticles, insertArticles, totalArticleCount };
+const totalCommentCountByArticleID = ({ article_id }) => {
+	return connection
+		.select('*')
+		.leftJoin('articles', 'comments.article_id', 'articles.article_id')
+		.from('comments')
+		.then((articles) => {
+			return articles.length;
+		});
+};
+
+module.exports = {
+	getArticleById,
+	updateArticleById,
+	getArticles,
+	insertArticles,
+	totalArticleCount,
+	totalCommentCountByArticleID
+};
