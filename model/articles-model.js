@@ -103,8 +103,15 @@ const getArticles = ({
 		});
 };
 
-const insertArticles = ({ username, title, topic, ...restOfReqBody }) => {
-	const formattedObj = { author: username, topic, title };
+const insertArticles = ({ username, title, topic, body, ...restOfReqBody }) => {
+	if (Object.keys(restOfReqBody).length > 0) {
+		return Promise.reject({
+			status: 400,
+			msg: 'Require a Valid Query'
+		});
+	}
+
+	const formattedObj = { author: username, topic, title, body };
 	return connection.insert(formattedObj).into('articles').returning('*').then((article) => article[0]);
 };
 module.exports = { getArticleById, updateArticleById, getArticles, insertArticles };
