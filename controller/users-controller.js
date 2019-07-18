@@ -1,4 +1,4 @@
-const { getUserByUsername } = require('../model/users-model.js');
+const { getUserByUsername, insertUser } = require('../model/users-model.js');
 
 const sendUserByUsername = (req, res, next) => {
 	getUserByUsername(req.params)
@@ -8,4 +8,9 @@ const sendUserByUsername = (req, res, next) => {
 		.catch(next);
 };
 
-module.exports = { sendUserByUsername };
+const postUser = (req, res, next) => {
+	console.log('postUser');
+	insertUser();
+};
+
+module.exports = { sendUserByUsername, postUser };

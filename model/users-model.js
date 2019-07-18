@@ -22,4 +22,8 @@ const getUserByUsername = ({ username }) => {
 	});
 };
 
-module.exports = { getUserByUsername };
+const insertUser = () => {
+	console.log('insertUser');
+};
+
+module.exports = { getUserByUsername, insertUser };

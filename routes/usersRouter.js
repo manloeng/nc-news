@@ -1,6 +1,8 @@
 const usersRouter = require('express').Router();
-const { sendUserByUsername } = require('../controller/users-controller.js');
+const { sendUserByUsername, postUser } = require('../controller/users-controller.js');
 const { sendMethodNotAllowed } = require('../errors/error.js');
+
+usersRouter.route('/').post(postUser);
 
 usersRouter.route('/:username').get(sendUserByUsername).all(sendMethodNotAllowed);
 
