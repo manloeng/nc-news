@@ -114,6 +114,10 @@ const insertArticles = ({ username, title, topic, body, ...restOfReqBody }) => {
 	return connection.insert(formattedObj).into('articles').returning('*').then((article) => article[0]);
 };
 
+const destroyArticleById = ({ article_id }) => {
+	console.log(article_id);
+};
+
 const totalArticleCount = () => {
 	return connection.select('*').from('articles').then((article) => article.length);
 };
@@ -133,6 +137,7 @@ module.exports = {
 	updateArticleById,
 	getArticles,
 	insertArticles,
+	destroyArticleById,
 	totalArticleCount,
 	totalCommentCountByArticleID
 };

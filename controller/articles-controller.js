@@ -3,7 +3,8 @@ const {
 	updateArticleById,
 	getArticles,
 	insertArticles,
-	totalArticleCount
+	totalArticleCount,
+	destroyArticleById
 } = require('../model/articles-model.js');
 
 const sendArticleById = (req, res, next) => {
@@ -42,4 +43,8 @@ const postArticles = (req, res, next) => {
 		.catch(next);
 };
 
-module.exports = { sendArticleById, patchArticleById, sendArticles, postArticles };
+const deleteArticleById = (req, res, next) => {
+	destroyArticleById(req.params);
+};
+
+module.exports = { sendArticleById, patchArticleById, sendArticles, postArticles, deleteArticleById };

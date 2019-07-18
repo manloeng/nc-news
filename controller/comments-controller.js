@@ -43,4 +43,9 @@ const deleteCommentById = (req, res, next) => {
 		.catch(next);
 };
 
-module.exports = { postCommentByArticleId, sendCommentByArticleId, patchCommentById, deleteCommentById };
+module.exports = {
+	postCommentByArticleId,
+	sendCommentByArticleId,
+	patchCommentById,
+	deleteCommentById
+};
