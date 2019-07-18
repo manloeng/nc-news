@@ -227,8 +227,27 @@ describe('/', () => {
 				// });
 			});
 
+			describe.only('POST method', () => {
+				it('POST /articles/:article_id/comments - responds with a Status:201 and the newly created comment', () => {
+					return request(app)
+						.post('/api/articles')
+						.send({
+							title: "Andrew's First article post",
+							body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+							username: 'butter_bridge',
+							topic: 'cats'
+						})
+						.expect(201)
+						.then(({ body: { article } }) => {
+							expect(article).to.have.keys('article_id', 'title', 'topic', 'author', 'votes', 'body', 'created_at');
+							expect(article.title).to.equal("Andrew's First article post");
+							expect(article.article_id).to.equal(13);
+						});
+				});
+			});
+
 			it('Invalid Methods for /topics - responds with a Status:405', () => {
-				const invalidMethods = [ 'patch', 'post', 'put', 'delete' ];
+				const invalidMethods = [ 'patch', 'put', 'delete' ];
 
 				invalidMethods.forEach((method) => {
 					return request(app)[method]('/api/articles').expect(405).then(({ body: { msg } }) => {
