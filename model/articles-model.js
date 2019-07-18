@@ -19,7 +19,8 @@ const getArticleById = ({ article_id }) => {
 		});
 };
 
-const updateArticleById = ({ article_id }, { inc_votes, ...restOfReqBody }) => {
+const updateArticleById = ({ article_id }, { inc_votes = 0, ...restOfReqBody }) => {
+	// Checks the passed query keys - length
 	if (Object.keys(restOfReqBody).length > 0) {
 		return Promise.reject({
 			status: 400,
@@ -54,7 +55,7 @@ const getArticles = ({ order = 'desc', sort_by = 'created_at', author, topic, ..
 		// Checks if the Order Query is 'asc' or 'desc'
 		!(
 			(order === 'asc' || order === 'desc') &&
-			// And Checks if the passed query keys - length
+			// And Checks the passed query keys - length
 			objLength === 0
 		)
 	) {
@@ -64,33 +65,30 @@ const getArticles = ({ order = 'desc', sort_by = 'created_at', author, topic, ..
 		});
 	}
 
-	return (
-		connection
-			.select('articles.article_id', 'articles.author', 'articles.created_at', 'articles.votes', 'title', 'topic')
-			.from('articles')
-			// .rightJoin('comments', 'articles.article_id', 'comments.comment_id')
-			.leftJoin('comments', 'articles.article_id', 'comments.comment_id')
-			.count({ comment_count: 'comments.article_id' })
-			.groupBy('articles.article_id')
-			.orderBy(sort_by, order)
-			.modify((queryBuilder) => {
-				if (author) {
-					queryBuilder.where('articles.author', author);
-				}
-				if (topic) {
-					queryBuilder.where('topic', topic);
-				}
-			})
-			.then((articles) => {
-				if (!articles.length) {
-					return Promise.reject({
-						status: 404,
-						msg: 'Data Not Found'
-					});
-				}
-				return articles;
-			})
-	);
+	return connection
+		.select('articles.article_id', 'articles.author', 'articles.created_at', 'articles.votes', 'title', 'topic')
+		.from('articles')
+		.leftJoin('comments', 'articles.article_id', 'comments.article_id')
+		.count({ comment_count: 'comments.article_id' })
+		.groupBy('articles.article_id')
+		.orderBy(sort_by, order)
+		.modify((queryBuilder) => {
+			if (author) {
+				queryBuilder.where('articles.author', author);
+			}
+			if (topic) {
+				queryBuilder.where('topic', topic);
+			}
+		})
+		.then((articles) => {
+			if (!articles.length) {
+				return Promise.reject({
+					status: 404,
+					msg: 'Data Not Found'
+				});
+			}
+			return articles;
+		});
 };
 
 module.exports = { getArticleById, updateArticleById, getArticles };
