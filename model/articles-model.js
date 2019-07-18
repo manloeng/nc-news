@@ -115,7 +115,7 @@ const insertArticles = ({ username, title, topic, body, ...restOfReqBody }) => {
 };
 
 const destroyArticleById = ({ article_id }) => {
-	console.log(article_id);
+	return connection.from('articles').where('article_id', article_id).del();
 };
 
 const totalArticleCount = () => {

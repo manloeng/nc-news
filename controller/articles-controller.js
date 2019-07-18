@@ -44,7 +44,11 @@ const postArticles = (req, res, next) => {
 };
 
 const deleteArticleById = (req, res, next) => {
-	destroyArticleById(req.params);
+	destroyArticleById(req.params)
+		.then(() => {
+			res.sendStatus(204);
+		})
+		.catch(next);
 };
 
 module.exports = { sendArticleById, patchArticleById, sendArticles, postArticles, deleteArticleById };

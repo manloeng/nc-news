@@ -446,7 +446,7 @@ describe('/', () => {
 
 				describe.only('DELETE method', () => {
 					it('DELETE /articles/:article_id - responds with a Status:204', () => {
-						return request(app).delete('/api/articles/1').expect(204);
+						return request(app).delete('/api/articles/2').expect(204);
 					});
 				});
 
