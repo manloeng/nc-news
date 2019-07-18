@@ -16,12 +16,12 @@ const sqlErrors = (err, req, res, next) => {
 
 		// Dev sql error codes
 		'42P01': /relation.+/g,
-		'23503': null
+		'23503': /.+?(?=")/
 	};
 
 	if (err.code in sqlErrCodes) {
 		if (err.code === '23503') {
-			res.status(404).send({ msg: err.detail });
+			res.status(404).send({ msg: err.detail.match(sqlErrCodes[err.code])[0].trim() });
 		}
 		const errorMsg = err.message.match(sqlErrCodes[err.code])[0];
 		res.status(400).send({ msg: errorMsg });
