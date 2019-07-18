@@ -15,20 +15,9 @@ const insertCommentByArticleId = ({ article_id }, { username, body, ...restOfReq
 		});
 	}
 
-	// Checks If Article ID exists in db
-	const queryExist = checkIfExists(article_id, 'articles', 'article_id');
-	return queryExist.then((queryExist) => {
-		if (!queryExist) {
-			return Promise.reject({
-				status: 404,
-				msg: "Article ID Doesn't Exist"
-			});
-		} else {
-			const formattedObj = { article_id, body, author: username };
-			return connection.insert(formattedObj).into('comments').returning('*').then((comment) => {
-				return comment[0];
-			});
-		}
+	const formattedObj = { article_id, body, author: username };
+	return connection.insert(formattedObj).into('comments').returning('*').then((comment) => {
+		return comment[0];
 	});
 };
 
