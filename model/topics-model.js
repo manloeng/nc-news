@@ -4,4 +4,8 @@ const getTopics = () => {
 	return connection.select('*').from('topics');
 };
 
-module.exports = { getTopics };
+const insertTopics = (reqBody) => {
+	return connection.insert(reqBody).into('topics').returning('*').then((topic) => topic[0]);
+};
+
+module.exports = { getTopics, insertTopics };
