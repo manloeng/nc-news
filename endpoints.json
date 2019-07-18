@@ -9,7 +9,49 @@
 			"topics": [ { "slug": "football", "description": "Footie!" } ]
 		}
 	},
-	"GET /api/user/:username": {
+	"POST /api/topics": {
+		"description": "adds a topic object to topics",
+		"queries": [],
+		"exampleInput": {
+			"slug": "football",
+			"description": "Footie!"
+		},
+		"exampleResponse": {
+			"topics": [ { "slug": "football", "description": "Footie!" } ]
+		}
+	},
+	"GET /api/users": {
+		"description": "serves an object of the requested users",
+		"queries": [],
+		"exampleResponse": {
+			"users": [
+				{
+					"username": "butter_bridge",
+					"name": "jonny",
+					"avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+				}
+			]
+		}
+	},
+	"POST /api/users": {
+		"description": "adds a user object to users",
+		"queries": [],
+		"exampleInput": {
+			"username": "butter_bridge",
+			"name": "jonny",
+			"avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+		},
+		"exampleResponse": {
+			"users": [
+				{
+					"username": "butter_bridge",
+					"name": "jonny",
+					"avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+				}
+			]
+		}
+	},
+	"GET /api/users/:username": {
 		"description": "serves an object of the requested username",
 		"queries": [],
 		"exampleResponse": {
@@ -23,6 +65,27 @@
 	"GET /api/articles": {
 		"description": "serves an array of all topics",
 		"queries": [ "author", "topic", "sort_by", "order" ],
+		"exampleResponse": {
+			"articles": [
+				{
+					"title": "Seafood substitutions are increasing",
+					"topic": "cooking",
+					"author": "weegembump",
+					"body": "Text from the article..",
+					"created_at": 1527695953341
+				}
+			]
+		}
+	},
+	"POST /api/articles": {
+		"description": "adds a user object to articles",
+		"queries": [],
+		"exampleInput": {
+			"title": "Andrew's First article post",
+			"body": "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+			"username": "butter_bridge",
+			"topic": "cats"
+		},
 		"exampleResponse": {
 			"articles": [
 				{
@@ -66,6 +129,24 @@
 			}
 		}
 	},
+	"DELETE /api/articles/:article_id": {
+		"description": "deletes an object of the requested article id",
+		"queries": [ "article_id" ]
+	},
+	"GET /api/articles/:article_id/comments": {
+		"description": "fetches comment based on requested article id",
+		"queries": [],
+		"exampleResponse": {
+			"comment": {
+				"article_id": "19",
+				"comment_id": "1",
+				"author": "butter_bridge",
+				"body": "Creating something new here",
+				"votes": "120",
+				"created_at": 1527695952241
+			}
+		}
+	},
 	"POST /api/articles/:article_id/comments": {
 		"description": "adds a comment object to the requested article id",
 		"queries": [ "author", "username" ],
@@ -80,20 +161,6 @@
 				"author": "butter_bridge",
 				"body": "Creating something new here",
 				"votes": "0",
-				"created_at": 1527695952241
-			}
-		}
-	},
-	"GET /api/articles/:article_id/comments": {
-		"description": "fetches comment based on requested article id",
-		"queries": [],
-		"exampleResponse": {
-			"comment": {
-				"article_id": "19",
-				"comment_id": "1",
-				"author": "butter_bridge",
-				"body": "Creating something new here",
-				"votes": "120",
 				"created_at": 1527695952241
 			}
 		}
@@ -114,17 +181,8 @@
 			}
 		}
 	},
-	"GET /api/comments/:comment_id": {
-		"description": "fetches comments based on requested comment id",
-		"queries": [],
-		"exampleResponse": {
-			"comment": {
-				"comment_id": "1",
-				"author": "butter_bridge",
-				"body": "Creating something new here",
-				"votes": "120",
-				"created_at": 1527695952241
-			}
-		}
+	"DELETE /api/comments/:comment_id": {
+		"description": "deletes an object of the requested comment id",
+		"queries": [ "comment_id" ]
 	}
 }
