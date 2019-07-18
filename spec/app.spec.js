@@ -109,7 +109,6 @@ describe('/', () => {
 							'created_at',
 							'comment_count'
 						);
-						console.log(articles);
 						//getting articles of length 12 still
 						expect(articles).to.have.lengthOf(12);
 						// expect(articles).to.have.lengthOf(13);
