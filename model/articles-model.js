@@ -44,7 +44,15 @@ const updateArticleById = ({ article_id }, { inc_votes = 0, ...restOfReqBody }) 
 		});
 };
 
-const getArticles = ({ order = 'desc', sort_by = 'created_at', author, topic, ...restOfReqBody }) => {
+const getArticles = ({
+	order = 'desc',
+	sort_by = 'created_at',
+	author,
+	topic,
+	limit = 10,
+	p = 1,
+	...restOfReqBody
+}) => {
 	const objLength = Object.keys(restOfReqBody).length;
 	const reg = /([A-Z])\w+/i;
 
@@ -65,6 +73,8 @@ const getArticles = ({ order = 'desc', sort_by = 'created_at', author, topic, ..
 		});
 	}
 
+	const offsetLimit = p * limit - limit;
+
 	return connection
 		.select('articles.article_id', 'articles.author', 'articles.created_at', 'articles.votes', 'title', 'topic')
 		.from('articles')
@@ -72,6 +82,8 @@ const getArticles = ({ order = 'desc', sort_by = 'created_at', author, topic, ..
 		.count({ comment_count: 'comments.article_id' })
 		.groupBy('articles.article_id')
 		.orderBy(sort_by, order)
+		.limit(limit)
+		.offset(offsetLimit)
 		.modify((queryBuilder) => {
 			if (author) {
 				queryBuilder.where('articles.author', author);
