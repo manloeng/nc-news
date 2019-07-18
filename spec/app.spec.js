@@ -149,21 +149,9 @@ describe('/', () => {
 					});
 				});
 
-				it('GET /articles - responds with a Status:404 and an empty object of "author" data', () => {
-					return request(app).get('/api/articles?author=andrew').expect(404).then(({ body: { msg } }) => {
-						expect(msg).to.be.eql('Data Not Found');
-					});
-				});
-
 				it('GET /articles - responds with a Status:200 and the list of articles filtered by "topic"', () => {
 					return request(app).get('/api/articles?topic=mitch').expect(200).then(({ body: { articles } }) => {
 						expect(articles).to.be.descendingBy('created_at');
-					});
-				});
-
-				it('GET /articles - responds with a Status:404 when the "topic" data isn\'t found', () => {
-					return request(app).get('/api/articles?topic=andrew').expect(404).then(({ body: { msg } }) => {
-						expect(msg).to.be.equal('Data Not Found');
 					});
 				});
 
@@ -221,15 +209,20 @@ describe('/', () => {
 					});
 				});
 
-				// it('GET /articles - responds with a Status:400 when passed with a valid sort_by query and a invalid query key', () => {
-				// 	return request(app).get('/api/articles?sort_by=author&order_by=asc').expect(400).then(({ body: { msg } }) => {
-				// 		expect(msg).to.be.equal('Require a Valid Query');
-				// 	});
-				// });
+				it('GET /articles - responds with a Status:404 when the "topic" data isn\'t found', () => {
+					return request(app).get('/api/articles?topic=andrew').expect(404).then(({ body: { msg } }) => {
+						expect(msg).to.be.equal('Data Not Found');
+					});
+				});
+				it('GET /articles - responds with a Status:404 and an empty object of "author" data', () => {
+					return request(app).get('/api/articles?author=andrew').expect(404).then(({ body: { msg } }) => {
+						expect(msg).to.be.eql('Data Not Found');
+					});
+				});
 			});
 
 			describe('POST method', () => {
-				it('POST /articles/:article_id/comments - responds with a Status:201 and the newly created comment', () => {
+				it('POST /articles - responds with a Status:201 and the newly created comment', () => {
 					return request(app)
 						.post('/api/articles')
 						.send({
@@ -246,7 +239,27 @@ describe('/', () => {
 						});
 				});
 
-				it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an object just containing title key', () => {
+				it('POST /articles - responds with a Status:201 when passed with an object containing the title, topic and username key with an invalid title value', () => {
+					return request(app)
+						.post('/api/articles')
+						.send({ title: 123, topic: 'cats', username: 'butter_bridge' })
+						.expect(201)
+						.then(({ body: { article } }) => {
+							expect(article.title).to.be.equal('123');
+						});
+				});
+
+				it('POST /articles - responds with a Status:201 when passed with an object containing the title, topic and username key', () => {
+					return request(app)
+						.post('/api/articles')
+						.send({ title: 123, topic: 'cats', username: 'butter_bridge' })
+						.expect(201)
+						.then(({ body: { article } }) => {
+							expect(article.title).to.be.equal('123');
+						});
+				});
+
+				it('POST /articles - responds with a Status:400 when passed with an object just containing title key', () => {
 					return request(app)
 						.post('/api/articles')
 						.send({ title: "Andrew's First article post" })
@@ -256,7 +269,7 @@ describe('/', () => {
 						});
 				});
 
-				it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an object containing the title key and topic key', () => {
+				it('POST /articles - responds with a Status:400 when passed with an object containing the title key and topic key', () => {
 					return request(app)
 						.post('/api/articles')
 						.send({ title: "Andrew's First article post", topic: 'cats' })
@@ -266,47 +279,7 @@ describe('/', () => {
 						});
 				});
 
-				it('POST /articles/:article_id/comments - responds with a Status:201 when passed with an object containing the title, topic and username key with an invalid title value', () => {
-					return request(app)
-						.post('/api/articles')
-						.send({ title: 123, topic: 'cats', username: 'butter_bridge' })
-						.expect(201)
-						.then(({ body: { article } }) => {
-							expect(article.title).to.be.equal('123');
-						});
-				});
-
-				it('POST /articles/:article_id/comments - responds with a Status:201 when passed with an object containing the title, topic and username key', () => {
-					return request(app)
-						.post('/api/articles')
-						.send({ title: 123, topic: 'cats', username: 'butter_bridge' })
-						.expect(201)
-						.then(({ body: { article } }) => {
-							expect(article.title).to.be.equal('123');
-						});
-				});
-
-				it("POST /articles/:article_id/comments - responds with a Status:404 when passed with an object containing the title, topic and username key with an invalid topic value that isn't found", () => {
-					return request(app)
-						.post('/api/articles')
-						.send({ title: 'Something new', topic: 12345, username: 'butter_bridge' })
-						.expect(404)
-						.then(({ body: { msg } }) => {
-							expect(msg).to.be.equal('Key (topic)=(12345) is not present in table');
-						});
-				});
-
-				it("POST /articles/:article_id/comments - responds with a Status:404 when passed with an object containing the title, topic and username key with an username value that isn't found", () => {
-					return request(app)
-						.post('/api/articles')
-						.send({ title: 'Something new', topic: 'cats', username: 'andrew' })
-						.expect(404)
-						.then(({ body: { msg } }) => {
-							expect(msg).to.be.equal('Key (author)=(andrew) is not present in table');
-						});
-				});
-
-				it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an object containing other additional keys', () => {
+				it('POST /articles - responds with a Status:400 when passed with an object containing other additional keys', () => {
 					return request(app)
 						.post('/api/articles')
 						.send({ title: 'Something new', topic: 'cats', username: 'andrew', invalidKey: 'invalidValue' })
@@ -316,10 +289,30 @@ describe('/', () => {
 						});
 				});
 
-				it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an empty object', () => {
+				it('POST /articles - responds with a Status:400 when passed with an empty object', () => {
 					return request(app).post('/api/articles').send({}).expect(400).then(({ body: { msg } }) => {
 						expect(msg).to.be.equal('null value in column "title" violates not-null constraint');
 					});
+				});
+
+				it("POST /articles - responds with a Status:404 when passed with an object containing the title, topic and username key with an invalid topic value that isn't found", () => {
+					return request(app)
+						.post('/api/articles')
+						.send({ title: 'Something new', topic: 12345, username: 'butter_bridge' })
+						.expect(404)
+						.then(({ body: { msg } }) => {
+							expect(msg).to.be.equal('Key (topic)=(12345) is not present in table');
+						});
+				});
+
+				it("POST /articles - responds with a Status:404 when passed with an object containing the title, topic and username key with an username value that isn't found", () => {
+					return request(app)
+						.post('/api/articles')
+						.send({ title: 'Something new', topic: 'cats', username: 'andrew' })
+						.expect(404)
+						.then(({ body: { msg } }) => {
+							expect(msg).to.be.equal('Key (author)=(andrew) is not present in table');
+						});
 				});
 			});
 
@@ -544,19 +537,6 @@ describe('/', () => {
 								});
 						});
 
-						it("POST /articles/:article_id/comments - responds with a Status:404 when passed with an article_id that isn't found", () => {
-							return request(app)
-								.post('/api/articles/999/comments')
-								.send({
-									body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
-									username: 'butter_bridge'
-								})
-								.expect(404)
-								.then(({ body: { msg } }) => {
-									expect(msg).to.be.equal('Key (article_id)=(999) is not present in table');
-								});
-						});
-
 						it('POST /articles/:article_id/comments - responds with a Status:400 when passed with addtional unwanted key-values', () => {
 							return request(app)
 								.post('/api/articles/1/comments')
@@ -569,6 +549,19 @@ describe('/', () => {
 								.expect(400)
 								.then(({ body: { msg } }) => {
 									expect(msg).to.be.equal('Bad Request');
+								});
+						});
+
+						it("POST /articles/:article_id/comments - responds with a Status:404 when passed with an article_id that isn't found", () => {
+							return request(app)
+								.post('/api/articles/999/comments')
+								.send({
+									body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+									username: 'butter_bridge'
+								})
+								.expect(404)
+								.then(({ body: { msg } }) => {
+									expect(msg).to.be.equal('Key (article_id)=(999) is not present in table');
 								});
 						});
 					});
