@@ -52,8 +52,24 @@ describe('/', () => {
 				});
 			});
 
+			describe.only('POST method', () => {
+				it('POST /topics - responds with a Status:201 and the newly created topic', () => {
+					return request(app)
+						.post('/api/topics')
+						.send({
+							slug: "Andrew's First topic post",
+							description: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
+						})
+						.expect(201)
+						.then(({ body: { topic } }) => {
+							expect(topic).to.have.all.keys('slug', 'description');
+							expect(topic.slug).to.equal("Andrew's First topic post");
+						});
+				});
+			});
+
 			it('Invalid Methods for /topics - responds with a Status:405', () => {
-				const invalidMethods = [ 'patch', 'put', 'post', 'delete' ];
+				const invalidMethods = [ 'patch', 'put', 'delete' ];
 
 				invalidMethods.forEach((method) => {
 					return request(app)[method]('/api/topics').expect(405).then(({ body: { msg } }) => {
@@ -222,7 +238,7 @@ describe('/', () => {
 			});
 
 			describe('POST method', () => {
-				it('POST /articles - responds with a Status:201 and the newly created comment', () => {
+				it('POST /articles - responds with a Status:201 and the newly created article', () => {
 					return request(app)
 						.post('/api/articles')
 						.send({
