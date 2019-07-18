@@ -444,8 +444,14 @@ describe('/', () => {
 					});
 				});
 
+				describe.only('DELETE method', () => {
+					it('DELETE /articles/:article_id - responds with a Status:204', () => {
+						return request(app).delete('/api/articles/1').expect(204);
+					});
+				});
+
 				it('Invalid Methods for /articles/:article_id - responds with a Status:405', () => {
-					const invalidMethods = [ 'put', 'post', 'delete' ];
+					const invalidMethods = [ 'put', 'post' ];
 
 					invalidMethods.forEach((method) => {
 						return request(app)[method]('/api/articles/1').expect(405).then(({ body: { msg } }) => {
