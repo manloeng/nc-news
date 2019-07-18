@@ -164,13 +164,57 @@ describe('/', () => {
 						});
 				});
 
-				it('Invalid Methods for /users - responds with a Status:405', () => {
-					const invalidMethods = [ 'patch', 'put', 'delete' ];
-
-					invalidMethods.forEach((method) => {
-						return request(app)[method]('/api/users').expect(405).then(({ body: { msg } }) => {
-							expect(msg).to.equal('Method Not Allowed');
+				it('POST /users - responds with a Status:201 and the newly created user', () => {
+					return request(app)
+						.post('/api/users')
+						.send({
+							username: 'butters'
+						})
+						.expect(201)
+						.then(({ body: { user } }) => {
+							expect(user.username).to.equal('butters');
 						});
+				});
+
+				it('POST /users - responds with a Status:201 with a username containing numbers', () => {
+					return request(app)
+						.post('/api/users')
+						.send({
+							username: '123cooler22'
+						})
+						.expect(201)
+						.then(({ body: { user } }) => {
+							expect(user.username).to.equal('123cooler22');
+						});
+				});
+
+				it('POST /users - responds with a Status:400 when passed with an existing user', () => {
+					return request(app)
+						.post('/api/users')
+						.send({
+							username: 'butter_bridge',
+							name: 'jonny',
+							avatar_url: 'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg'
+						})
+						.expect(400)
+						.then(({ body: { msg } }) => {
+							expect(msg).to.equal('Key (username)=(butter_bridge) already exists.');
+						});
+				});
+
+				it('POST /users - responds with a Status:400 when passed with an empty object', () => {
+					return request(app).post('/api/users').send({}).expect(400).then(({ body: { msg } }) => {
+						expect(msg).to.equal('null value in column "username" violates not-null constraint');
+					});
+				});
+			});
+
+			it('Invalid Methods for /users - responds with a Status:405', () => {
+				const invalidMethods = [ 'patch', 'put', 'delete' ];
+
+				invalidMethods.forEach((method) => {
+					return request(app)[method]('/api/users').expect(405).then(({ body: { msg } }) => {
+						expect(msg).to.equal('Method Not Allowed');
 					});
 				});
 			});
