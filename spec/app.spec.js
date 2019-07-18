@@ -209,7 +209,7 @@ describe('/', () => {
 				});
 			});
 
-			describe.only('GET method', () => {
+			describe('GET method', () => {
 				it('GET /users - responds with a Status:200 and a list of the users data', () => {
 					return request(app).get('/api/users').expect(200).then(({ body: { users } }) => {
 						expect(users[0]).to.have.keys('username', 'name', 'avatar_url');
