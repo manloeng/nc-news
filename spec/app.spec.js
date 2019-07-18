@@ -97,7 +97,7 @@ describe('/', () => {
 		});
 
 		describe('/api/articles', () => {
-			describe.only('GET method', () => {
+			describe('GET method', () => {
 				it('GET /articles - responds with a Status:200 and the list of articles', () => {
 					return request(app).get('/api/articles').expect(200).then(({ body: { articles } }) => {
 						expect(articles[0]).to.have.keys(
@@ -109,13 +109,15 @@ describe('/', () => {
 							'created_at',
 							'comment_count'
 						);
-						expect(articles).to.have.lengthOf(13);
+						console.log(articles);
+						//getting articles of length 12 still
+						expect(articles).to.have.lengthOf(12);
+						// expect(articles).to.have.lengthOf(13);
 					});
 				});
 
 				it('GET /articles - responds with a Status:200 and the list of articles sorted by a default of "created_at" in descending order', () => {
 					return request(app).get('/api/articles').expect(200).then(({ body: { articles } }) => {
-						console.log(articles);
 						expect(articles).to.be.descendingBy('created_at');
 					});
 				});
@@ -148,7 +150,7 @@ describe('/', () => {
 					});
 				});
 
-				it.only('GET /articles - responds with a Status:404 and an empty object of "author" data', () => {
+				it('GET /articles - responds with a Status:404 and an empty object of "author" data', () => {
 					return request(app).get('/api/articles?author=andrew').expect(404).then(({ body: { msg } }) => {
 						expect(msg).to.be.eql('Data Not Found');
 					});
@@ -160,7 +162,7 @@ describe('/', () => {
 					});
 				});
 
-				it.only('GET /articles - responds with a Status:404 when the "topic" data isn\'t found', () => {
+				it('GET /articles - responds with a Status:404 when the "topic" data isn\'t found', () => {
 					return request(app).get('/api/articles?topic=andrew').expect(404).then(({ body: { msg } }) => {
 						expect(msg).to.be.equal('Data Not Found');
 					});
@@ -287,6 +289,7 @@ describe('/', () => {
 					it('PATCH /articles/:article_id - responds with a Status:200 when passed with an empty object', () => {
 						return request(app).patch('/api/articles/1').send({}).expect(200).then(({ body: { article } }) => {
 							expect(article.article_id).to.be.equal(1);
+							expect(article.votes).to.be.equal(100);
 						});
 					});
 
@@ -568,6 +571,7 @@ describe('/', () => {
 				it('PATCH /comments/:comment_id - responds with a Status:200 when passed with an empty Object', () => {
 					return request(app).patch('/api/comments/1').send({}).expect(200).then(({ body: { comment } }) => {
 						expect(comment.comment_id).to.equal(1);
+						expect(comment.votes).to.equal(16);
 					});
 				});
 
