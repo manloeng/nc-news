@@ -66,6 +66,74 @@ describe('/', () => {
 							expect(topic.slug).to.equal("Andrew's First topic post");
 						});
 				});
+
+				it('POST /topics - responds with a Status:400 when passed an object without a description', () => {
+					return request(app)
+						.post('/api/topics')
+						.send({ slug: "Andrew's First topic post" })
+						.expect(400)
+						.then(({ body: { msg } }) => {
+							expect(msg).to.equal('null value in column "description" violates not-null constraint');
+						});
+				});
+
+				it('POST /topics - responds with a Status:400 when passed an object without a description', () => {
+					return request(app)
+						.post('/api/topics')
+						.send({
+							description: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
+						})
+						.expect(400)
+						.then(({ body: { msg } }) => {
+							expect(msg).to.equal('null value in column "slug" violates not-null constraint');
+						});
+				});
+
+				it('POST /topics - responds with a Status:400 when passed an empty object', () => {
+					return request(app).post('/api/topics').send({}).expect(400).then(({ body: { msg } }) => {
+						expect(msg).to.equal('null value in column "slug" violates not-null constraint');
+					});
+				});
+
+				it('POST /topics - responds with a Status:400 when passed with a slug that exists', () => {
+					return request(app)
+						.post('/api/topics')
+						.send({
+							slug: 'cats',
+							description: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
+						})
+						.expect(400)
+						.then(({ body: { msg } }) => {
+							expect(msg).to.equal('Key (slug)=(cats) already exists.');
+						});
+				});
+
+				it('POST /topics - responds with a Status:400 when passed with an invalid slug', () => {
+					return request(app)
+						.post('/api/topics')
+						.send({
+							slug: 123,
+							description: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
+						})
+						.expect(400)
+						.then(({ body: { msg } }) => {
+							expect(msg).to.equal('Bad Request');
+						});
+				});
+
+				it('POST /topics - responds with a Status:400 when passed with an invalid slug', () => {
+					return request(app)
+						.post('/api/topics')
+						.send({
+							slug: 'Andrew',
+							description: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+							url: 'https://www.google.com'
+						})
+						.expect(400)
+						.then(({ body: { msg } }) => {
+							expect(msg).to.equal('Bad Request');
+						});
+				});
 			});
 
 			it('Invalid Methods for /topics - responds with a Status:405', () => {
