@@ -148,9 +148,9 @@ describe('/', () => {
 					});
 				});
 
-				it('GET /articles - responds with a Status:200 and an empty object of "author" data', () => {
-					return request(app).get('/api/articles?author=andrew').expect(200).then(({ body: { articles } }) => {
-						expect(articles).to.be.eql([]);
+				it.only('GET /articles - responds with a Status:404 and an empty object of "author" data', () => {
+					return request(app).get('/api/articles?author=andrew').expect(404).then(({ body: { msg } }) => {
+						expect(msg).to.be.eql('Data Not Found');
 					});
 				});
 
@@ -162,7 +162,7 @@ describe('/', () => {
 
 				it.only('GET /articles - responds with a Status:404 when the "topic" data isn\'t found', () => {
 					return request(app).get('/api/articles?topic=andrew').expect(404).then(({ body: { msg } }) => {
-						expect(msg).to.be.equal('Topic Not Found');
+						expect(msg).to.be.equal('Data Not Found');
 					});
 				});
 

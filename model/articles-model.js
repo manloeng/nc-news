@@ -85,7 +85,7 @@ const getArticles = ({ order = 'desc', sort_by = 'created_at', author, topic, ..
 				if (!articles.length) {
 					return Promise.reject({
 						status: 404,
-						msg: 'Topic Not Found'
+						msg: 'Data Not Found'
 					});
 				}
 				return articles;
