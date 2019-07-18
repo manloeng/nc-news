@@ -38,7 +38,7 @@ const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'crea
 		// Checks if the Order Query is 'asc' or 'desc'
 		!(
 			(order === 'asc' || order === 'desc') &&
-			// And Checks if the passed query keys - length
+			// And Checks the passed query keys - length
 			objLength === 0
 		)
 	) {
@@ -64,7 +64,7 @@ const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'crea
 		});
 };
 
-const updateCommentById = ({ comment_id }, { inc_votes, ...restOfReqBody }) => {
+const updateCommentById = ({ comment_id }, { inc_votes = 0, ...restOfReqBody }) => {
 	if (Object.keys(restOfReqBody).length > 0) {
 		return Promise.reject({
 			status: 400,
