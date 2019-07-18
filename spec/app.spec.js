@@ -433,11 +433,9 @@ describe('/', () => {
 									body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
 									username: 'butter_bridge'
 								})
-								.expect(400)
+								.expect(404)
 								.then(({ body: { msg } }) => {
-									expect(msg).to.be.equal(
-										'insert or update on table "comments" violates foreign key constraint "comments_article_id_foreign"'
-									);
+									expect(msg).to.be.equal("Article ID Doesn't Exist");
 								});
 						});
 
@@ -466,6 +464,12 @@ describe('/', () => {
 								expect(comments[0]).to.have.keys('article_id', 'comment_id', 'votes', 'created_at', 'author', 'body');
 								expect(comments).to.be.descendingBy('created_at');
 								expect(comments).to.have.lengthOf(13);
+							});
+						});
+
+						it('GET /articles/:article_id/comments  - responds with a Status:200 and an empty obecjt', () => {
+							return request(app).get('/api/articles/2/comments').expect(200).then(({ body: { comments } }) => {
+								expect(comments).to.eql([]);
 							});
 						});
 

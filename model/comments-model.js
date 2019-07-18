@@ -14,20 +14,21 @@ const insertCommentByArticleId = ({ article_id }, { username, body, ...restOfReq
 			msg: 'Bad Request'
 		});
 	}
-	// can't use previous checking method because this comes from articles id
 
-	// const queryExist = checkIfExists(article_id, 'articles', 'article_id').then((article) => {
-	// 	// Checks if article ID exists in the database
-	// 	if (!article.length) {
-	// 		return Promise.reject({
-	// 			status: 404,
-	// 			msg: "Article ID Doesn't Exist"
-	// 		});
-	// 	}
-	// });
-	const formattedObj = { article_id, body, author: username };
-	return connection.insert(formattedObj).into('comments').returning('*').then((comment) => {
-		return comment[0];
+	// Checks If Article ID exists in db
+	const queryExist = checkIfExists(article_id, 'articles', 'article_id');
+	return queryExist.then((queryExist) => {
+		if (!queryExist) {
+			return Promise.reject({
+				status: 404,
+				msg: "Article ID Doesn't Exist"
+			});
+		} else {
+			const formattedObj = { article_id, body, author: username };
+			return connection.insert(formattedObj).into('comments').returning('*').then((comment) => {
+				return comment[0];
+			});
+		}
 	});
 };
 
@@ -54,7 +55,12 @@ const getCommentByArticleId = ({ article_id }, { order = 'desc', sort_by = 'crea
 		.orderBy(sort_by, order)
 		.where('article_id', article_id)
 		.then((comments) => {
-			if (!comments.length) {
+			// Checks If Article ID exists in db
+			const queryExist = checkIfExists(article_id, 'articles', 'article_id');
+			return Promise.all([ queryExist, comments ]);
+		})
+		.then(([ queryExist, comments ]) => {
+			if (!queryExist) {
 				return Promise.reject({
 					status: 404,
 					msg: 'Article ID Not Found'
