@@ -3,6 +3,7 @@ const sendMethodNotAllowed = (req, res, next) => {
 };
 
 const customError = (err, req, res, next) => {
+	console.log(err);
 	if (err.status) {
 		res.status(err.status).send({ msg: err.msg });
 	} else next(err);
@@ -16,12 +17,16 @@ const sqlErrors = (err, req, res, next) => {
 
 		// Dev sql error codes
 		'42P01': /relation.+/g,
-		'23503': /.+?(?=")/
+		'23503': /.+?(?=")/,
+		'23505': /.+/
 	};
 
 	if (err.code in sqlErrCodes) {
 		if (err.code === '23503') {
 			res.status(404).send({ msg: err.detail.match(sqlErrCodes[err.code])[0].trim() });
+		}
+		if (err.code === '23505') {
+			res.status(400).send({ msg: err.detail.match(sqlErrCodes[err.code])[0] });
 		}
 		const errorMsg = err.message.match(sqlErrCodes[err.code])[0];
 		res.status(400).send({ msg: errorMsg });
