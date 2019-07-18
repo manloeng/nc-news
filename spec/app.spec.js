@@ -239,7 +239,7 @@ describe('/', () => {
 						})
 						.expect(201)
 						.then(({ body: { article } }) => {
-							expect(article).to.have.keys('article_id', 'title', 'topic', 'author', 'votes', 'body', 'created_at');
+							expect(article).to.have.all.keys('article_id', 'title', 'topic', 'author', 'votes', 'body', 'created_at');
 							expect(article.title).to.equal("Andrew's First article post");
 							expect(article.article_id).to.equal(13);
 						});
@@ -294,6 +294,7 @@ describe('/', () => {
 							expect(msg).to.be.equal('Key (topic)=(12345) is not present in table');
 						});
 				});
+
 				it("POST /articles/:article_id/comments - responds with a Status:404 when passed with an object containing the title, topic and username key with an username value that isn't found", () => {
 					return request(app)
 						.post('/api/articles')
@@ -301,6 +302,16 @@ describe('/', () => {
 						.expect(404)
 						.then(({ body: { msg } }) => {
 							expect(msg).to.be.equal('Key (author)=(andrew) is not present in table');
+						});
+				});
+
+				it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an object containing other additional keys', () => {
+					return request(app)
+						.post('/api/articles')
+						.send({ title: 'Something new', topic: 'cats', username: 'andrew', invalidKey: 'invalidValue' })
+						.expect(400)
+						.then(({ body: { msg } }) => {
+							expect(msg).to.be.equal('Require a Valid Query');
 						});
 				});
 
