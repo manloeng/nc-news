@@ -227,7 +227,7 @@ describe('/', () => {
 				// });
 			});
 
-			describe.only('POST method', () => {
+			describe('POST method', () => {
 				it('POST /articles/:article_id/comments - responds with a Status:201 and the newly created comment', () => {
 					return request(app)
 						.post('/api/articles')
@@ -245,14 +245,62 @@ describe('/', () => {
 						});
 				});
 
-				it('POST /articles/:article_id/comments - responds with a Status:200 when passed with an object just containing title key', () => {
+				it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an object just containing title key', () => {
 					return request(app)
 						.post('/api/articles')
 						.send({ title: "Andrew's First article post" })
+						.expect(400)
+						.then(({ body: { msg } }) => {
+							expect(msg).to.be.equal('null value in column "topic" violates not-null constraint');
+						});
+				});
+
+				it('POST /articles/:article_id/comments - responds with a Status:400 when passed with an object containing the title key and topic key', () => {
+					return request(app)
+						.post('/api/articles')
+						.send({ title: "Andrew's First article post", topic: 'cats' })
+						.expect(400)
+						.then(({ body: { msg } }) => {
+							expect(msg).to.be.equal('null value in column "author" violates not-null constraint');
+						});
+				});
+
+				it('POST /articles/:article_id/comments - responds with a Status:201 when passed with an object containing the title, topic and username key with an invalid title value', () => {
+					return request(app)
+						.post('/api/articles')
+						.send({ title: 123, topic: 'cats', username: 'butter_bridge' })
 						.expect(201)
 						.then(({ body: { article } }) => {
-							console.log(article);
-							expect(article).to.be.equal('null value in column "title" violates not-null constraint');
+							expect(article.title).to.be.equal('123');
+						});
+				});
+
+				it('POST /articles/:article_id/comments - responds with a Status:201 when passed with an object containing the title, topic and username key', () => {
+					return request(app)
+						.post('/api/articles')
+						.send({ title: 123, topic: 'cats', username: 'butter_bridge' })
+						.expect(201)
+						.then(({ body: { article } }) => {
+							expect(article.title).to.be.equal('123');
+						});
+				});
+
+				it("POST /articles/:article_id/comments - responds with a Status:404 when passed with an object containing the title, topic and username key with an invalid topic value that isn't found", () => {
+					return request(app)
+						.post('/api/articles')
+						.send({ title: 'Something new', topic: 12345, username: 'butter_bridge' })
+						.expect(404)
+						.then(({ body: { msg } }) => {
+							expect(msg).to.be.equal('Key (topic)=(12345) is not present in table');
+						});
+				});
+				it("POST /articles/:article_id/comments - responds with a Status:404 when passed with an object containing the title, topic and username key with an username value that isn't found", () => {
+					return request(app)
+						.post('/api/articles')
+						.send({ title: 'Something new', topic: 'cats', username: 'andrew' })
+						.expect(404)
+						.then(({ body: { msg } }) => {
+							expect(msg).to.be.equal('Key (author)=(andrew) is not present in table');
 						});
 				});
 
@@ -475,7 +523,7 @@ describe('/', () => {
 								})
 								.expect(404)
 								.then(({ body: { msg } }) => {
-									expect(msg).to.be.equal('Key (article_id)=(999) is not present in table "articles".');
+									expect(msg).to.be.equal('Key (article_id)=(999) is not present in table');
 								});
 						});
 
