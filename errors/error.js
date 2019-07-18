@@ -12,8 +12,10 @@ const sqlErrors = (err, req, res, next) => {
 	const sqlErrCodes = {
 		'22P02': /invalid.+/g,
 		'23502': /null.+/g,
-		'23503': /insert or.+/g,
 		'42703': /order by.+/g,
+
+		// Dev sql error codes
+		'23503': /insert or.+/g,
 		'42P01': /relation.+/g
 	};
 
