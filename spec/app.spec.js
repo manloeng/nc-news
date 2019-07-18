@@ -449,9 +449,15 @@ describe('/', () => {
 						return request(app).delete('/api/articles/2').expect(204);
 					});
 
-					it('DELETE /comments/:comment_id - responds with a Status:400', () => {
+					it('DELETE /articles/:article_id - responds with a Status:400', () => {
 						return request(app).delete('/api/articles/not-a-valid-id').expect(400).then(({ body: { msg } }) => {
 							expect(msg).to.equal('invalid input syntax for integer: "not-a-valid-id"');
+						});
+					});
+
+					it('DELETE /articles/:article_id - responds with a Status:404', () => {
+						return request(app).delete('/api/articles/999').expect(404).then(({ body: { msg } }) => {
+							expect(msg).to.equal('Article ID Not Found');
 						});
 					});
 				});
