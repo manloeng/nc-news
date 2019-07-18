@@ -22,8 +22,9 @@ const getUserByUsername = ({ username }) => {
 	});
 };
 
-const insertUser = () => {
-	console.log('insertUser');
+const insertUser = ({ username, name, avatar_url, ...restOfReqBody }) => {
+	const formattedObj = { username, name, avatar_url };
+	return connection.insert(formattedObj).into('users').returning('*').then((user) => user[0]);
 };
 
 module.exports = { getUserByUsername, insertUser };

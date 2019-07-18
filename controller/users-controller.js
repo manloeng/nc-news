@@ -9,8 +9,11 @@ const sendUserByUsername = (req, res, next) => {
 };
 
 const postUser = (req, res, next) => {
-	console.log('postUser');
-	insertUser();
+	insertUser(req.body)
+		.then((user) => {
+			res.status(201).send({ user });
+		})
+		.catch(next);
 };
 
 module.exports = { sendUserByUsername, postUser };
