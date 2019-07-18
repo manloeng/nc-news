@@ -98,7 +98,7 @@ describe('/', () => {
 
 		describe('/api/articles', () => {
 			describe('GET method', () => {
-				it('GET /articles - responds with a Status:200 and the list of articles which is limited to 10', () => {
+				it.only('GET /articles - responds with a Status:200 and the list of articles which is limited to 10', () => {
 					return request(app).get('/api/articles').expect(200).then(({ body }) => {
 						expect(body.articles[0]).to.have.keys(
 							'article_id',
@@ -111,6 +111,8 @@ describe('/', () => {
 						);
 						expect(body.articles).to.have.lengthOf(10);
 						expect(body).to.have.key('articles', 'total_count');
+						console.log(body);
+						expect(body.total_count).to.equal(12);
 					});
 				});
 
