@@ -103,8 +103,8 @@ const getArticles = ({
 		});
 };
 
-const insertArticles = ({ username, ...restOfReqBody }) => {
-	restOfReqBody.author = username;
-	return connection.insert(restOfReqBody).into('articles').returning('*').then((article) => article[0]);
+const insertArticles = ({ username, title, topic, ...restOfReqBody }) => {
+	const formattedObj = { author: username, topic, title };
+	return connection.insert(formattedObj).into('articles').returning('*').then((article) => article[0]);
 };
 module.exports = { getArticleById, updateArticleById, getArticles, insertArticles };
