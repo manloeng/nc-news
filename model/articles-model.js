@@ -98,8 +98,7 @@ const getArticles = ({
 					msg: 'Data Not Found'
 				});
 			}
-			const total_count = articles.length;
-			return { total_count, articles };
+			return articles;
 		});
 };
 
@@ -114,4 +113,9 @@ const insertArticles = ({ username, title, topic, body, ...restOfReqBody }) => {
 	const formattedObj = { author: username, topic, title, body };
 	return connection.insert(formattedObj).into('articles').returning('*').then((article) => article[0]);
 };
-module.exports = { getArticleById, updateArticleById, getArticles, insertArticles };
+
+const totalArticleCount = () => {
+	return connection.select('*').from('articles').then((article) => article.length);
+};
+
+module.exports = { getArticleById, updateArticleById, getArticles, insertArticles, totalArticleCount };
