@@ -64,7 +64,7 @@
 	},
 	"GET /api/articles": {
 		"description": "serves an array of all topics",
-		"queries": [ "author", "topic", "sort_by", "order" ],
+		"queries": [ "author", "topic", "sort_by", "order", "limit", "p" ],
 		"exampleResponse": {
 			"articles": [
 				{
@@ -149,7 +149,7 @@
 	},
 	"POST /api/articles/:article_id/comments": {
 		"description": "adds a comment object to the requested article id",
-		"queries": [ "author", "username" ],
+		"queries": [ "sort_by", "order", "limit", "p" ],
 		"exampleInput": {
 			"username": "butter_bridge",
 			"body": "Creating something new here"
