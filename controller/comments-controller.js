@@ -16,11 +16,10 @@ const postCommentByArticleId = (req, res, next) => {
 };
 
 const sendCommentByArticleId = (req, res, next) => {
-	getCommentByArticleId(req.params, req.query)
-		.then((comments) => {
-			const total_count = totalCommentCountByArticleID(req.params);
-			return Promise.all([ total_count, comments ]);
-		})
+	const total_count = totalCommentCountByArticleID(req.params);
+	const comments = getCommentByArticleId(req.params, req.query);
+
+	return Promise.all([ total_count, comments ])
 		.then(([ total_count, comments ]) => {
 			res.status(200).send({ total_count, comments });
 		})

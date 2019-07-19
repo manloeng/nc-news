@@ -24,11 +24,10 @@ const patchArticleById = (req, res, next) => {
 };
 
 const sendArticles = (req, res, next) => {
-	getArticles(req.query)
-		.then((articles) => {
-			const total_count = totalArticleCount();
-			return Promise.all([ total_count, articles ]);
-		})
+	const total_count = totalArticleCount();
+	const articles = getArticles(req.query);
+
+	return Promise.all([ total_count, articles ])
 		.then(([ total_count, articles ]) => {
 			res.status(200).send({ total_count, articles });
 		})
