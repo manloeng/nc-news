@@ -42,6 +42,24 @@ describe('/', () => {
 			});
 		});
 
+		describe.only('/login', () => {
+			describe('POST method', () => {
+				it('POST status:201 responds with the posted login details', () => {
+					return request(app)
+						.post('/api/login')
+						.send({
+							username: 'Andrew',
+							password: 'Andrew123'
+						})
+						.expect(201)
+						.then(({ body }) => {
+							expect(body).to.have.ownProperty('token');
+							expect(body.user.username).to.equal('Andrew');
+						});
+				});
+			});
+		});
+
 		describe('/api/topics', () => {
 			describe('GET method', () => {
 				it('GET /topics - responds with a Status:200 and the list of the topics data', () => {
