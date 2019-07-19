@@ -42,7 +42,7 @@ describe('/', () => {
 			});
 		});
 
-		describe.only('/login', () => {
+		describe('/login', () => {
 			describe('POST method', () => {
 				it('POST status:201 responds with the posted login details', () => {
 					return request(app)
@@ -177,7 +177,7 @@ describe('/', () => {
 						})
 						.expect(201)
 						.then(({ body: { user } }) => {
-							expect(user).to.have.all.keys('username', 'name', 'avatar_url');
+							expect(user).to.contain.keys('username', 'name', 'avatar_url');
 							expect(user.username).to.equal('butters');
 						});
 				});
@@ -230,7 +230,7 @@ describe('/', () => {
 			describe('GET method', () => {
 				it('GET /users - responds with a Status:200 and a list of the users data', () => {
 					return request(app).get('/api/users').expect(200).then(({ body: { users } }) => {
-						expect(users[0]).to.have.keys('username', 'name', 'avatar_url');
+						expect(users[0]).to.contain.keys('username', 'name', 'avatar_url');
 						expect(users).to.have.lengthOf(4);
 					});
 				});
@@ -250,7 +250,7 @@ describe('/', () => {
 				describe('GET method', () => {
 					it('GET /users/:username - responds with a Status:200 and the users data', () => {
 						return request(app).get('/api/users/butter_bridge').expect(200).then(({ body: { user } }) => {
-							expect(user).to.have.keys('username', 'name', 'avatar_url');
+							expect(user).to.contain.keys('username', 'name', 'avatar_url');
 							expect(user.username).to.equal('butter_bridge');
 						});
 					});
