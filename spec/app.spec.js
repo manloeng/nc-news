@@ -405,13 +405,13 @@ describe('/', () => {
 						});
 				});
 
-				it('POST /articles - responds with a Status:201 when passed with an object containing the title, topic and username key with an invalid title value', () => {
+				it('POST /articles - responds with a Status:201 when passed with an object containing the title, topic and username key with an title value of a string and number value', () => {
 					return request(app)
 						.post('/api/articles')
-						.send({ title: 123, topic: 'cats', username: 'butter_bridge' })
+						.send({ title: '123 Systems in the World', topic: 'cats', username: 'butter_bridge' })
 						.expect(201)
 						.then(({ body: { article } }) => {
-							expect(article.title).to.be.equal('123');
+							expect(article.title).to.be.equal('123 Systems in the World');
 						});
 				});
 
