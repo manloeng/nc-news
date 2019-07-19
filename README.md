@@ -172,7 +172,7 @@ The document also supplies you with a:
 - example of what you will see at the endpoint
 
 
-## Deploying to your own server
+## Deploying to your own server - Production Environment
 
 ### Hosting a PSQL DB using Heroku
 
