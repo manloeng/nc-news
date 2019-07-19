@@ -848,10 +848,10 @@ describe('/', () => {
 								return request(app)
 									.get('/api/articles/1/comments')
 									.set('Authorization', `BEARER ${validToken}`)
-									.expect(404)
-									.then(({ body: { msg } }) => {
-										expect(msg).to.equal('Article ID Not Found');
-									});
+									.expect(404);
+							})
+							.then(({ body: { msg } }) => {
+								expect(msg).to.equal('Article ID Not Found');
 							});
 					});
 
