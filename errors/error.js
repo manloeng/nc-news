@@ -23,12 +23,12 @@ const sqlErrors = (err, req, res, next) => {
 	if (err.code in sqlErrCodes) {
 		if (err.code === '23503') {
 			res.status(404).send({ msg: err.detail.match(sqlErrCodes[err.code])[0].trim() });
+		} else if (err.code === '23505') {
+			res.status(422).send({ msg: err.detail.match(sqlErrCodes[err.code])[0] });
+		} else {
+			const errorMsg = err.message.match(sqlErrCodes[err.code])[0];
+			res.status(400).send({ msg: errorMsg });
 		}
-		if (err.code === '23505') {
-			res.status(400).send({ msg: err.detail.match(sqlErrCodes[err.code])[0] });
-		}
-		const errorMsg = err.message.match(sqlErrCodes[err.code])[0];
-		res.status(400).send({ msg: errorMsg });
 	} else next(err);
 };
 
