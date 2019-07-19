@@ -126,13 +126,20 @@ const destroyArticleById = ({ article_id }) => {
 };
 
 const totalArticleCount = () => {
-	return connection.select('*').from('articles').then((article) => article.length);
+	return connection.select().count('article_id').from('articles').then(([ { count } ]) => {
+		return +count;
+	});
 };
 
 const totalCommentCountByArticleID = ({ article_id }) => {
-	return connection.select('*').from('comments').where('article_id', article_id).then((articles) => {
-		return articles.length;
-	});
+	return connection
+		.select()
+		.count('comment_id')
+		.from('comments')
+		.where('article_id', article_id)
+		.then(([ { count } ]) => {
+			return +count;
+		});
 };
 
 module.exports = {
