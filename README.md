@@ -3,6 +3,8 @@
 API that fetches data from the Northcoder's News Database.
 Your database will be PSQL, and you will interact with it using Knex.js
 
+Currently the project is hosted on https://project-nc-news.herokuapp.com/api
+
 ## Prerequisites
 
 What things you need:
