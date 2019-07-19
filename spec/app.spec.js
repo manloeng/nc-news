@@ -73,6 +73,15 @@ describe('/', () => {
 							expect(msg).to.equal('invalid username or password');
 						});
 				});
+				it('POST responds with status 401 for an incorrect username', () => {
+					return request(app)
+						.post('/api/login')
+						.send({ username: 'not-valid-user', password: 'secure123' })
+						.expect(401)
+						.then(({ body: { msg } }) => {
+							expect(msg).to.equal('invalid username or password');
+						});
+				});
 			});
 		});
 
