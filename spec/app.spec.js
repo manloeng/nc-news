@@ -44,7 +44,7 @@ describe('/', () => {
 
 		describe.only('/login', () => {
 			describe('POST method', () => {
-				it.only('POST responds with an access token given correct username and password', () => {
+				it('POST responds with an access token given correct username and password', () => {
 					return request(app)
 						.post('/api/login')
 						.send({ username: 'butter_bridge', password: 'secure123' })
@@ -53,17 +53,24 @@ describe('/', () => {
 							expect(body).to.have.ownProperty('token');
 						});
 				});
-				it('POST status:200 responds with the login details', () => {
+
+				it('POST responds with status 401 for an incorrect username and incorrect password', () => {
 					return request(app)
 						.post('/api/login')
-						.send({
-							username: 'Andrew',
-							password: 'Andrew123'
-						})
-						.expect(200)
-						.then(({ body }) => {
-							expect(body).to.have.ownProperty('token');
-							// expect(body.user.username).to.equal('Andrew');
+						.send({ username: 'not-valid-user', password: 'wrongpassword' })
+						.expect(401)
+						.then(({ body: { msg } }) => {
+							expect(msg).to.equal('invalid username or password');
+						});
+				});
+
+				it('POST responds with status 401 for an incorrect password', () => {
+					return request(app)
+						.post('/api/login')
+						.send({ username: 'butter_bridge', password: 'wrongpassword' })
+						.expect(401)
+						.then(({ body: { msg } }) => {
+							expect(msg).to.equal('invalid username or password');
 						});
 				});
 			});
