@@ -62,6 +62,19 @@ describe('/', () => {
 			});
 		});
 
+		xdescribe('/api/secrets', () => {
+			it('Responds with an array of secrets', () => {
+				return request(app)
+					.get('/api/secrets')
+					.set('Authorization', `BEARER ${validToken}`)
+					.expect(200)
+					.then(({ body: { secrets } }) => {
+						expect(secrets).to.be.an('Array');
+						expect(secrets[0]).to.have.all.keys('secret_id', 'secret_text', 'user_id');
+					});
+			});
+		});
+
 		describe('/login', () => {
 			describe('POST method', () => {
 				it('POST responds with an access token given correct username and password', () => {

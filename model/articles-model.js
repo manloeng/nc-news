@@ -116,7 +116,6 @@ const insertArticles = ({ username, title, topic, body, ...restOfReqBody }) => {
 
 const destroyArticleById = ({ article_id }) => {
 	return connection.from('articles').where('article_id', article_id).del().then((deleteCount) => {
-		console.log(deleteCount);
 		if (!deleteCount) {
 			return Promise.reject({
 				status: 404,
