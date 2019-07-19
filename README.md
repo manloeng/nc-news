@@ -9,9 +9,9 @@ What things you need:
 
 - `Code Editor` (We're using Visual Studio Code)
 - `Node.js` (Version to Date : v12.1.0)
-- `PostgreSQL`(Version to Date : v11.2)
+- `PostgreSQL`(Version to Date: v11.2)
 
-### If your deploying to your own server
+### If you're deploying to your own server
 
 - `Heroku`
 
@@ -32,7 +32,7 @@ cd nc-news
 ```
 Once you have cloned the repo, you should have the repo on your system.
 
-You will need to install the required modules to run the api sucessfully.
+You will need to install the required modules to run the api successfully.
 
 ## Step 2 - Installing
 
@@ -40,7 +40,7 @@ On your terminal you will want to run:
 ```bash
 npm install
 ```
-This will install all the modules that is listed in the `package.json`
+This will install all the modules that are listed in the `package.json`
 
 ## Step 3 - Creating knexfile.js
 
@@ -55,31 +55,31 @@ const { DB_URL } = process.env;
 const ENV = process.env.NODE_ENV || 'development';
 
 const baseConfig = {
-	client: 'pg',
-	migrations: {
-		directory: './db/migrations',
+  client: 'pg',
+  migrations: {
+    directory: './db/migrations',
     //username : your username, (for linux users only)
     //password : your password  (for linux users only)
-	},
-	seeds: {
-		directory: './db/seeds'
-	}
+  },
+  seeds: {
+    directory: './db/seeds'
+  }
 };
 
 const customConfig = {
-	development: {
-		connection: {
-			database: 'nc_news'
-		}
-	},
-	test: {
-		connection: {
-			database: 'nc_news_test'
-		}
-	},
-	production: {
-		connection: `${DB_URL}?ssl=true`
-	}
+  development: {
+    connection: {
+      database: 'nc_news'
+    }
+  },
+  test: {
+    connection: {
+      database: 'nc_news_test'
+    }
+  },
+  production: {
+    connection: `${DB_URL}?ssl=true`
+  }
 };
 
 module.exports = { ...customConfig[ENV], ...baseConfig };
@@ -109,7 +109,7 @@ npm run seed
 
 ```
 
-`npm run setup-dbs` will setup the databases on `PSQL`.
+`npm run setup-dbs` will set up the databases on `PSQL`.
 
 `npm run migrate-latest` will setup the 'development' tables (nc_news) on `PSQL`.
 
@@ -121,7 +121,7 @@ Once you have `seeded` your tables you can run:
 npm run start
 ```
 
-`npm run start` will start up the server on it's default `PORT` of `9090`
+`npm run start` will start up the server on its default `PORT` of `9090`
 
 you should see this message on your terminal, Ex:
 
@@ -139,25 +139,25 @@ If you want to stop the server, you will need to hit `Ctrl+C` on the terminal.
 
 ### Understanding the endpoints
 
-In order to navigate sucessfully around the `API`, you can look into the JSON of `http://localhost:9090/api` which will provide you the routes of all the endpoints available to you.
+To navigate sucessfully around the `API`, you can look into the JSON of `http://localhost:9090/api` which will provide you with the routes of all the endpoints available to you.
 
 Ex: 
 
 ```bash
 "GET /api/articles": {
-	"description": "serves an array of all topics",
-	"queries": [ "author", "topic", "sort_by", "order" ],
-	"exampleResponse": {
-		"articles": [
-		{
-		"title": "Seafood substitutions are increasing",
-		"topic": "cooking",
-		"author": "weegembump",
-		"body": "Text from the article..",
-		"created_at": 1527695953341
-		}
-	  ]
-	}
+  "description": "serves an array of all topics",
+  "queries": [ "author", "topic", "sort_by", "order" ],
+  "exampleResponse": {
+    "articles": [
+    {
+    "title": "Seafood substitutions are increasing",
+    "topic": "cooking",
+    "author": "weegembump",
+    "body": "Text from the article..",
+    "created_at": 1527695953341
+    }
+    ]
+  }
 },
 ```
 
@@ -246,7 +246,7 @@ DATABASE_URL: <Your Database URL>
 
 ### Step 5 - Seeding the Production Database
 
-Once You have your created your database on `HEROKU`
+Once you have your created your database on `HEROKU`
 
 You will want to run the seed prod script from your `package.json`:
 ```bash
@@ -268,5 +268,6 @@ heroku logs --tail
 ## Authors
 
 * **Andrew Chung** - *Initial work* - [Andrew Chung](https://github.com/manloeng/nc-news)
+
 
 
