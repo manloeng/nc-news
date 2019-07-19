@@ -137,7 +137,7 @@ to see your server running from your local computer.
 
 If you want to stop the server, you will need to hit `Ctrl+C` on the terminal.
 
-## Understanding the endpoints
+### Understanding the endpoints
 
 In order to navigate sucessfully around the `API`, you can look into the JSON of `http://localhost:9090/api` which will provide you the routes of all the endpoints available to you.
 
