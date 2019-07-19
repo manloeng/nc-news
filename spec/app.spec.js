@@ -102,7 +102,7 @@ describe('/', () => {
 							slug: 'cats',
 							description: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
 						})
-						.expect(400)
+						.expect(422)
 						.then(({ body: { msg } }) => {
 							expect(msg).to.equal('Key (slug)=(cats) already exists.');
 						});
@@ -196,7 +196,7 @@ describe('/', () => {
 							name: 'jonny',
 							avatar_url: 'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg'
 						})
-						.expect(400)
+						.expect(422)
 						.then(({ body: { msg } }) => {
 							expect(msg).to.equal('Key (username)=(butter_bridge) already exists.');
 						});
