@@ -4,7 +4,6 @@ const { JWT_SECRET } = require('../config.js');
 
 const insertLogin = ({ username, password, ...restOfReqBody }) => {
 	//password hardcoded for now
-	// console.log(password);
 	return connection.select('*').from('users').where('username', username).then(([ user ]) => {
 		if (!user || password !== 'secure123') {
 			return Promise.reject({ status: 401, msg: 'invalid username or password' });
