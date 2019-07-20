@@ -13,9 +13,6 @@ What things you need:
 - `Node.js` (Version to Date : v12.1.0)
 - `PostgreSQL`(Version to Date: v11.2)
 
-### If you're deploying to your own server
-
-- `Heroku`
 
 ## Step 1 - Setting up your own repository
 
