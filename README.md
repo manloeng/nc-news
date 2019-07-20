@@ -16,13 +16,7 @@ What things you need:
 
 ## Step 1 - Setting up your own repository
 
-`Fork` this repo on:
-
-```bash
-https://github.com/manloeng/nc-news
-
-```
-and then `Clone` the repo:
+`Clone` the repo:
 
 ```bash
 git clone https://github.com/manloeng/nc-news
