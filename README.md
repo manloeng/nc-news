@@ -13,19 +13,10 @@ What things you need:
 - `Node.js` (Version to Date : v12.1.0)
 - `PostgreSQL`(Version to Date: v11.2)
 
-### If you're deploying to your own server
-
-- `Heroku`
 
 ## Step 1 - Setting up your own repository
 
-`Fork` this repo on:
-
-```bash
-https://github.com/manloeng/nc-news
-
-```
-and then `Clone` the repo:
+`Clone` the repo:
 
 ```bash
 git clone https://github.com/manloeng/nc-news
