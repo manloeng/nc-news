@@ -2,8 +2,6 @@ const express = require('express');
 const app = express();
 const apiRouter = require('./routes/apiRouter.js');
 const { customError, sqlErrors, serverErrors } = require('./errors/error.js');
-const jwt = require('jsonwebtoken');
-const { JWT_SECRET } = require('./config.js');
 
 app.use(express.json());
 app.use('/api', apiRouter);
