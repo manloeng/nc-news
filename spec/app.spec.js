@@ -62,7 +62,7 @@ describe('/', () => {
 			});
 		});
 
-		xdescribe('/api/secrets', () => {
+		describe.only('/api/secrets', () => {
 			it('Responds with an array of secrets', () => {
 				return request(app)
 					.get('/api/secrets')
