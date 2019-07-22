@@ -4,12 +4,13 @@ const topicsRouter = require('./topicsRouter.js');
 const usersRouter = require('./usersRouter.js');
 const articlesRouter = require('./articlesRouter.js');
 const commentsRouter = require('./commentsRouter.js');
-const sendGetJSON = require('../controller/api-controller.js');
+const sendJSON = require('../controller/api-controller.js');
 const { sendMethodNotAllowed } = require('../errors/error.js');
 
-apiRouter.route('/').get(sendGetJSON).all(sendMethodNotAllowed);
+apiRouter.route('/').get(sendJSON).all(sendMethodNotAllowed);
 
 apiRouter.use('/login', loginRouter);
+// apiRouter.route('/secrets').get(sendGetJSON);
 apiRouter.use('/topics', topicsRouter);
 apiRouter.use('/users', usersRouter);
 apiRouter.use('/articles', articlesRouter);
