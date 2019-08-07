@@ -131,7 +131,7 @@
 	},
 	"DELETE /api/articles/:article_id": {
 		"description": "deletes an object of the requested article id",
-		"queries": [ "article_id" ]
+		"queries": []
 	},
 	"GET /api/articles/:article_id/comments": {
 		"description": "fetches comment based on requested article id",
@@ -149,7 +149,7 @@
 	},
 	"POST /api/articles/:article_id/comments": {
 		"description": "adds a comment object to the requested article id",
-		"queries": [ "sort_by", "order", "limit", "p" ],
+		"queries": [],
 		"exampleInput": {
 			"username": "butter_bridge",
 			"body": "Creating something new here"
@@ -183,6 +183,6 @@
 	},
 	"DELETE /api/comments/:comment_id": {
 		"description": "deletes an object of the requested comment id",
-		"queries": [ "comment_id" ]
+		"queries": []
 	}
 }
