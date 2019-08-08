@@ -139,7 +139,6 @@ const totalArticleCount = (query) => {
 			}
 		})
 		.then(([ { count } ]) => {
-			console.log(count);
 			return +count;
 		});
 };
