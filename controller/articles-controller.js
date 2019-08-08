@@ -24,7 +24,7 @@ const patchArticleById = (req, res, next) => {
 };
 
 const sendArticles = (req, res, next) => {
-	const total_count = totalArticleCount();
+	const total_count = totalArticleCount(req.query);
 	const articles = getArticles(req.query);
 
 	return Promise.all([ total_count, articles ])

@@ -125,10 +125,23 @@ const destroyArticleById = ({ article_id }) => {
 	});
 };
 
-const totalArticleCount = () => {
-	return connection.select().count('article_id').from('articles').then(([ { count } ]) => {
-		return +count;
-	});
+const totalArticleCount = (query) => {
+	return connection
+		.select()
+		.count('article_id')
+		.from('articles')
+		.modify((queryBuilder) => {
+			if (query.topic) {
+				queryBuilder.where('articles.topic', query.topic);
+			}
+			if (query.author) {
+				queryBuilder.where('articles.author', query.author);
+			}
+		})
+		.then(([ { count } ]) => {
+			console.log(count);
+			return +count;
+		});
 };
 
 const totalCommentCountByArticleID = ({ article_id }) => {
