@@ -18,13 +18,14 @@ module.exports = [
   {
     username: 'cooljmessy',
     name: 'Peter Messy',
-    avatar_url: 'https://i.imgur.com/WfX0Neu.jpg'
+    avatar_url:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtU7qYCuYTZ8EvTlG5m5OfQefTYIluaZ6h8lBWrxbpMBVnkQdy'
   },
   {
     username: 'weegembump',
     name: 'Gemma Bump',
     avatar_url:
-      'https://www.upandrunning.co.uk/media/catalog/product/cache/1/image/650x/040ec09b1e35df139433887a97daa66f/m/r/mr-bump.jpg'
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrC6m7TG_41J3AJSUk4HX7b3j43iv6dz7qmQVuIyYZ7n7tXNI8'
   },
   {
     username: 'jessjelly',
