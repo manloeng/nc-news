@@ -1,0 +1,40 @@
+version: "3.7"
+services:
+  app:
+    build: .
+    restart: always
+    ports:
+      - "9090:9090"
+    environment:
+      NODE_ENV: production
+    depends_on:
+      - "db"
+    command: npm run dev
+
+  db:
+      image: "postgres:11"
+      restart: always
+      container_name: "testing_nc_news"
+      environment: 
+        - POSTGRES_USER=andrewchung
+        - POSTGRES_DB=nc_news
+        # - DB_URL=postgres://andrewchung@127.0.0.1:5432/nc_news
+      ports:
+        - "5432:5432"
+volumes:
+  my_dbdata:
+
+
+
+#   postgres:
+#     image: postgres:11
+#     ports:
+#       - "5432:5432"
+#     environment:
+#       POSTGRES_USER: andrewchung
+#       POSTGRES_PASSWORD: 
+#       POSTGRES_DB: nc_news
+
+# networks:
+#   backend:
+#     driver: bridge

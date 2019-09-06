@@ -33,6 +33,7 @@ const sqlErrors = (err, req, res, next) => {
 };
 
 const serverErrors = (err, req, res, next) => {
+	console.log(err, "err")
 	res.status(500).send({ msg: 'Internal Server Error' });
 };
 
