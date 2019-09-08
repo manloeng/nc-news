@@ -1,30 +1,34 @@
 version: "3.7"
 services:
   app:
-    build: .
+    build: 
+      context: .
     restart: always
     ports:
       - "9090:9090"
     environment:
-      NODE_ENV: production
+      NODE_ENV: development
+      POSTGRES_URI: postgres://andrewchung@0.0.0.0:5432
+      DB_URL: postgres://andrewchung@0.0.0.0:5432
     depends_on:
       - "db"
-    command: npm run dev
+    volumes:
+      - ".:/usr/src/app"
+    command: > 
+      sh -c "npm run dev"
 
   db:
       image: "postgres:11"
       restart: always
-      container_name: "testing_nc_news"
+      container_name: "postgres"
       environment: 
         - POSTGRES_USER=andrewchung
+        - DB_HOST=postgres
         - POSTGRES_DB=nc_news
-        # - DB_URL=postgres://andrewchung@127.0.0.1:5432/nc_news
       ports:
         - "5432:5432"
 volumes:
   my_dbdata:
-
-
 
 #   postgres:
 #     image: postgres:11
