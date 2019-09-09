@@ -8,8 +8,6 @@ services:
       - "9090:9090"
     environment:
       NODE_ENV: development
-      POSTGRES_URI: postgres://andrewchung@0.0.0.0:5432
-      DB_URL: postgres://andrewchung@0.0.0.0:5432
     depends_on:
       - "db"
     volumes:
@@ -29,16 +27,3 @@ services:
         - "5432:5432"
 volumes:
   my_dbdata:
-
-#   postgres:
-#     image: postgres:11
-#     ports:
-#       - "5432:5432"
-#     environment:
-#       POSTGRES_USER: andrewchung
-#       POSTGRES_PASSWORD: 
-#       POSTGRES_DB: nc_news
-
-# networks:
-#   backend:
-#     driver: bridge
