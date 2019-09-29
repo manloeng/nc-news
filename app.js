@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const sls = require('serverless-http')
+
 const apiRouter = require('./routes/apiRouter.js');
 const { customError, sqlErrors, serverErrors } = require('./errors/error.js');
 
@@ -14,4 +16,4 @@ app.all('/*', (req, res, next) => {
 
 app.use(customError, sqlErrors, serverErrors);
 
-module.exports = app;
+module.exports.server = sls(app)
